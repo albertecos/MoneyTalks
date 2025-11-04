@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
@@ -41,7 +42,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MoneyTalksApp() {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+/*
+    Scaffold (
+        topBar = { TopBar() },
+        navBar = { NavBar() }
+    )
 
+ */
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             AppDestinations.entries.forEach {
@@ -58,14 +65,7 @@ fun MoneyTalksApp() {
                 )
             }
         }
-    ) {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Greeting(
-                name = "Android",
-                modifier = Modifier.padding(innerPadding)
-            )
-        }
-    }
+    )
 }
 
 enum class AppDestinations(
