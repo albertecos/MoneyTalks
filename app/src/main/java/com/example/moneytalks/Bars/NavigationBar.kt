@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.NavigationBarItem
@@ -18,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.moneytalks.Pages.HomePage
+import com.example.moneytalks.Pages.NotificationPage
 import com.example.moneytalks.Pages.ProfilePage
 import com.example.moneytalks.Pages.SettingsPage
 
@@ -29,7 +31,8 @@ enum class Destination(
 ){
     PROFILE("profile", "Profile", Icons.Outlined.Person, "Profile"),
     HOME("home", "Home", Icons.Outlined.Home, "Home"),
-    SETTINGS("settings", "Settings", Icons.Outlined.Settings, "Settings")
+    SETTINGS("settings", "Settings", Icons.Outlined.Settings, "Settings"),
+    NOTIFICATIONS("notifications", "Notifications", Icons.Outlined.Notifications, "Notifications")
 
 }
 @Composable
@@ -92,6 +95,7 @@ fun AppNavHost(
                     Destination.PROFILE -> ProfilePage()
                     Destination.HOME -> HomePage()
                     Destination.SETTINGS -> SettingsPage()
+                    Destination.NOTIFICATIONS -> NotificationPage()
                 }
             }
         }

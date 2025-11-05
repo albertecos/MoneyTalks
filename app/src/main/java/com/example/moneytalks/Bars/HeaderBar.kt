@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.TopAppBarScrollBehavior
+import com.example.moneytalks.Pages.NotificationPage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
