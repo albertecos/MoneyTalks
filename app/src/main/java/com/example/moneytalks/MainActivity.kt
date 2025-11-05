@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.compose.rememberNavController
-import com.example.moneytalks.Bars.AppNavHost
-import com.example.moneytalks.Bars.Destination
-import com.example.moneytalks.Bars.NavBar
-import com.example.moneytalks.Bars.TopBar
+import com.example.moneytalks.bars.AppNavHost
+import com.example.moneytalks.bars.Destination
+import com.example.moneytalks.bars.NavBar
+import com.example.moneytalks.bars.TopBar
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 
 

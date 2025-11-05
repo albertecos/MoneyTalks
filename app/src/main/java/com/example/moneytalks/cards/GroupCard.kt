@@ -1,4 +1,4 @@
-package com.example.moneytalks.Cards
+package com.example.moneytalks.cards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

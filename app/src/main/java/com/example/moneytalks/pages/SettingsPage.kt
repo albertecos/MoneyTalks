@@ -1,4 +1,4 @@
-package com.example.moneytalks.Pages
+package com.example.moneytalks.pages
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

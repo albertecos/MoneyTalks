@@ -1,4 +1,4 @@
-package com.example.moneytalks.Pages
+package com.example.moneytalks.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
