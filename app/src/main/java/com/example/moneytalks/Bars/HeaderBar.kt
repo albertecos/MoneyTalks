@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Pages.NotificationPage
 
 
@@ -45,8 +46,8 @@ fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior
         navigationIcon = {
             IconButton(onClick = { navController.navigate(Destination.NOTIFICATIONS.route) }) {
                 Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = "Notifications"
+                    imageVector = NavIcon.NOTIFICATIONS.icon,
+                    contentDescription = NavIcon.NOTIFICATIONS.destination.contentDescription
                 )
             }
         },

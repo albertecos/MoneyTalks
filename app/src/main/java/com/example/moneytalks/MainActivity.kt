@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,11 +16,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.Bars.NavBar
-import com.example.moneytalks.Bars.NavigateNavBar
 import com.example.moneytalks.Bars.TopBar
+import com.example.moneytalks.Cards.DeleteButton
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.Pages.HomePage
+import com.example.moneytalks.Pages.NotificationPage
+import com.example.moneytalks.Pages.ProfilePage
+import com.example.moneytalks.Pages.SettingsPage
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 
 
@@ -42,16 +49,21 @@ fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { TopBar(navController, scrollBehavior) },
         bottomBar = { NavBar(navController) }
     ) { innerPadding ->
-        NavigateNavBar(
+        NavHost(
             navController = navController,
-            startDestination = Destination.HOME,
+            startDestination = Destination.HOME.route,
             modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding)
-        )
+        ){
+            composable(Destination.PROFILE.route) { ProfilePage() }
+            composable(Destination.HOME.route) { HomePage() }
+            composable(Destination.SETTINGS.route) { SettingsPage() }
+            composable(Destination.NOTIFICATIONS.route) { NotificationPage() }
+        }
     }
+
 }
