@@ -22,9 +22,10 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun LoginScreen() {
+fun CreateAccount() {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var fullName by remember {mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
@@ -38,12 +39,43 @@ fun LoginScreen() {
         verticalArrangement = Arrangement.Center
     ){
         Text(
-            text = "Login",
+            text = "Create account",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(bottom = 32.dp)
         )
+
+        //Full name field
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .border(2.dp, gradient, RoundedCornerShape(20.dp))
+        ){
+            OutlinedTextField(
+                value = fullName,
+                onValueChange = { fullName = it },
+                label = { Text("Full name") },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .padding(0.dp), // remove extra padding
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,   // Transparent so Box handles outer border
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.DarkGray,
+                    focusedLabelColor = Color.Gray,
+                    unfocusedLabelColor = Color.Gray
+                ),
+                singleLine = true
+            )
+        }
 
         //username field
         Box(
@@ -108,46 +140,38 @@ fun LoginScreen() {
             )
         }
 
-        /*
-        //Forgot password - skal slettes?
-        Text(
-            text = "Forgot password?",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Gray,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(top = 8.dp, bottom = 24.dp)
-        )
-         */
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        // Login button
+        // Confirm password field
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .height(48.dp)
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-                .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
-            Button(
-                onClick = { /* handle login */ },
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Confirm password") },
                 shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues()
-            ) {
-                Text(
-                    "Login",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
+                    .fillMaxWidth()
+                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .padding(0.dp), // remove extra padding
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,   // Transparent so Box handles outer border
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.DarkGray,
+                    focusedLabelColor = Color.Gray,
+                    unfocusedLabelColor = Color.Gray
+                ),
+                singleLine = true
+            )
         }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -175,6 +199,11 @@ fun LoginScreen() {
                 )
             }
         }
+
+
+
+
+
 
     }
 }
