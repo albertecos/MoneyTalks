@@ -17,12 +17,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.navigation.NavController
+import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Pages.NotificationPage
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
+fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior) {
     val gradient = Brush.horizontalGradient(0f to Color(0xFFBADFFF), 1.0f to Color(0xFF3F92DA))
 
     CenterAlignedTopAppBar(
@@ -41,7 +43,7 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
             )
         },
         navigationIcon = {
-            IconButton(onClick = { TODO() }) {
+            IconButton(onClick = { navController.navigate(Destination.NOTIFICATIONS.route) }) {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = "Notifications"
