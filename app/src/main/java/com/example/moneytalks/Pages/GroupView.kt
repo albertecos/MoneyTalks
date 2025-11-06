@@ -1,16 +1,14 @@
 package com.example.moneytalks.Pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,10 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.moneytalks.Cards.BalanceBox
+import com.example.moneytalks.Cards.BalanceStatus
 import com.example.moneytalks.ui.theme.DarkGrey
-import com.example.moneytalks.ui.theme.GreyColor
-import com.example.moneytalks.ui.theme.redInDebt
 
 @Preview
 @Composable
@@ -40,12 +37,14 @@ fun GroupView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
 
-        BalanceBox(100)
+        BalanceBox(-202.20) //TODO - skal kalde API :)
 
         // Transactions
         Column(modifier = modifier
             .weight(1f)
-            .fillMaxWidth()) {
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+        ) {
             FriendsBubble("Alberte", "Paid ", 500)
             FriendsBubble("Asta", "Paid ", 200)
             OwnBubble("Paid ",150)
@@ -56,28 +55,6 @@ fun GroupView(modifier: Modifier = Modifier) {
         }
 
         AllButtonsBar()
-    }
-}
-
-@Composable
-fun BalanceBox(value: Int) {
-    Box(
-        modifier = Modifier
-            .size(height = 60.dp, width = 190.dp)
-            .background(GreyColor)
-            .border(
-                width = 3.dp,
-                color = redInDebt,
-                shape = RoundedCornerShape(25.dp),
-            )
-    ) {
-        Text(
-            "You need to pay " + value + ".-",
-            Modifier.align(Alignment.Center),
-            fontSize = 12.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 

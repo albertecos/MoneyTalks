@@ -21,3 +21,8 @@ val DarkGrey = Color(0xF28D8D8D)
 val redInDebt = Color(0xFFAC0000)
 val greenCreditor = Color(0xFF007F13)
 val blueDebtFree = Color(0xFF3F92DA)
+
+//For gradient effect
+val redInDebtV2 = Color(0xFFFF0000)
+val greenCreditorV2 = Color(0xFF00FF26)
+val blueDebtFreeV2 = Color(0xFFBADFFF)
