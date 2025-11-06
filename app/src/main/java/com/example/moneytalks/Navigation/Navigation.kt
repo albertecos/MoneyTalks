@@ -1,0 +1,42 @@
+package com.example.moneytalks.Navigation
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.moneytalks.Cards.DeleteButton
+import com.example.moneytalks.Pages.HomePage
+import com.example.moneytalks.Pages.NotificationPage
+import com.example.moneytalks.Pages.ProfilePage
+import com.example.moneytalks.Pages.SettingsPage
+
+enum class Destination(
+    val route: String,
+    val label: String,
+    val contentDescription: String
+
+){
+    PROFILE("profile", "Profile", "Profile"),
+    HOME("home", "Home", "Home"),
+    SETTINGS("settings", "Settings", "Settings"),
+    NOTIFICATIONS("notifications", "Notifications", "Notifications")
+
+}
+
+enum class NavIcon(
+    var destination: Destination,
+    val icon: ImageVector,
+){
+    PROFILE(Destination.PROFILE, Icons.Outlined.Person),
+    HOME(Destination.HOME, Icons.Outlined.Home),
+    SETTINGS(Destination.SETTINGS, Icons.Outlined.Settings),
+    NOTIFICATIONS(Destination.NOTIFICATIONS, Icons.Outlined.Notifications)
+}
+

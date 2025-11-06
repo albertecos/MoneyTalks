@@ -11,14 +11,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.compose.rememberNavController
-import com.example.moneytalks.Bars.AppNavHost
-import com.example.moneytalks.Bars.Destination
 import com.example.moneytalks.Bars.NavBar
+import com.example.moneytalks.Bars.NavigateNavBar
 import com.example.moneytalks.Bars.TopBar
+import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 
 
@@ -44,10 +45,10 @@ fun MoneyTalksApp() {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopBar(scrollBehavior) },
+        topBar = { TopBar(navController, scrollBehavior) },
         bottomBar = { NavBar(navController) }
     ) { innerPadding ->
-        AppNavHost(
+        NavigateNavBar(
             navController = navController,
             startDestination = Destination.HOME,
             modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding)

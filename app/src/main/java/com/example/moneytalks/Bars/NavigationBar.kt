@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.NavigationBarItem
@@ -17,21 +18,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Pages.HomePage
+import com.example.moneytalks.Pages.NotificationPage
 import com.example.moneytalks.Pages.ProfilePage
 import com.example.moneytalks.Pages.SettingsPage
 
-enum class Destination(
-    val route: String,
-    val label: String,
-    val icon: ImageVector,
-    val contentDescription: String
-){
-    PROFILE("profile", "Profile", Icons.Outlined.Person, "Profile"),
-    HOME("home", "Home", Icons.Outlined.Home, "Home"),
-    SETTINGS("settings", "Settings", Icons.Outlined.Settings, "Settings")
 
-}
 @Composable
 fun NavBar(
     navController: NavController,
@@ -40,20 +34,13 @@ fun NavBar(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    /*
-    val navController = rememberNavController()
-    val startDestination = Destination.HOME
-    var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
-
-     */
-
     NavigationBar(modifier = modifier) {
-        Destination.entries.forEach { destination ->
+        NavIcon.entries.forEach { destination ->
             NavigationBarItem(
-                selected = currentRoute == destination.route,
+                selected = currentRoute == destination.destination.route,
                 onClick = {
-                    if (currentRoute != destination.route) {
-                        navController.navigate(destination.route) {
+                    if (currentRoute != destination.destination.route) {
+                        navController.navigate(destination.destination.route) {
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
                             }
@@ -65,18 +52,17 @@ fun NavBar(
                 icon = {
                     Icon(
                         destination.icon,
-                        contentDescription = destination.contentDescription
+                        contentDescription = destination.destination.contentDescription
                     )
                 },
-                label = { Text(destination.label) }
+                label = { Text(destination.destination.label) }
             )
         }
     }
 }
 
-
 @Composable
-fun AppNavHost(
+fun NavigateNavBar(
     navController: NavHostController,
     startDestination: Destination,
     modifier: Modifier = Modifier
@@ -92,6 +78,7 @@ fun AppNavHost(
                     Destination.PROFILE -> ProfilePage()
                     Destination.HOME -> HomePage()
                     Destination.SETTINGS -> SettingsPage()
+                    Destination.NOTIFICATIONS -> NotificationPage()
                 }
             }
         }
