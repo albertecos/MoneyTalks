@@ -33,13 +33,7 @@ fun NavBar(
             NavigationBarItem(
                 selected = currentRoute == item.destination.route,
                 onClick = {
-                    navController.navigate(item.destination.route){
-                        popUpTo(navController.graph.findStartDestination()) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navController.navigate(item.destination.route)
                 },
                 icon = {
                     Icon(
