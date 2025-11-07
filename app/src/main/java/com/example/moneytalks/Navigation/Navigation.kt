@@ -15,7 +15,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.moneytalks.Cards.DeleteButton
 import com.example.moneytalks.Pages.HomePage
 import com.example.moneytalks.Pages.NotificationPage
 import com.example.moneytalks.Pages.ProfilePage

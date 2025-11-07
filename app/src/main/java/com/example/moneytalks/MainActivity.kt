@@ -21,7 +21,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.Bars.NavBar
 import com.example.moneytalks.Bars.TopBar
-import com.example.moneytalks.Cards.DeleteButton
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Pages.EditGroupPage
 import com.example.moneytalks.Pages.GroupView
