@@ -1,5 +1,6 @@
 package com.example.moneytalks.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 //The old colors
@@ -14,6 +15,7 @@ val Pink40 = Color(0xFF7D5260)
 val LightBlue = Color(0xFFBADFFF)
 val DarkBlue = Color(0xFF3C4780)
 val GreyColor = Color(0xF2F2F2F2)
+val Black = Color(0xFF000000)
 
 val DarkGrey = Color(0xF28D8D8D)
 
@@ -26,3 +28,5 @@ val blueDebtFree = Color(0xFF3F92DA)
 val redInDebtV2 = Color(0xFFFF0000)
 val greenCreditorV2 = Color(0xFF00FF26)
 val blueDebtFreeV2 = Color(0xFFBADFFF)
+val gradient = Brush.horizontalGradient(0f to Color(0xFFBADFFF), 1.0f to Color(0xFF3F92DA))
+

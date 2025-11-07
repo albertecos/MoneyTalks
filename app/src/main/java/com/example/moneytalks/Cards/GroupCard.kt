@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
+import com.example.moneytalks.ui.theme.DarkBlue
+import com.example.moneytalks.ui.theme.LightBlue
 import com.example.moneytalks.ui.theme.LilyScriptOne
 
 /*
@@ -56,8 +58,8 @@ fun GroupCard(
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFBADFFF),
-            contentColor = Color(0xFF3C4780)
+            containerColor = LightBlue,
+            contentColor = DarkBlue
         )
     ) {
         Box(Modifier.fillMaxSize()){
