@@ -24,6 +24,7 @@ import com.example.moneytalks.Bars.TopBar
 import com.example.moneytalks.Cards.DeleteButton
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Pages.EditGroupPage
+import com.example.moneytalks.Pages.GroupView
 import com.example.moneytalks.Pages.HomePage
 import com.example.moneytalks.Pages.NotificationPage
 import com.example.moneytalks.Pages.ProfilePage
@@ -65,6 +66,8 @@ fun MoneyTalksApp() {
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
+            composable(Destination.NOTIFICATIONS.route) { NotificationPage() }
+            composable(Destination.GROUPVIEW.route) { GroupView() }
         }
     }
 
