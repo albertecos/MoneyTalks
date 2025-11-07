@@ -1,7 +1,10 @@
 package com.example.moneytalks.Pages
-// TODO: ADD FUNCTIONALITY TO PAGE (ADD PROFILE PICTURE, CHANGE EMAIL,
+// TODO: ADD FUNCTIONALITY TO PAGE  (CHANGE EMAIL,
 //  CHANGE PASSWORD, TURN OFF NOTIFICATIONS)
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,7 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,10 +24,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.moneytalks.R
 
 @Composable
 fun SettingsPage(modifier: Modifier = Modifier) {
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
+    var notificationsEnabled by remember { mutableStateOf(true) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +63,11 @@ fun SettingsPage(modifier: Modifier = Modifier) {
             ) {
                 // Profile Image
                 Image(
-                    painter = painterResource(id = R.drawable.profileplaceholder),
+                    painter = if (imageUri != null) {
+                        rememberAsyncImagePainter(imageUri)
+                    } else {
+                        painterResource(id = R.drawable.profileplaceholder)
+                    },
                     contentDescription = "Profile Image",
                     modifier = Modifier
                         .size(100.dp)
@@ -61,14 +77,18 @@ fun SettingsPage(modifier: Modifier = Modifier) {
                 )
 
                 // Add Icon Overlay
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Photo",
-                    tint = Color.Black,
+                IconButton(
+                    onClick = { launcher.launch("image/*") },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .size(24.dp)
-                )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Photo",
+                        tint = Color.Black,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -89,7 +109,10 @@ fun SettingsPage(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedButtonUI(text = "Turn off notifications")
+            OutlinedButtonUI(
+                text = if (notificationsEnabled) "Turn off notifications" else "Turn on notifications",
+                onClick = { notificationsEnabled = !notificationsEnabled }
+            )
             OutlinedButtonUI(text = "...")
             OutlinedButtonUI(text = "...")
         }
@@ -99,9 +122,9 @@ fun SettingsPage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OutlinedButtonUI(text: String) {
+fun OutlinedButtonUI(text: String, onClick: () -> Unit = {}) {
     OutlinedButton(
-        onClick = { /* TODO */ },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
