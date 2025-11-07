@@ -1,10 +1,12 @@
 package com.example.moneytalks.Navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -28,7 +30,8 @@ enum class Destination(
     PROFILE("profile", "Profile", "Profile"),
     HOME("home", "Home", "Home"),
     SETTINGS("settings", "Settings", "Settings"),
-    NOTIFICATIONS("notifications", "Notifications", "Notifications")
+    NOTIFICATIONS("notifications", "Notifications", "Notifications"),
+    EDITGROUP("editGroup", "EditGroup", "EditGroup")
 
 }
 
@@ -39,6 +42,7 @@ enum class NavIcon(
     PROFILE(Destination.PROFILE, Icons.Outlined.Person),
     HOME(Destination.HOME, Icons.Outlined.Home),
     SETTINGS(Destination.SETTINGS, Icons.Outlined.Settings),
-    NOTIFICATIONS(Destination.NOTIFICATIONS, Icons.Outlined.Notifications)
+    NOTIFICATIONS(Destination.NOTIFICATIONS, Icons.Outlined.Notifications),
+    EDITGROUP(Destination.EDITGROUP, Icons.Outlined.Edit)
 }
 

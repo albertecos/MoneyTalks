@@ -24,6 +24,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.ui.theme.LilyScriptOne
 
 /*
@@ -38,8 +41,8 @@ GroupCard(
 @Composable
 fun GroupCard(
     groupName: String,
+    navController: NavController,
     modifier: Modifier = Modifier,
-    onEdit: () -> Unit = {},
     onDelete: () -> Unit = {}
 ){
     Card (
@@ -58,10 +61,10 @@ fun GroupCard(
                 verticalAlignment = Alignment.Top,
             ){
 
-                IconButton(onClick = onEdit) {
+                IconButton(onClick = { navController.navigate(Destination.EDITGROUP.route) }) {
                     Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = "Edit"
+                        imageVector = NavIcon.EDITGROUP.icon,
+                        contentDescription = NavIcon.EDITGROUP.destination.contentDescription
                     )
                 }
                 IconButton(onClick = onDelete) {
@@ -95,5 +98,5 @@ fun DeleteButton(){
 @Preview(showBackground = true)
 @Composable
 private fun GroupCardPreview(){
-    GroupCard("The Name")
+
 }

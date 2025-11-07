@@ -2,6 +2,7 @@ package com.example.moneytalks.Notifications
 
 import android.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,24 +24,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.moneytalks.Navigation.Destination
 
 @Composable
 fun PaymentNotify(
     payment: String,
     groupName: String,
     date: String,
+    navController: NavController,
+    onClick: () -> Unit = { navController.navigate(Destination.HOME.route) },
     onAccept: () -> Unit = {},
     onDecline: () -> Unit = {},
     modifier: Modifier = Modifier
-){
+) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(4.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().background(Color.White).padding(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(12.dp)
+                .clickable(onClick = onClick),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
@@ -60,34 +69,12 @@ fun PaymentNotify(
 
                 Text(date, color = Color.DarkGray, fontStyle = FontStyle.Italic)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(
-                    onClick = onAccept,
-                    shape = RoundedCornerShape(20.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFBADFFF),
-                        contentColor = Color(0xFF3C4780)
-                    )
-                ) {Text("Accept") }
-
-                Button(
-                    onClick = onAccept,
-                    shape = RoundedCornerShape(20.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFBADFFF),
-                        contentColor = Color(0xFF3C4780)
-                    )
-                ) {Text("Decline") }
-            }
         }
     }
-
 }
 
 @Preview
 @Composable
-fun PaymentNotifyPreview(){
-    PaymentNotify("150", "weekend","10.10.2002")
+fun PaymentNotifyPreview() {
+    //PaymentNotify("150", "weekend","10.10.2002")
 }

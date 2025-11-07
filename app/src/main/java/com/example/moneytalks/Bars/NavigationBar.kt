@@ -21,8 +21,8 @@ fun NavBar(
     modifier: Modifier = Modifier
 ) {
     val items = listOf(
-        NavIcon.HOME,
         NavIcon.PROFILE,
+        NavIcon.HOME,
         NavIcon.SETTINGS
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
