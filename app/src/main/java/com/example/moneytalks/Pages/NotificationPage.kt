@@ -16,13 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.moneytalks.Notifications.GroupInviteNotify
 import com.example.moneytalks.Notifications.PaymentNotify
 import com.example.moneytalks.Notifications.ReceivementNotify
 
 
 @Composable
-fun NotificationPage(modifier: Modifier = Modifier){
+fun NotificationPage(
+    navController: NavController,
+    modifier: Modifier = Modifier
+){
     Column (
         modifier = modifier.padding(horizontal = 12.dp).fillMaxSize()
     ) {
@@ -39,8 +43,8 @@ fun NotificationPage(modifier: Modifier = Modifier){
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        PaymentNotify("150", "Weekend","10.10.2002")
-        ReceivementNotify("2000", "Paartyyy","05.11.2025")
+        PaymentNotify("150", "Weekend","10.10.2002", navController)
+        ReceivementNotify("2000", "Paartyyy","05.11.2025", navController)
 
     }
 }
@@ -48,5 +52,5 @@ fun NotificationPage(modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun NotificationPreview(){
-    NotificationPage()
+    //NotificationPage(navController)
 }

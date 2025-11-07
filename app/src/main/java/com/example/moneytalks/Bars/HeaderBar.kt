@@ -21,19 +21,21 @@ import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Pages.NotificationPage
+import com.example.moneytalks.ui.theme.Black
+import com.example.moneytalks.ui.theme.blueDebtFreeV2
+import com.example.moneytalks.ui.theme.gradient
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior) {
-    val gradient = Brush.horizontalGradient(0f to Color(0xFFBADFFF), 1.0f to Color(0xFF3F92DA))
 
     CenterAlignedTopAppBar(
         modifier = Modifier.background(gradient).statusBarsPadding(),
         colors = TopAppBarDefaults.topAppBarColors(
             //containerColor = Color.Red,
             containerColor = Color.Transparent,
-            titleContentColor = Color(0xFF000000)
+            titleContentColor = Black
         ),
         title = {
             Text(

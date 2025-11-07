@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.moneytalks.Bars.Destination
+import com.example.moneytalks.Navigation.Destination
 
 
 @OptIn(ExperimentalMaterial3Api::class)
