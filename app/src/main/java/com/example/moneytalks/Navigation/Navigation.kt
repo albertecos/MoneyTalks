@@ -28,8 +28,8 @@ enum class Destination(
     PROFILE("profile", "Profile", "Profile"),
     HOME("home", "Home", "Home"),
     SETTINGS("settings", "Settings", "Settings"),
-    NOTIFICATIONS("notifications", "Notifications", "Notifications")
-
+    NOTIFICATIONS("notifications", "Notifications", "Notifications"),
+    GROUPVIEW("groupview", "Groupview", "Groupview")
 }
 
 enum class NavIcon(
