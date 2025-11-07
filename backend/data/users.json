@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ecae9dd4-d13e-4354-978f-617c099eb9fb",
+    "username": "string",
+    "full_name": "string",
+    "email": "user@example.com",
+    "password": "string"
+  },
+  {
+    "id": "f03cf78c-7f30-42fc-8c6c-3184ef96deee",
+    "username": "string23",
+    "full_name": "string",
+    "email": "user@example.com",
+    "password": "string"
+  }
+]

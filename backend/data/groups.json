@@ -1,0 +1,28 @@
+[
+  {
+    "id": "7bc52d44-32ec-40ce-961e-09f095ee6f99",
+    "name": "string",
+    "description": "string",
+    "members": [
+      {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      }
+    ]
+  },
+  {
+    "id": "086507c8-673e-4942-8f0d-666659404e88",
+    "name": "string",
+    "description": "string",
+    "members": [
+      {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      },
+      {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      },
+      {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      }
+    ]
+  }
+]
