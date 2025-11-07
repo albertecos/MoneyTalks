@@ -1,4 +1,4 @@
-package com.example.moneytalks.bars
+package com.example.moneytalks.Bars
 
 import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
@@ -17,9 +17,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.moneytalks.pages.HomePage
-import com.example.moneytalks.pages.ProfilePage
-import com.example.moneytalks.pages.SettingsPage
+import com.example.moneytalks.Pages.HomePage
+import com.example.moneytalks.Pages.ProfilePage
+import com.example.moneytalks.Pages.SettingsPage
 
 enum class Destination(
     val route: String,
@@ -29,7 +29,9 @@ enum class Destination(
 ){
     PROFILE("profile", "Profile", Icons.Outlined.Person, "Profile"),
     HOME("home", "Home", Icons.Outlined.Home, "Home"),
-    SETTINGS("settings", "Settings", Icons.Outlined.Settings, "Settings")
+    SETTINGS("settings", "Settings", Icons.Outlined.Settings, "Settings"),
+
+//    ADD_EXPENSE("addExpense", "Add expense", "Add expense")
 
 }
 @Composable

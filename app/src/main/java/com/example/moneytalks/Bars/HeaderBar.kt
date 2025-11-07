@@ -1,4 +1,4 @@
-package com.example.moneytalks.bars
+package com.example.moneytalks.Bars
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.statusBarsPadding
