@@ -1,5 +1,6 @@
 package com.example.moneytalks.Cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -43,10 +44,15 @@ fun GroupCard(
     groupName: String,
     navController: NavController,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {navController.navigate(Destination.GROUPVIEW.route)},
     onDelete: () -> Unit = {}
 ){
     Card (
-        modifier = modifier.width(290.dp).height(161.dp).padding(16.dp),
+        modifier = modifier
+            .width(290.dp)
+            .height(161.dp)
+            .padding(16.dp)
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(

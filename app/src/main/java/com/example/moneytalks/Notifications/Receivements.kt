@@ -2,6 +2,7 @@ package com.example.moneytalks.Notifications
 
 import android.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,16 +24,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.moneytalks.Navigation.Destination
 
 @Composable
 fun ReceivementNotify(
     payment: String,
     groupName: String,
     date: String,
+    navController: NavController,
+    onClick: () -> Unit = { navController.navigate(Destination.GROUPVIEW.route) },
     modifier: Modifier = Modifier
 ){
     ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(4.dp)
     ) {
         Row(
@@ -67,5 +74,5 @@ fun ReceivementNotify(
 @Preview
 @Composable
 fun ReceivementNotifyPreview(){
-    ReceivementNotify("150", "weekend","10.10.2002")
+    //ReceivementNotify("150", "weekend","10.10.2002")
 }

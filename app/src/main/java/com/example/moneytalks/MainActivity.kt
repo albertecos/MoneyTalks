@@ -66,7 +66,7 @@ fun MoneyTalksApp() {
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
-            composable(Destination.NOTIFICATIONS.route) { NotificationPage() }
+            composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
             composable(Destination.GROUPVIEW.route) { GroupView() }
         }
     }

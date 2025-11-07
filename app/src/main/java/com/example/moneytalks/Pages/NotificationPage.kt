@@ -44,7 +44,7 @@ fun NotificationPage(
             modifier = Modifier.padding(bottom = 8.dp)
         )
         PaymentNotify("150", "Weekend","10.10.2002", navController)
-        ReceivementNotify("2000", "Paartyyy","05.11.2025")
+        ReceivementNotify("2000", "Paartyyy","05.11.2025", navController)
 
     }
 }

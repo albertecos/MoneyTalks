@@ -33,7 +33,7 @@ fun PaymentNotify(
     groupName: String,
     date: String,
     navController: NavController,
-    onClick: () -> Unit = { navController.navigate(Destination.HOME.route) },
+    onClick: () -> Unit = { navController.navigate(Destination.GROUPVIEW.route) },
     onAccept: () -> Unit = {},
     onDecline: () -> Unit = {},
     modifier: Modifier = Modifier

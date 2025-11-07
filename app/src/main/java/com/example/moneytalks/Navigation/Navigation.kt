@@ -31,9 +31,7 @@ enum class Destination(
     HOME("home", "Home", "Home"),
     SETTINGS("settings", "Settings", "Settings"),
     NOTIFICATIONS("notifications", "Notifications", "Notifications"),
-    EDITGROUP("editGroup", "EditGroup", "EditGroup")
-
-    NOTIFICATIONS("notifications", "Notifications", "Notifications"),
+    EDITGROUP("editGroup", "EditGroup", "EditGroup"),
     GROUPVIEW("groupview", "Groupview", "Groupview")
 }
 
