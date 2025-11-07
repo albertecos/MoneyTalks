@@ -1,6 +1,4 @@
 package com.example.moneytalks.Pages
-// TODO: ADD FUNCTIONALITY TO PAGE  (CHANGE EMAIL,
-//  CHANGE PASSWORD, TURN OFF NOTIFICATIONS)
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,9 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import com.example.moneytalks.R
 
+// Dummy data class for user information
+data class DummyUserData(val email: String, val password: String)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(modifier: Modifier = Modifier) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -36,6 +39,33 @@ fun SettingsPage(modifier: Modifier = Modifier) {
         imageUri = uri
     }
     var notificationsEnabled by remember { mutableStateOf(true) }
+    var userData by remember { mutableStateOf(DummyUserData("user@example.com", "password123")) }
+    var showChangeEmailDialog by remember { mutableStateOf(false) }
+    var showChangePasswordDialog by remember { mutableStateOf(false) }
+
+    if (showChangeEmailDialog) {
+        ChangeInfoDialog(
+            title = "Change Email",
+            currentValue = userData.email,
+            onDismiss = { showChangeEmailDialog = false },
+            onSave = { newEmail ->
+                userData = userData.copy(email = newEmail)
+                showChangeEmailDialog = false
+            }
+        )
+    }
+
+    if (showChangePasswordDialog) {
+        ChangeInfoDialog(
+            title = "Change Password",
+            currentValue = "", // Don't show current password
+            onDismiss = { showChangePasswordDialog = false },
+            onSave = { newPassword ->
+                userData = userData.copy(password = newPassword)
+                showChangePasswordDialog = false
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -93,8 +123,8 @@ fun SettingsPage(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedButtonUI(text = "Change email")
-            OutlinedButtonUI(text = "Change password")
+            OutlinedButtonUI(text = "Change email", onClick = { showChangeEmailDialog = true })
+            OutlinedButtonUI(text = "Change password", onClick = { showChangePasswordDialog = true })
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -136,5 +166,51 @@ fun OutlinedButtonUI(text: String, onClick: () -> Unit = {}) {
         shape = RoundedCornerShape(12.dp),
     ) {
         Text(text = text, textAlign = TextAlign.Center, fontSize = 16.sp)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ChangeInfoDialog(
+    title: String,
+    currentValue: String,
+    onDismiss: () -> Unit,
+    onSave: (String) -> Unit
+) {
+    var text by remember { mutableStateOf(currentValue) }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = title, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                TextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    label = { Text("New $title") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text("Cancel")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = { onSave(text) }) {
+                        Text("Save")
+                    }
+                }
+            }
+        }
     }
 }
