@@ -20,11 +20,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moneytalks.Cards.BalanceBox
-import com.example.moneytalks.Cards.BalanceStatus
 import com.example.moneytalks.ui.theme.DarkGrey
 
 @Preview
@@ -41,7 +47,7 @@ fun GroupView(modifier: Modifier = Modifier) {
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(top = 40.dp, bottom = 20.dp)
+                .padding(10.dp)
         )
         BalanceBox(0.20) //TODO - skal kalde API :)
 
@@ -51,14 +57,10 @@ fun GroupView(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
         ) {
-            FriendsBubble("Alberte", "Paid ", 500)
-            FriendsBubble("Asta", "Paid ", 200)
+            FriendsBubble("Alberte", R.drawable.babygator,"Paid ", 500)
+            FriendsBubble("Asta", R.drawable.arghhh,"Paid ", 200)
             OwnBubble("Paid ",150)
-            FriendsBubble("Maria", "Added expense of ", 200)
-            FriendsBubble("Bernard", "Added expense of ", 300)
-            FriendsBubble("Idriis", "Paid ", 500)
-            OwnBubble("Added expense of ",300)
-            OwnBubble("Added expense of ",300)
+            FriendsBubble("Maria", R.drawable.batman,"Added expense of ", 200)
             OwnBubble("Added expense of ",300)
             OwnBubble("Added expense of ",300)
 
@@ -86,12 +88,21 @@ fun OwnBubble(text: String, value: Int) {
 }
 
 @Composable
-fun FriendsBubble(username: String, text: String, value: Int) {
+fun FriendsBubble(username: String, pfpResID: Int, text: String, value: Int) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        Image(
+            painter = painterResource(pfpResID),
+            "lulul",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+            )
         Column(modifier = Modifier
             .align(Alignment.CenterVertically)
             .padding(8.dp),
@@ -133,3 +144,6 @@ fun AddExpenseButton() {
     }
 }
 
+enum class ExpenseActions {
+    PAID, ADD_EXPENSE, REMOVE_EXPENSE
+}
