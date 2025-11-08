@@ -22,6 +22,7 @@ fun HomePage(
     LaunchedEffect(memberId) {
         vm.fetchGroups(memberId)
     }
+
     val groups = vm.groups
     Column(modifier = modifier) {
 
