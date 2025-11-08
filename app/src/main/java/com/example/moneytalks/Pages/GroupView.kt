@@ -2,6 +2,7 @@ package com.example.moneytalks.Pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +38,12 @@ fun GroupView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
 
-        BalanceBox(-202.20) //TODO - skal kalde API :)
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp, bottom = 20.dp)
+        )
+        BalanceBox(0.20) //TODO - skal kalde API :)
 
         // Transactions
         Column(modifier = modifier
@@ -52,6 +58,10 @@ fun GroupView(modifier: Modifier = Modifier) {
             FriendsBubble("Bernard", "Added expense of ", 300)
             FriendsBubble("Idriis", "Paid ", 500)
             OwnBubble("Added expense of ",300)
+            OwnBubble("Added expense of ",300)
+            OwnBubble("Added expense of ",300)
+            OwnBubble("Added expense of ",300)
+
         }
 
         AllButtonsBar()
