@@ -14,14 +14,15 @@ import com.example.moneytalks.ViewModel.GroupsViewModel
 @Composable
 fun HomePage(
     memberId: String,
-    viewModel: GroupsViewModel = viewModel(),
     navController: NavController,
     modifier: Modifier = Modifier
 ){
+    val vm: GroupsViewModel = viewModel()
+
     LaunchedEffect(memberId) {
-        viewModel.fetchGroups(memberId)
+        vm.fetchGroups(memberId)
     }
-    val groups = viewModel.groups
+    val groups = vm.groups
     Column(modifier = modifier) {
 
         groups.forEach { group ->

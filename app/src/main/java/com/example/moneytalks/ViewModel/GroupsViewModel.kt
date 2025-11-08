@@ -7,7 +7,7 @@ import com.example.moneytalks.APISetup.RetrofitClient
 import com.example.moneytalks.DataClasses.Group
 import kotlinx.coroutines.launch
 
-class GroupsViewModel(private val retrofitClient: RetrofitClient): ViewModel() {
+class GroupsViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
     var groups = mutableStateListOf<Group>()
 
     fun fetchGroups(memberId: String) {
