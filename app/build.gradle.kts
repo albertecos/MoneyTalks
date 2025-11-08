@@ -54,6 +54,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts") //For the Google font lily script one
     implementation("androidx.navigation:navigation-compose:2.9.5")
     implementation(libs.androidx.compose.runtime.saveable)
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") //For API
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,5 +64,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("io.coil-kt:coil-compose:2.5.0")
 }
