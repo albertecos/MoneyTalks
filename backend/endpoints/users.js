@@ -127,7 +127,7 @@ endPoints.push({method: 'POST', path: '/signup', oapi: {
         required: true,
         content: {
             'application/json': {
-                schema: Components.schemas.User
+                schema: Components.schemas.UserWithoutId
             }
         }
     },

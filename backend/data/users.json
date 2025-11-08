@@ -1,16 +1,9 @@
 [
   {
-    "id": "ecae9dd4-d13e-4354-978f-617c099eb9fb",
-    "username": "string",
-    "full_name": "string",
-    "email": "user@example.com",
-    "password": "string"
-  },
-  {
-    "id": "f03cf78c-7f30-42fc-8c6c-3184ef96deee",
-    "username": "string23",
-    "full_name": "string",
-    "email": "user@example.com",
-    "password": "string"
+    "id": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "username": "justavirus",
+    "full_name": "Bob Lars",
+    "email": "boy-big@example.com",
+    "password": "catlover"
   }
 ]

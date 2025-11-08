@@ -17,6 +17,10 @@ class Database {
         this.data = this.readFromFile();
     }
 
+    all() {
+        return this.data;
+    }
+
     select(obj) {
         const keys = Object.keys(obj);
         return this.data.filter(item => 
@@ -27,7 +31,7 @@ class Database {
     selectLike(obj) {
         const keys = Object.keys(obj);
         return this.data.filter(item => 
-            keys.every(key => item[key] && item[key].includes(obj[key]))
+            keys.every(key => item[key] && item[key].toLowerCase().includes(obj[key].toLowerCase()))
         );
     }
 

@@ -2,10 +2,11 @@ const {v4: uuidv4} = require('uuid');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const openapi = require('@wesleytodd/openapi')
-const { Database } = require('./Database');
+const openapi = require('@wesleytodd/openapi');
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // This middleware is used to parse JSON bodies.
+
+const { Components } = require('./schema/components');
 
 
 const oapi = openapi({
@@ -17,7 +18,8 @@ const oapi = openapi({
       url: "http://localhost:3000",
       description: "Local server"
     }
-  ]
+  ],
+  components: Components
 });
 
 app.use(oapi);
