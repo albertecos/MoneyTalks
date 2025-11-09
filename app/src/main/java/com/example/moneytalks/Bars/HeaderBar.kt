@@ -22,6 +22,7 @@ import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Pages.NotificationPage
 import com.example.moneytalks.ui.theme.Black
+import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 import com.example.moneytalks.ui.theme.gradient
 
@@ -49,7 +50,8 @@ fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior
             IconButton(onClick = { navController.navigate(Destination.NOTIFICATIONS.route) }) {
                 Icon(
                     imageVector = NavIcon.NOTIFICATIONS.icon,
-                    contentDescription = NavIcon.NOTIFICATIONS.destination.contentDescription
+                    contentDescription = NavIcon.NOTIFICATIONS.destination.contentDescription,
+                    tint = DarkBlue
                 )
             }
         },
