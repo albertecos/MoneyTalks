@@ -36,7 +36,7 @@ fun BalanceBox(value: Double) {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(height = 60.dp, width = 230.dp)
-            .background(GreyColor)
+            .background(GreyColor, shape = RoundedCornerShape(25.dp))
             .border(
                 width = 3.dp,
                 brush = borderColor,
@@ -54,13 +54,13 @@ fun BalanceStatusText(value: Double, balanceStatus: BalanceStatus) {
 
     val message = when (balanceStatus) {
         BalanceStatus.OweMoney -> "You need to pay " + formattedPrice + ".-"
-        BalanceStatus.RecieveMoney -> "Other members owe you " + formattedPrice + ".-"
+        BalanceStatus.RecieveMoney -> "Others owe you " + formattedPrice + ".-"
         BalanceStatus.Clear -> "You are all clear!"
     }
 
     Text(
         message,
-        fontSize = 12.sp,
+        fontSize = 14.sp,
         color = Color.Black,
         fontWeight = FontWeight.Bold
     )

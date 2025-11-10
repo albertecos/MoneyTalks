@@ -2,6 +2,7 @@ package com.example.moneytalks.Pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,18 +14,27 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moneytalks.Cards.BalanceBox
-import com.example.moneytalks.Cards.BalanceStatus
+import com.example.moneytalks.Pages.PossibleActions.*
 import com.example.moneytalks.ui.theme.DarkGrey
+import com.example.moneytalks.ui.theme.GreyColor
+import com.example.moneytalks.ui.theme.blueDebtFree
+import com.example.moneytalks.ui.theme.blueDebtFreeV2
 
 @Preview
 @Composable
@@ -37,7 +47,12 @@ fun GroupView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
 
-        BalanceBox(-202.20) //TODO - skal kalde API :)
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        )
+        BalanceBox(0.20) //TODO - skal kalde API :)
 
         // Transactions
         Column(modifier = modifier
@@ -45,13 +60,12 @@ fun GroupView(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
         ) {
-            FriendsBubble("Alberte", "Paid ", 500)
-            FriendsBubble("Asta", "Paid ", 200)
-            OwnBubble("Paid ",150)
-            FriendsBubble("Maria", "Added expense of ", 200)
-            FriendsBubble("Bernard", "Added expense of ", 300)
-            FriendsBubble("Idriis", "Paid ", 500)
-            OwnBubble("Added expense of ",300)
+            FriendsBubble("Alberte", R.drawable.babygator,PAY, 500)
+            FriendsBubble("Asta", R.drawable.arghhh,PAY, 200)
+            OwnBubble(REMOVE_EXPENSE,150)
+            FriendsBubble("Maria", R.drawable.batman,ADD_EXPENSE, 200)
+            OwnBubble(ADD_EXPENSE,300)
+            OwnBubble(PAY,300)
         }
 
         AllButtonsBar()
@@ -59,7 +73,7 @@ fun GroupView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OwnBubble(text: String, value: Int) {
+fun OwnBubble(action: PossibleActions, value: Int) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
@@ -70,24 +84,34 @@ fun OwnBubble(text: String, value: Int) {
             horizontalAlignment = Alignment.End
         ) {
             Text("You", fontWeight = FontWeight.Bold)
-            Text(text + value + ".-", color = DarkGrey)
+            Text(returnTextForAction(action) + value + ".-", color = DarkGrey)
         }
     }
 }
 
+
 @Composable
-fun FriendsBubble(username: String, text: String, value: Int) {
+fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, value: Int) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        Image(
+            painter = painterResource(pfpResID),
+            "lulul",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+            )
         Column(modifier = Modifier
             .align(Alignment.CenterVertically)
             .padding(8.dp),
         ) {
             Text(username, fontWeight = FontWeight.Bold)
-            Text(text + value + ".-", color = DarkGrey)
+            Text(returnTextForAction(action) + value + ".-", color = DarkGrey)
         }
     }
 }
@@ -97,6 +121,7 @@ fun AllButtonsBar() {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp),
+        horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
     )  {
         AddExpenseButton()
         TransactionButton()
@@ -105,21 +130,55 @@ fun AllButtonsBar() {
 
 @Composable
 fun TransactionButton() {
-    var buttonText by remember { mutableStateOf("Pay your part to the group?") }
     Button(
-        onClick = { buttonText = "Payed!" }
+        modifier = Modifier
+            .size(80.dp)
+            .clip(CircleShape)
+            .border(
+                3.dp,
+                Brush.horizontalGradient(0f to (blueDebtFreeV2), 1.0f to blueDebtFree),
+                CircleShape
+            ),
+        colors = ButtonDefaults.buttonColors(GreyColor),
+        onClick = { "Payment!" } //TODO
     ) {
-        Text(buttonText)
+        Image(painter = painterResource(R.drawable.payment),
+            "payment icon")
     }
 }
 
 @Composable
 fun AddExpenseButton() {
-    var buttonText by remember { mutableStateOf("Add expense to group?") }
+    //var buttonText by remember { mutableStateOf("Add expense to group?") }
     Button(
-        onClick = { buttonText = "Added!" }
+        modifier = Modifier
+            .size(80.dp)
+            .clip(CircleShape)
+            .border(
+                3.dp,
+                Brush.horizontalGradient(0f to (blueDebtFreeV2), 1.0f to blueDebtFree),
+                CircleShape
+            ),
+        colors = ButtonDefaults.buttonColors(GreyColor),
+        onClick = { "Added Expense!" } //TODO
     ) {
-        Text(buttonText)
+        Image(painter = painterResource(R.drawable.add),
+            "Add expense icon"
+        )
     }
+}
+
+fun returnTextForAction(value: PossibleActions): String {
+    return when (value) {
+        PAY -> "Payed "
+        ADD_EXPENSE -> "Added expense of "
+        REMOVE_EXPENSE -> "Removed expense of "
+    }
+}
+
+enum class PossibleActions {
+    PAY,
+    ADD_EXPENSE,
+    REMOVE_EXPENSE
 }
 
