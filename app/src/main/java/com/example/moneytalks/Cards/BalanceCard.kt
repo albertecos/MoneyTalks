@@ -54,7 +54,7 @@ fun BalanceStatusText(value: Double, balanceStatus: BalanceStatus) {
 
     val message = when (balanceStatus) {
         BalanceStatus.OweMoney -> "You need to pay " + formattedPrice + ".-"
-        BalanceStatus.RecieveMoney -> "Other members owe you " + formattedPrice + ".-"
+        BalanceStatus.RecieveMoney -> "Others owe you " + formattedPrice + ".-"
         BalanceStatus.Clear -> "You are all clear!"
     }
 
