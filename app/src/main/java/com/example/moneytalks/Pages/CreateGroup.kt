@@ -23,7 +23,7 @@ import com.example.moneytalks.DataClasses.User
     showBackground = true,
 )
 @Composable
-fun EditGroupPage() {
+fun CreateGroup() {
     var groupName by remember { mutableStateOf("") }
     var addPeople by remember { mutableStateOf("") }
 
@@ -39,7 +39,7 @@ fun EditGroupPage() {
         verticalArrangement = Arrangement.Center
     ){
         Text(
-            text = "Edit group",
+            text = "Create group",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
@@ -121,7 +121,7 @@ fun EditGroupPage() {
         MemberListElement(User(id = "placeholder", full_name = "John Doe", username = "johndoe", email = "john@example.com", password = "password"))
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Edit group button
+        // Create group button
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
@@ -130,7 +130,7 @@ fun EditGroupPage() {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { /* handle save edits */ },
+                onClick = { /* handle create group */ },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -138,10 +138,62 @@ fun EditGroupPage() {
                 contentPadding = PaddingValues()
             ) {
                 Text(
-                    "Save",
+                    "Create group",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MemberListElement(member: User) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Placeholder for profile picture
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Text(
+            text = member.full_name,
+            fontSize = 18.sp,
+            color = Color.Black
+        )
+
+        Text(
+            text = " (@${member.username})",
+            fontSize = 14.sp,
+            color = Color.DarkGray,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .weight(1f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Button(
+                onClick = { /* Remove member action */ },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(0.dp),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Remove member",
+                    tint = Color.Red,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
