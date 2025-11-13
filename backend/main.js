@@ -31,9 +31,14 @@ app.use((req, res, next) => {
 
 const groupsEndpoints = require('./endpoints/groups');
 const usersEndpoints = require('./endpoints/users');
+const notificationsEndpoints = require('./endpoints/notifications');
+const expensesEndpoints = require('./endpoints/expenses');
 
 registerGroupEndpoints(groupsEndpoints);
 registerGroupEndpoints(usersEndpoints);
+registerGroupEndpoints(notificationsEndpoints);
+registerGroupEndpoints(expensesEndpoints);
+
 
 function registerGroupEndpoints(endPoints) {
     for (const endpoint of endPoints) {

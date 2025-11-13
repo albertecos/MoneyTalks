@@ -61,6 +61,40 @@ var Components = {
             },
             required: ['username', 'full_name', 'email', 'password']
         },
+        Notification: {
+            type: 'object',
+            properties: {
+                id: {type: 'string', format: 'uuid'},
+                date: {type: 'string', format: 'date-time'},
+                description: {type: 'string'},
+                seen: {type: 'boolean'},
+                inviteId: {type: 'string', format: 'uuid'}
+            },
+            required: ['id', 'date', 'description', 'seen']
+        },
+        Expense: {
+            type: 'object',
+            properties: {
+                id: {type: 'string', format: 'uuid'},
+                groupId: {type: 'string', format: 'uuid'},
+                description: {type: 'string'},
+                amount: {type: 'number', format: 'float'},
+                date: {type: 'string', format: 'date-time'},
+                action: {type: 'string'}, // either 'expense' or 'payment'
+            },
+            required: ['id', 'groupId', 'description', 'amount', 'date', 'action']
+        },
+        ExpenseWithoutId: {
+            type: 'object',
+            properties: {
+                groupId: {type: 'string', format: 'uuid'},
+                description: {type: 'string'},
+                amount: {type: 'number', format: 'float'},
+                date: {type: 'string', format: 'date-time'},
+                action: {type: 'string'}, // either 'expense' or 'payment'
+            },
+            required: ['groupId', 'description', 'amount', 'date', 'action']
+        }
     }
 };
 

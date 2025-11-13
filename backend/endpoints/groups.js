@@ -117,111 +117,39 @@ endPoints.push({path: '/groups/edit', method: 'POST', oapi: {
     res.json(Database.getInstance('groups').select({id})[0]);
 }});
 
-endPoints.push({method: 'POST', path: '/groups/addMember', oapi: {
-    summary: 'Add a member to a group',
-    requestBody: {
-        required: true,
-        content: {
-            'application/json': {
-                schema: {
-                    type: 'object',
-                    properties: {
-                        groupId: {type: 'string', format: 'uuid'},
-                        memberId: {type: 'string', format: 'uuid'}
-                    },
-                    required: ['groupId', 'memberId']
-                }
-            }
-        }
-    },
-    responses: {
-        200: {
-            description: 'Member added successfully',
-            content: {
-                'application/json': {
-                    schema: Components.schemas.Group
-                }
+endPoints.push({path: '/groups/leave', method: 'GET', oapi: {
+    summary: 'Leave a group by group ID and member ID',
+    parameters: [
+        {
+            name: 'groupId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
             }
         },
+        {
+            name: 'memberId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
+    responses: {
+        200: {
+            description: 'Group left successfully'
+        },
         404: {
-            description: 'Group not found'
+            description: 'Group not found or member not in group'
         }
     }
 }, handler: (req, res) => {
-    const {groupId, memberId} = req.body;
-    if(!groupId || !memberId) {
-        return res.status(400).send({error: 'Please enter a valid groupId and memberId'});
-    }
-
-    const existingGroups = Database.getInstance('groups').select({id: groupId});
-    if(existingGroups.length === 0) {
-        return res.status(404).send({error: 'Group not found'});
-    }
-
-    const existingMembers = Database.getInstance('users').select({id: memberId});
-    if(existingMembers.length === 0) {
-        return res.status(404).send({error: 'Member not found'});
-    }
-
-    const group = existingGroups[0];
-    if(!group.members.includes(memberId)) {
-        group.members.push(memberId);
-        Database.getInstance('groups').update(groupId, {members: group.members});
-    }
-
-    res.json(Database.getInstance('groups').select({id: groupId})[0]);
-}});
-
-endPoints.push({method: 'POST', path: '/groups/removeMember', oapi: {
-    summary: 'Remove a member from a group',
-    requestBody: {
-        required: true,
-        content: {
-            'application/json': {
-                schema: {
-                    type: 'object',
-                    properties: {
-                        groupId: {type: 'string', format: 'uuid'},
-                        memberId: {type: 'string', format: 'uuid'}
-                    },
-                    required: ['groupId', 'memberId']
-                }
-            }
-        }
-    },
-    responses: {
-        200: {
-            description: 'Member removed successfully',
-            content: {
-                'application/json': {
-                    schema: Components.schemas.Group
-                }
-            }
-        },
-        404: {
-            description: 'Group or member not found'
-        }
-    }
-}, handler: (req, res) => {
-    const {groupId, memberId} = req.body;
-    if(!groupId || !memberId) {
-        return res.status(400).send({error: 'Please enter a valid groupId and memberId'});
-    }
-
-    const existingGroups = Database.getInstance('groups').select({id: groupId});
-    if(existingGroups.length === 0) {
-        return res.status(404).send({error: 'Group not found'});
-    }
-
-    const group = existingGroups[0];
-    if(group.members.includes(memberId)) {
-        group.members = group.members.filter(id => id !== memberId);
-        Database.getInstance('groups').update(groupId, {members: group.members});
-    } else {
-        return res.status(404).send({error: 'Member not found in group'});
-    }
-
-    res.json(Database.getInstance('groups').select({id: groupId})[0]);
+    // Not implemented yet
+    res.status(501).send({error: 'Not implemented'});
 }});
 
 module.exports = endPoints;
