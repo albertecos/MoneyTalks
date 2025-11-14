@@ -60,12 +60,12 @@ fun GroupView(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
         ) {
-            FriendsBubble("Alberte", R.drawable.babygator,PAY, 500)
-            FriendsBubble("Asta", R.drawable.arghhh,PAY, 200)
+            FriendsBubble("Alberte", R.drawable.babygator,PAID, 500)
+            FriendsBubble("Asta", R.drawable.arghhh,PAID, 200)
             OwnBubble(REMOVE_EXPENSE,150)
             FriendsBubble("Maria", R.drawable.batman,ADD_EXPENSE, 200)
             OwnBubble(ADD_EXPENSE,300)
-            OwnBubble(PAY,300)
+            OwnBubble(PAID,300)
         }
 
         AllButtonsBar()
@@ -170,14 +170,14 @@ fun AddExpenseButton() {
 
 fun returnTextForAction(value: PossibleActions): String {
     return when (value) {
-        PAY -> "Payed "
+        PAID -> "Paid "
         ADD_EXPENSE -> "Added expense of "
         REMOVE_EXPENSE -> "Removed expense of "
     }
 }
 
 enum class PossibleActions {
-    PAY,
+    PAID,
     ADD_EXPENSE,
     REMOVE_EXPENSE
 }
