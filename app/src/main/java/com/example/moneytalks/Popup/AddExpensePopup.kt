@@ -10,10 +10,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -24,19 +20,15 @@ import androidx.compose.ui.window.Dialog
 
 @Preview
 @Composable
-fun AccessPhotosPopupPreview() {
-    AccessPhotosPopup(
-        onDismiss = {},
-        onDeny = {},
-        onAllow = {}
+fun AddExpensePopupPreview() {
+    AddExpensePopup(
+        onDismiss = {}
     )
 }
 
 @Composable
-fun AccessPhotosPopup(
-    onDismiss: () -> Unit,
-    onDeny: () -> Unit,
-    onAllow: () -> Unit,
+fun AddExpensePopup(
+    onDismiss: () -> Unit
     ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -48,14 +40,12 @@ fun AccessPhotosPopup(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Allow MoneyTalk to access and manage your photo album?", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = "Add expense?", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Row (modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
                     horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
                 )  {
-                    Button(onClick = onDeny) {Text("Deny")}
-                    Button(onClick = onAllow) {Text("Allow")}
                 }
             }
         }
