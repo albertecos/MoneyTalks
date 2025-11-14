@@ -69,22 +69,24 @@ endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const notificationId = req.query.notificationId;
-    const db = new Database();
+    const memberId = req.query.memberId;
 
-    const noty = db.table('notifications').find(notificationId);
-    if(!noty || noty.action !== 'INVITE'){
-        return res.status(404).send({error: 'Notification not found'})
+    const notificationsDb = Database.getInstance('notifications');
+
+    const invites = notificationsDb.select({
+        userId: memberId,
+        action: 'INVITE'
+    });
+
+    if(!invites || invites.length === 0){
+        return res.status(404).send({error: 'No invite notifications found'})
     }
 
-    db.table('members').update(
-        { id: noty.memberId, groupId: noty.groupId},
-        { accepted: true }
-    );
+    invites.forEach(invite => {
+        notificationsDb.update(invite.id, {seen: true })
+    })
 
-    db.table('notifications').update(notificationId, { seen: true });
-
-    res.send({ ok: true });
+    res.send({ ok: true })
 }});
 
 endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
@@ -109,22 +111,24 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const notificationId = req.query.notificationId;
-    const db = new Database();
+    const memberId = req.query.memberId;
 
-    const noty = db.table('notifications').find(notificationId);
-    if(!noty || noty.action !== 'INVITE'){
-        return res.status(404).send({error: 'Notification not found'})
+    const notificationsDb = Database.getInstance('notifications');
+
+    const invites = notificationsDb.select({
+        userId: memberId,
+        action: 'INVITE'
+    });
+
+    if(!invites || invites.length === 0){
+        return res.status(404).send({error: 'No invite notifications found'})
     }
 
-    db.table('members').update(
-        { id: noty.memberId, groupId: noty.groupId},
-        { accepted: true }
-    );
+    invites.forEach(invite => {
+        notificationsDb.update(invite.id, {seen: true })
+    })
 
-    db.table('notifications').update(notificationId, { seen: true });
-
-    res.send({ ok: true });
+    res.send({ ok: true })
 }});
 
 module.exports = endPoints;
