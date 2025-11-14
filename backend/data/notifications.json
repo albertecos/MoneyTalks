@@ -1,0 +1,35 @@
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "action": "PAYMENT",
+    "groupId": "31e50e58-431f-41ea-83d3-b7f896e87351",
+    "groupName": "Spain trip",
+    "userId": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "amount": 200,
+    "date": "2025-11-14T16:44:51.097Z",
+    "seen": false,
+    "description": "PleaSe GIVE ME MY MONEYY$$$$"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "action": "RECEIVEMENT",
+    "groupId": "31e50e58-431f-41ea-83d3-b7f896e87351",
+    "groupName": "Spain trip",
+    "userId": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "amount": 50,
+    "date": "2025-11-14T16:44:51.097Z",
+    "seen": false,
+    "description": "This is your money"
+  },
+  {
+    "id": "3fa85f64-5717-2222-b3fc-2c963f66afa6",
+    "action": "INVITE",
+    "groupId": "71e50e58-431f-41ea-83d3-b7f896e87351",
+    "groupName": "New Years",
+    "userId": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "amount": null,
+    "date": "2025-11-14T16:44:51.097Z",
+    "seen": false,
+    "description": "You have been invited"
+  }
+]

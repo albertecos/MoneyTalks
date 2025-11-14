@@ -34,11 +34,20 @@ endPoints.push({method: 'GET', path: '/getNotifications', oapi: {
         }
     }
 }, handler: (req, res) => {
-    // not implemented yet
-    res.status(501).send({error: 'Not implemented'});
+    const userId = req.query.userId;
+
+    let notifications = Database.getInstance('notifications').all();
+
+    notifications = notifications.filter(n => n.userId === userId)
+
+    if(notifications.length === 0){
+        return res.status(404).send({error: 'No notifications on for this user id'})
+    }
+
+    res.json(notifications);
 }});
 
-endPoints.push({method: 'GET', path: '/acceptInvite', oapi: {
+endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
     summary: 'Accept invite by member ID',
     parameters: [
         {
@@ -64,7 +73,7 @@ endPoints.push({method: 'GET', path: '/acceptInvite', oapi: {
     res.status(501).send({error: 'Not implemented'});
 }});
 
-endPoints.push({method: 'GET', path: '/declineInvite', oapi: {
+endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
     summary: 'Decline invite by member ID',
     parameters: [
         {
