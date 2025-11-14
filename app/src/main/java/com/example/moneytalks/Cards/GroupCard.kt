@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moneytalks.DataClasses.Group
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Popup.ShowLeavePopup

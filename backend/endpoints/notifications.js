@@ -69,8 +69,22 @@ endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    // not implemented yet
-    res.status(501).send({error: 'Not implemented'});
+    const notificationId = req.query.notificationId;
+    const db = new Database();
+
+    const noty = db.table('notifications').find(notificationId);
+    if(!noty || noty.action !== 'INVITE'){
+        return res.status(404).send({error: 'Notification not found'})
+    }
+
+    db.table('members').update(
+        { id: noty.memberId, groupId: noty.groupId},
+        { accepted: true }
+    );
+
+    db.table('notifications').update(notificationId, { seen: true });
+
+    res.send({ ok: true });
 }});
 
 endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
@@ -95,8 +109,22 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    // not implemented yet
-    res.status(501).send({error: 'Not implemented'});
+    const notificationId = req.query.notificationId;
+    const db = new Database();
+
+    const noty = db.table('notifications').find(notificationId);
+    if(!noty || noty.action !== 'INVITE'){
+        return res.status(404).send({error: 'Notification not found'})
+    }
+
+    db.table('members').update(
+        { id: noty.memberId, groupId: noty.groupId},
+        { accepted: true }
+    );
+
+    db.table('notifications').update(notificationId, { seen: true });
+
+    res.send({ ok: true });
 }});
 
 module.exports = endPoints;

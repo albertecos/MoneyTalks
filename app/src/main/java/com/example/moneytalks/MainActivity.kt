@@ -65,7 +65,7 @@ fun MoneyTalksApp() {
             composable(Destination.PROFILE.route) { ProfilePage() }
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
             composable(Destination.SETTINGS.route) { SettingsPage() }
-            composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
+            composable(Destination.NOTIFICATIONS.route) { NotificationPage(startMemberID, navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
             composable(Destination.CREATEGROUP.route) { CreateGroup() }
             composable(Destination.GROUPVIEW.route) { GroupView() }

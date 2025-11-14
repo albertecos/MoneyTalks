@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
@@ -24,8 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.ViewModel.GroupsViewModel
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.LightLightBlue
 import com.example.moneytalks.ui.theme.greenCreditor
