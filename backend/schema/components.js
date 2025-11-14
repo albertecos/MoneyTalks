@@ -5,22 +5,29 @@ var Components = {
             properties: {
                 id: {type: 'string', format: 'uuid'},
                 name: {type: 'string'},
-                description: {type: 'string'},
                 members: {
                     type: 'array',
                     items: {
-                        type: 'string',
-                        format: 'uuid'
+                        type: 'object',
+                        properties: {
+                            id: {type: 'string', format: 'uuid'},
+                            username: {type: 'string'},
+                            profile_picture: {type: 'string', format: 'uri'},
+                            full_name: {type: 'string'},
+                            email: {type: 'string', format: 'email'},
+                            password: {type: 'string'},
+                            accepted: {type: 'boolean'}
+                        },
+                        required: ['id', 'username', 'profile_picture', 'full_name', 'email', 'password', 'accepted']
                     }
                 }
             },
-            required: ['id', 'name', 'description', 'members']
+            required: ['id', 'name', 'members']
         },
         GroupWithoutId: {
             type: 'object',
             properties: {
                 name: {type: 'string'},
-                description: {type: 'string'},
                 members: {
                     type: 'array',
                     items: {
@@ -29,27 +36,27 @@ var Components = {
                     }
                 }
             },
-            required: ['name', 'description', 'members']
+            required: ['name', 'members']
         },
         GroupWithoutMembers: {
             type: 'object',
             properties: {
                 id: {type: 'string', format: 'uuid'},
                 name: {type: 'string'},
-                description: {type: 'string'}
             },
-            required: ['id', 'name', 'description']
+            required: ['id', 'name']
         },
         User: {
             type: 'object',
             properties: {
                 id: {type: 'string', format: 'uuid'},
                 username: {type: 'string'},
+                profile_picture: {type: 'string', format: 'uri'},
                 full_name: {type: 'string'},
                 email: {type: 'string', format: 'email'},
                 password: {type: 'string'}
             },
-            required: ['id', 'username', 'full_name', 'email', 'password']
+            required: ['id', 'username', 'profile_picture', 'full_name', 'email', 'password']
         },
         UserWithoutId: {
             type: 'object',

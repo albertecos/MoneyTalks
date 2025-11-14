@@ -5,10 +5,10 @@ const { Components } = require('../schema/components');
 var endPoints = [];
 
 endPoints.push({method: 'GET', path: '/groups', oapi: {
-    summary: 'Get group by member ID',
+    summary: 'Get group by user ID',
     parameters: [
         {
-            name: 'memberId',
+            name: 'userId',
             in: 'query',
             required: true,
             schema: {
@@ -30,24 +30,27 @@ endPoints.push({method: 'GET', path: '/groups', oapi: {
             }
         },
         404: {
-            description: 'No groups found for this member ID'
+            description: 'No groups found for this user ID'
         }
     }
 }, handler: (req, res) => {
-    const memberId = req.query.memberId;
-    
-    let groups = Database.getInstance('groups').all();
-    groups = groups.filter(group => group.members.includes(memberId));
-
-    if(groups.length === 0) {
-        return res.status(404).send({error: 'No groups found for this member ID'});
-    }
-
-    res.json(groups);
+    // not implemented yet
+    res.status(501).send({error: 'Not implemented'});
 }});
 
-endPoints.push({method: 'POST', path: '/groups/create', oapi: {
+endPoints.push({method: 'POST', path: '/createGroup', oapi: {
     summary: 'Create a new group',
+    parameters: [
+        {
+            name: 'userId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
     requestBody: {
         required: true,
         content: {
@@ -67,18 +70,11 @@ endPoints.push({method: 'POST', path: '/groups/create', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const {name, description, members} = req.body;
-    if(!name || !description || !Array.isArray(members)) {
-        return res.status(400).send({error: 'Please enter a valid name, description and members array'});
-    }
-
-    const newGroup = {id: uuidv4(), name, description, members};
-    Database.getInstance('groups').insert(newGroup);
-
-    res.status(201).json(newGroup);
+    // not implemented yet
+    res.status(501).send({error: 'Not implemented'});
 }});
 
-endPoints.push({path: '/groups/edit', method: 'POST', oapi: {
+endPoints.push({path: '/editGroup', method: 'POST', oapi: {
     summary: 'Edit an existing group',
     requestBody: {
         required: true,
@@ -102,23 +98,12 @@ endPoints.push({path: '/groups/edit', method: 'POST', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const {id, name, description} = req.body;
-    if(!id || !name || !description) {
-        return res.status(400).send({error: 'Please enter a valid id, name, and description'});
-    }
-
-    const existingGroups = Database.getInstance('groups').select({id});
-    if(existingGroups.length === 0) {
-        return res.status(404).send({error: 'Group not found'});
-    }
-
-    Database.getInstance('groups').update(id, {name, description});
-
-    res.json(Database.getInstance('groups').select({id})[0]);
+    // not implemented yet
+    res.status(501).send({error: 'Not implemented'});
 }});
 
-endPoints.push({path: '/groups/leave', method: 'GET', oapi: {
-    summary: 'Leave a group by group ID and member ID',
+endPoints.push({path: '/leaveGroup', method: 'GET', oapi: {
+    summary: 'Leave a group by group ID and user ID',
     parameters: [
         {
             name: 'groupId',
@@ -130,7 +115,7 @@ endPoints.push({path: '/groups/leave', method: 'GET', oapi: {
             }
         },
         {
-            name: 'memberId',
+            name: 'userId',
             in: 'query',
             required: true,
             schema: {
@@ -144,7 +129,7 @@ endPoints.push({path: '/groups/leave', method: 'GET', oapi: {
             description: 'Group left successfully'
         },
         404: {
-            description: 'Group not found or member not in group'
+            description: 'Group not found or user not in group'
         }
     }
 }, handler: (req, res) => {
