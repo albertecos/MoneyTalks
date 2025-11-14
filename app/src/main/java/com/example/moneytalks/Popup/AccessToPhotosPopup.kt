@@ -26,16 +26,18 @@ import androidx.compose.ui.window.Dialog
 @Composable
 fun AccessPhotosPopupPreview() {
     AccessPhotosPopup(
-        onDismiss = {}
+        onDismiss = {},
+        onDeny = {},
+        onAllow = {}
     )
 }
 
 @Composable
 fun AccessPhotosPopup(
     onDismiss: () -> Unit,
-) {
-    //var text by remember { mutableStateOf(currentValue) }
-
+    onDeny: () -> Unit,
+    onAllow: () -> Unit,
+    ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(16.dp),
@@ -52,30 +54,10 @@ fun AccessPhotosPopup(
                     .padding(20.dp),
                     horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
                 )  {
-                    DenyButton()
-                    AcceptButton()
+                    Button(onClick = onDeny) {Text("Deny")}
+                    Button(onClick = onAllow) {Text("Allow")}
                 }
             }
         }
-    }
-}
-
-@Composable
-fun DenyButton() {
-    var buttonText by remember { mutableStateOf("Deny") }
-    Button(
-        onClick = { buttonText = "Denied"}
-    ) {
-        Text(buttonText)
-    }
-}
-
-@Composable
-fun AcceptButton() {
-    var buttonText by remember { mutableStateOf("Allow") }
-    Button(
-        onClick = { buttonText = "Allowed"}
-    ) {
-        Text(buttonText)
     }
 }
