@@ -27,6 +27,7 @@ import com.example.moneytalks.Pages.NotificationPage
 import com.example.moneytalks.Pages.ProfilePage
 import com.example.moneytalks.Pages.SettingsPage
 import com.example.moneytalks.Pages.EditGroupPage
+import com.example.moneytalks.Pages.CreateGroup
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 
 
@@ -66,6 +67,7 @@ fun MoneyTalksApp() {
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
+            composable(Destination.CREATEGROUP.route) { CreateGroup() }
             composable(Destination.GROUPVIEW.route) { GroupView() }
         }
     }

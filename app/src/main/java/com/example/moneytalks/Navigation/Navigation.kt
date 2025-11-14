@@ -30,6 +30,7 @@ enum class Destination(
     HOME("home", "Home", "Home"),
     SETTINGS("settings", "Settings", "Settings"),
     NOTIFICATIONS("notifications", "Notifications", "Notifications"),
+    CREATEGROUP("createGroup", "CreateGroup", "Create a group"),
     EDITGROUP("editGroup", "EditGroup", "EditGroup"),
     GROUPVIEW("groupview", "Groupview", "Groupview")
 }
