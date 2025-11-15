@@ -97,10 +97,8 @@ var Components = {
                 groupId: {type: 'string', format: 'uuid'},
                 description: {type: 'string'},
                 amount: {type: 'number', format: 'float'},
-                date: {type: 'string', format: 'date-time'},
-                action: {type: 'string'}, // either 'expense' or 'payment'
             },
-            required: ['groupId', 'description', 'amount', 'date', 'action']
+            required: ['groupId', 'description', 'amount', 'action']
         }
     }
 };
