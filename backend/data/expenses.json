@@ -1,0 +1,18 @@
+[
+  {
+    "id": "c6316da1-730f-451f-971b-fa1b72161603",
+    "member_id": "9f8359c6-163e-481a-9642-33333006b707",
+    "date": "2025-11-15T14:42:15.177Z",
+    "amount": 100,
+    "description": "string4",
+    "action": "expense"
+  },
+  {
+    "id": "b6b65a45-1d7b-4025-a4ad-6dbb2bb8e839",
+    "member_id": "983c20c3-3a59-4a4e-bfe5-e81283b79d83",
+    "date": "2025-11-15T14:45:04.451Z",
+    "amount": 25,
+    "description": "Payment of owed expenses",
+    "action": "payment"
+  }
+]

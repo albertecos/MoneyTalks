@@ -5,10 +5,10 @@ const { Components } = require('../schema/components');
 var endPoints = [];
 
 endPoints.push({method: 'GET', path: '/groups', oapi: {
-    summary: 'Get group by member ID',
+    summary: 'Get group by user ID',
     parameters: [
         {
-            name: 'memberId',
+            name: 'userId',
             in: 'query',
             required: true,
             schema: {
@@ -30,24 +30,45 @@ endPoints.push({method: 'GET', path: '/groups', oapi: {
             }
         },
         404: {
-            description: 'No groups found for this member ID'
+            description: 'No groups found for this user ID'
         }
     }
 }, handler: (req, res) => {
-    const memberId = req.query.memberId;
-    
-    let groups = Database.getInstance('groups').all();
-    groups = groups.filter(group => group.members.includes(memberId));
-
-    if(groups.length === 0) {
-        return res.status(404).send({error: 'No groups found for this member ID'});
+    const userId = req.query.userId;
+    if (!userId) {
+        return res.status(400).send({error: 'userId query parameter is required'});
     }
+
+    const groupMembers = Database.getInstance('group_members').select({user_id: userId});
+    if(groupMembers.length === 0) {
+        return res.status(404).send({error: 'No groups found for this user ID'});
+    }
+
+    const groups = groupMembers.map(gm => {
+        const group = Database.getInstance('groups').select({id: gm.group_id})[0];
+        const members = Database.getInstance('group_members').select({group_id: group.id}).map(memberRecord => {
+            const user = Database.getInstance('users').select({id: memberRecord.user_id})[0];
+            return {...user, accepted: memberRecord.accepted};
+        });
+        return {...group, members};
+    });
 
     res.json(groups);
 }});
 
-endPoints.push({method: 'POST', path: '/groups/create', oapi: {
+endPoints.push({method: 'POST', path: '/createGroup', oapi: {
     summary: 'Create a new group',
+    parameters: [
+        {
+            name: 'userId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
     requestBody: {
         required: true,
         content: {
@@ -67,18 +88,42 @@ endPoints.push({method: 'POST', path: '/groups/create', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const {name, description, members} = req.body;
-    if(!name || !description || !Array.isArray(members)) {
-        return res.status(400).send({error: 'Please enter a valid name, description and members array'});
+    const userId = req.query.userId;
+    const groupData = req.body;
+
+    if (!userId) {
+        return res.status(400).send({error: 'userId query parameter is required'});
     }
 
-    const newGroup = {id: uuidv4(), name, description, members};
-    Database.getInstance('groups').insert(newGroup);
+    if (!groupData || !groupData.name || !Array.isArray(groupData.members)) {
+        return res.status(400).send({error: 'Invalid group data'});
+    }
 
-    res.status(201).json(newGroup);
+    let group = {
+        id: uuidv4(),
+        name: groupData.name,
+    };
+    Database.getInstance('groups').insert(group);
+
+    // if the creator is not in the members list, add them
+    if (!groupData.members.includes(userId)) {
+        groupData.members.push(userId);
+    }
+
+    let members = groupData.members.map(memberId => ({
+        id: uuidv4(),
+        group_id: group.id,
+        user_id: memberId,
+        accepted: memberId === userId // auto-accept if the member is the creator
+    }));
+    members.forEach(member => Database.getInstance('group_members').insert(member));
+
+    // TODO send invitations to other members
+
+    res.status(201).json({...group, members: members});
 }});
 
-endPoints.push({path: '/groups/edit', method: 'POST', oapi: {
+endPoints.push({path: '/editGroup', method: 'POST', oapi: {
     summary: 'Edit an existing group',
     requestBody: {
         required: true,
@@ -102,9 +147,9 @@ endPoints.push({path: '/groups/edit', method: 'POST', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const {id, name, description} = req.body;
-    if(!id || !name || !description) {
-        return res.status(400).send({error: 'Please enter a valid id, name, and description'});
+    const {id, name} = req.body;
+    if(!id || !name) {
+        return res.status(400).send({error: 'Please enter a valid id and name'});
     }
 
     const existingGroups = Database.getInstance('groups').select({id});
@@ -112,25 +157,17 @@ endPoints.push({path: '/groups/edit', method: 'POST', oapi: {
         return res.status(404).send({error: 'Group not found'});
     }
 
-    Database.getInstance('groups').update(id, {name, description});
+    Database.getInstance('groups').update(id, {name});
 
-    res.json(Database.getInstance('groups').select({id})[0]);
+    const updatedGroup = Database.getInstance('groups').select({id})[0];
+    res.json(updatedGroup);
 }});
 
-endPoints.push({path: '/groups/leave', method: 'GET', oapi: {
-    summary: 'Leave a group by group ID and member ID',
+endPoints.push({path: '/leaveGroup', method: 'POST', oapi: {
+    summary: 'Leave a group by group ID and user ID',
     parameters: [
         {
-            name: 'groupId',
-            in: 'query',
-            required: true,
-            schema: {
-                type: 'string',
-                format: 'uuid'
-            }
-        },
-        {
-            name: 'memberId',
+            name: 'userId',
             in: 'query',
             required: true,
             schema: {
@@ -139,17 +176,43 @@ endPoints.push({path: '/groups/leave', method: 'GET', oapi: {
             }
         }
     ],
+    requestBody: {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        groupId: {type: 'string', format: 'uuid'}
+                    },
+                    required: ['groupId']
+                }
+            }
+        }
+    },
     responses: {
         200: {
             description: 'Group left successfully'
         },
         404: {
-            description: 'Group not found or member not in group'
+            description: 'Group not found or user not in group'
         }
     }
 }, handler: (req, res) => {
-    // Not implemented yet
-    res.status(501).send({error: 'Not implemented'});
+    const {groupId, userId} = req.query;
+    if(!groupId || !userId) {
+        return res.status(400).send({error: 'Please provide valid groupId and userId'});
+    }
+
+    const groupMembers = Database.getInstance('group_members').select({group_id: groupId, user_id: userId});
+    if(groupMembers.length === 0) {
+        return res.status(404).send({error: 'Group not found or user not in group'});
+    }
+    // TODO: check if expenses are settled before leaving
+
+    Database.getInstance('group_members').delete(groupMembers[0].id);
+
+    res.json({message: 'Left group successfully'});
 }});
 
 module.exports = endPoints;

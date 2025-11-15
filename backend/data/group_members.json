@@ -1,0 +1,26 @@
+[
+  {
+    "id": "9feeb013-4c84-455d-b256-453440ebadb3",
+    "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
+    "user_id": "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",
+    "accepted": false
+  },
+  {
+    "id": "983c20c3-3a59-4a4e-bfe5-e81283b79d83",
+    "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
+    "user_id": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
+    "accepted": false
+  },
+  {
+    "id": "9f8359c6-163e-481a-9642-33333006b707",
+    "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
+    "user_id": "4fdf2d6a-c65b-47b7-96a0-3d0c748616d9",
+    "accepted": false
+  },
+  {
+    "id": "791c291c-675a-491d-934f-7f655018a66b",
+    "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
+    "user_id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
+    "accepted": true
+  }
+]
