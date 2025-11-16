@@ -39,7 +39,7 @@ class NotificationViewModel(private val retrofitClient: RetrofitClient = Retrofi
     fun declineInvite(notification: Notification){
         viewModelScope.launch {
             try{
-                retrofitClient.api.declineInvite(notification.userId)
+                retrofitClient.api.declineInvite(notification.id)
 
                 notifications.remove(notification)
             }catch (e: Exception){

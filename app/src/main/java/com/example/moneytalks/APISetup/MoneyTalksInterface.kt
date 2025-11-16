@@ -26,7 +26,7 @@ interface MoneyTalksInterface {
         @Query("groupId") groupId: String)
 
     @POST("declineInvite")
-    suspend fun declineInvite(@Query("userId") userId: String)
+    suspend fun declineInvite(@Query("notificationId") notificationId: String)
 
     @GET("getBalance")
     suspend fun getBalance(

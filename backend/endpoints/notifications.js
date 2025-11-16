@@ -120,7 +120,7 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
     summary: 'Decline invite by user ID',
     parameters: [
         {
-            name: 'userId',
+            name: 'notificationId',
             in: 'query',
             required: true,
             schema: {
@@ -138,12 +138,16 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const userId = req.query.userId;
+    const { notificationId } = req.query;
+
+    if(!notificationId) {
+        return res.status(400).send({ error: 'notificationId is required' })
+    }
 
     const notificationsDb = Database.getInstance('notifications');
 
     const invites = notificationsDb.select({
-        userId: userId,
+        id: notificationId,
         action: 'INVITE'
     });
 
@@ -151,9 +155,9 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
         return res.status(404).send({error: 'No invite notifications found'})
     }
 
-    invites.forEach(invite => {
-        notificationsDb.update(invite.id, {seen: true })
-    })
+    const invite = invites[0]
+
+    notificationsDb.update(invite.id, { seen: true })
 
     res.send({ ok: true })
 }});
