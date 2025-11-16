@@ -1,12 +1,12 @@
 package com.example.moneytalks.Popup
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,15 +20,17 @@ import androidx.compose.ui.window.Dialog
 
 @Preview
 @Composable
-fun AddExpensePopupPreview() {
-    AddExpensePopup(
-        onDismiss = {}
+fun PaymentPopupPreview() {
+    PaymentPopup(
+        onDismiss = {},
+        onConfirm = {}
     )
 }
 
 @Composable
-fun AddExpensePopup(
-    onDismiss: () -> Unit
+fun PaymentPopup(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
     ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -40,12 +42,34 @@ fun AddExpensePopup(
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Add expense?", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                Text(
+                    text = "Pay your part to the group?",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
                     horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
                 )  {
+                    Text(
+                        text = "Cancel",
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable{onDismiss() }
+                    )
+
+                    Text(
+                        text = "Confirm",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable{onDismiss() }
+                    )
                 }
             }
         }

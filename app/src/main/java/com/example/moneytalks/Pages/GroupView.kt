@@ -22,6 +22,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
@@ -31,14 +33,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moneytalks.Cards.BalanceBox
 import com.example.moneytalks.Pages.PossibleActions.*
+import com.example.moneytalks.Popup.PaymentPopup
 import com.example.moneytalks.ui.theme.DarkGrey
 import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
+import kotlin.Unit
 
 @Preview
 @Composable
 fun GroupView(modifier: Modifier = Modifier) {
+
+    var showPaymentPopup by remember { mutableStateOf(false) }
+    var value = 0.20
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,7 +60,7 @@ fun GroupView(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(10.dp)
         )
-        BalanceBox(0.20) //TODO - skal kalde API :)
+        BalanceBox(value) //TODO - skal kalde API :)
 
         // Transactions
         Column(modifier = modifier
@@ -68,7 +76,19 @@ fun GroupView(modifier: Modifier = Modifier) {
             OwnBubble(PAID,300)
         }
 
-        AllButtonsBar()
+        AllButtonsBar(
+            onPayClick = {showPaymentPopup = true }
+        )
+
+        if (showPaymentPopup) {
+            PaymentPopup(
+                onDismiss = {showPaymentPopup = false},
+                onConfirm = {
+                    value = 0.0;
+                    showPaymentPopup = false
+                }
+            )
+        }
     }
 }
 
@@ -117,19 +137,19 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
 }
 
 @Composable
-fun AllButtonsBar() {
+fun AllButtonsBar(onPayClick:() -> Unit ) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
     )  {
         AddExpenseButton()
-        TransactionButton()
+        TransactionButton(onPayClick)
     }
 }
 
 @Composable
-fun TransactionButton() {
+fun TransactionButton(onPayClick:() -> Unit ) {
     Button(
         modifier = Modifier
             .size(80.dp)
@@ -140,7 +160,7 @@ fun TransactionButton() {
                 CircleShape
             ),
         colors = ButtonDefaults.buttonColors(GreyColor),
-        onClick = { "Payment!" } //TODO
+        onClick = { onPayClick() } //TODO
     ) {
         Image(painter = painterResource(R.drawable.payment),
             "payment icon")
