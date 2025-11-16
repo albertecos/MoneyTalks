@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface MoneyTalksInterface {
     @GET("groups")
-    suspend fun getGroups(@Query("memberId") memberId: String): List<Group>
+    suspend fun getGroups(@Query("userId") userId: String): List<Group>
 
     @GET("getNotifications")
     suspend fun getNotifications(@Query("userId") userId: String): List<Notification>

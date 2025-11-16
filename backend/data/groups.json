@@ -1,22 +1,6 @@
 [
   {
-    "id": "71e50e58-431f-41ea-83d3-b7f896e87351",
-    "name": "New Years",
-    "description": "new description",
-    "members": [
-
-    ]
-  },
-  {
-    "id": "31e50e58-431f-41ea-83d3-b7f896e87351",
-    "name": "Spain trip",
-    "description": "new description",
-    "members": [
-      "68661b1b-6586-4f3c-ac0b-a02fa35d60f7"
-    ]
-  },
-  {
     "id": "a8602b88-8236-4596-9235-01a6040ab116",
-    "name": "string"
+    "name": "Spain Trip 2026"
   }
 ]

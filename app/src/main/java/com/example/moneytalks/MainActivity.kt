@@ -50,7 +50,7 @@ fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    val startMemberID = "68661b1b-6586-4f3c-ac0b-a02fa35d60f7"
+    val startMemberID = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

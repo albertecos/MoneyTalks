@@ -4,14 +4,16 @@
     "username": "justavirus",
     "full_name": "Bob Lars",
     "email": "boy-big@example.com",
-    "password": "catlover"
+    "password": "catlover",
+    "profile_picture": ""
   },
   {
     "id": "68661b1b-1234-4f3c-ac0b-a02fa35d60f7",
     "username": "crazy frog",
     "full_name": "Asta Pasta",
     "email": "anya_banana@gmail.com",
-    "password": "maria_Sangria"
+    "password": "maria_Sangria",
+    "profile_picture": ""
   },
   {
     "id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
