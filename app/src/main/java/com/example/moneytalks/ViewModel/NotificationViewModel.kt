@@ -23,20 +23,24 @@ class NotificationViewModel(private val retrofitClient: RetrofitClient = Retrofi
         }
     }
 
-    fun acceptInvite(memberId: String){
+    fun acceptInvite(notification: Notification){
         viewModelScope.launch {
             try{
-                retrofitClient.api.acceptInvite(memberId)
+                retrofitClient.api.acceptInvite(notification.userId)
+
+                notifications.remove(notification)
             }catch (e: Exception){
                 e.printStackTrace()
             }
         }
     }
 
-    fun declineInvite(memberId: String){
+    fun declineInvite(notification: Notification){
         viewModelScope.launch {
             try{
-                retrofitClient.api.declineInvite(memberId)
+                retrofitClient.api.declineInvite(notification.userId)
+
+                notifications.remove(notification)
             }catch (e: Exception){
                 e.printStackTrace()
             }

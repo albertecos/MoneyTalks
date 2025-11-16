@@ -38,7 +38,7 @@ endPoints.push({method: 'GET', path: '/getNotifications', oapi: {
 
     let notifications = Database.getInstance('notifications').all();
 
-    notifications = notifications.filter(n => n.userId === userId)
+    notifications = notifications.filter(n => n.userId === userId && !n.seen)
 
     if(notifications.length === 0){
         return res.status(404).send({error: 'No notifications on for this user id'})

@@ -54,8 +54,8 @@ fun NotificationPage(
                 GroupInviteNotify(
                     groupName = notification.groupName,
                     date = notification.date.take(10),
-                    onAccept = { vm.acceptInvite(notification.userId)},
-                    onDecline = {vm.declineInvite(notification.userId)}
+                    onAccept = { vm.acceptInvite(notification)},
+                    onDecline = {vm.declineInvite(notification)}
                 )
                 Spacer(Modifier.height(16.dp))
             }
