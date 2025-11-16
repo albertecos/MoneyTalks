@@ -42,10 +42,11 @@ import kotlin.Unit
 
 @Preview
 @Composable
+//TODO: API CALL TO GROUP
 fun GroupView(modifier: Modifier = Modifier) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
-    var value = 0.20
+    var expenseValue by remember { mutableStateOf(-10.20) } //TODO: API CALL TO VALUE
 
     Column(
         modifier = modifier
@@ -60,7 +61,7 @@ fun GroupView(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(10.dp)
         )
-        BalanceBox(value) //TODO - skal kalde API :)
+        BalanceBox(expenseValue)
 
         // Transactions
         Column(modifier = modifier
@@ -68,6 +69,7 @@ fun GroupView(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
         ) {
+            //TODO: API CALL TO EXPENSE LOG
             FriendsBubble("Alberte", R.drawable.babygator,PAID, 500)
             FriendsBubble("Asta", R.drawable.arghhh,PAID, 200)
             OwnBubble(REMOVE_EXPENSE,150)
@@ -82,9 +84,12 @@ fun GroupView(modifier: Modifier = Modifier) {
 
         if (showPaymentPopup) {
             PaymentPopup(
+                value = expenseValue,
                 onDismiss = {showPaymentPopup = false},
                 onConfirm = {
-                    value = 0.0;
+                    if (expenseValue > 0.0) {
+                        expenseValue = 0.0;
+                    }
                     showPaymentPopup = false
                 }
             )

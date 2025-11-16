@@ -17,22 +17,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.moneytalks.ui.theme.blueDebtFree
 
 @Preview
 @Composable
 fun PaymentPopupPreview() {
     PaymentPopup(
         onDismiss = {},
-        onConfirm = {}
+        onConfirm = {},
+        30.00
     )
 }
 
 @Composable
 fun PaymentPopup(
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    value: Double
     ) {
     Dialog(onDismissRequest = onDismiss) {
+        val formattedPrice = String.format("%.2f", Math.abs(value))
+
         Card(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.padding(16.dp)
@@ -40,25 +45,46 @@ fun PaymentPopup(
             Column(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+
             ) {
-                Text(
-                    text = "Pay your part to the group?",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
+
+                if (value > 0) {
+                    Text(
+                        text = "Pay your part to the group?",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = "$formattedPrice.-",
+                        fontWeight = FontWeight.ExtraBold,
+                        color = blueDebtFree,
+                        fontSize = 40.sp,
+                        modifier = Modifier
+                            .padding(10.dp)
+                    )
+                } else {
+                    Text(
+                        text = "You don't owe anything to the group!",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .padding(10.dp)
+                    )
+                }
 
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp),
+                        .padding(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
                 )  {
                     Text(
                         text = "Cancel",
                         fontSize = 15.sp,
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(5.dp)
                             .clickable{onDismiss() }
                     )
 
@@ -67,8 +93,8 @@ fun PaymentPopup(
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .padding(8.dp)
-                            .clickable{onDismiss() }
+                            .padding(5.dp)
+                            .clickable{onConfirm() }
                     )
                 }
             }
