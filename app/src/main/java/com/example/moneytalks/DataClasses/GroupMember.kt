@@ -1,5 +1,9 @@
 package com.example.moneytalks.DataClasses
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class GroupMember(
     val id: String,
     val username: String,
@@ -8,4 +12,4 @@ data class GroupMember(
     val password: String,
     val profile_picture: String,
     val accepted: Boolean
-)
+) : Parcelable

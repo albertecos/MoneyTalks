@@ -37,8 +37,7 @@ fun HomePage(
 
         groups.forEach { group ->
             GroupCard(
-                groupName = group.name,
-                groupId = group.id,
+                group = group,
                 memberId = memberId,
                 navController = navController
             )

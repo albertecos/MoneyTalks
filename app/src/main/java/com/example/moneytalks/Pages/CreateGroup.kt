@@ -16,16 +16,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.navigation.NavController
+import com.example.moneytalks.DataClasses.GroupMember
 import com.example.moneytalks.DataClasses.User
 
 @Preview(
     showBackground = true,
 )
 @Composable
-fun CreateGroup() {
+fun CreateGroup(navController: NavController) {
     var groupName by remember { mutableStateOf("") }
     var addPeople by remember { mutableStateOf("") }
+    var peopleList = remember { mutableStateListOf<GroupMember>() }
+    var searchResults by remember { mutableStateOf<List<com.example.moneytalks.DataClasses.User>>(emptyList()) }
+    var userVM: com.example.moneytalks.ViewModel.UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    var groupVM: com.example.moneytalks.ViewModel.GroupsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    
+    // LaunchedEffect triggered whenever addPeople changes
+    LaunchedEffect(addPeople) {
+        if (addPeople.isEmpty()) {
+            searchResults = emptyList()
+            return@LaunchedEffect
+        }
+        val results = userVM.searchUsers(addPeople) ?: emptyList()
+        searchResults = results
+    }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
@@ -86,7 +103,9 @@ fun CreateGroup() {
         ){
             OutlinedTextField(
                 value = addPeople,
-                onValueChange = { addPeople = it },
+                onValueChange = { 
+                    addPeople = it
+                },
                 label = { Text("Add people...") },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
@@ -108,6 +127,22 @@ fun CreateGroup() {
             )
         }
 
+        for (member in searchResults) {
+            SearchedMemberListElement(member = member, onAddClick = {
+                peopleList.add(
+                    GroupMember(
+                        id = member.id,
+                        full_name = member.full_name,
+                        profile_picture = member.profile_picture,
+                        username = member.username,
+                        email = member.email,
+                        password = member.password,
+                        accepted = false
+                    )
+                )
+            })
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Members:",
@@ -118,7 +153,10 @@ fun CreateGroup() {
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         )
-        MemberListElement(User(id = "placeholder", full_name = "John Doe", username = "johndoe", email = "john@example.com", password = "password"))
+        for (groupMember in peopleList) {
+            MemberListElement(member = groupMember)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         // Create group button
@@ -130,7 +168,12 @@ fun CreateGroup() {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { /* handle create group */ },
+                onClick = { 
+                    val userId = userVM.currentUser.value?.id
+                    if (userId != null) {
+                        groupVM.createGroup(userId, groupName, peopleList.map { it.id })
+                    }
+                },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -148,8 +191,61 @@ fun CreateGroup() {
     }
 }
 
+
 @Composable
-fun MemberListElement(member: User) {
+fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Placeholder for profile picture
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Text(
+            text = member.full_name,
+            fontSize = 18.sp,
+            color = Color.Black
+        )
+
+        Text(
+            text = " (@${member.username})",
+            fontSize = 14.sp,
+            color = Color.DarkGray,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .weight(1f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Button(
+                onClick = onAddClick,
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(0.dp),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add member",
+                    tint = Color.Green,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MemberListElement(member: GroupMember) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
