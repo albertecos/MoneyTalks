@@ -32,7 +32,7 @@ enum class Destination(
     NOTIFICATIONS("notifications", "Notifications", "Notifications"),
     CREATEGROUP("createGroup", "CreateGroup", "Create a group"),
     EDITGROUP("editGroup", "EditGroup", "EditGroup"),
-    GROUPVIEW("group", "GroupView", "Groupview"),
+    GROUPVIEW("group", "GroupView", "GroupView"),
     ADDEXPENSE("group/addExpense", "AddExpense", "AddExpense")
 }
 

@@ -29,28 +29,36 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.ViewModel.AddExpenseViewModel
 import com.example.moneytalks.ViewModel.GroupsViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExpensePage(navController: NavController, groupId: String, memberId: String) {
-    val groupsVm: GroupsViewModel = viewModel()
-
-    LaunchedEffect(memberId) {
-        groupsVm.fetchGroups(memberId)
-    }
-
-    val poster = memberId
+fun AddExpensePage(
+    navController: NavController,
+    groupId: String,
+    memberId: String,
+    vm: AddExpenseViewModel = viewModel()
+) {
+//    val groupsVm: GroupsViewModel = viewModel()
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
-    val groups = groupsVm.groups
-    val currentGroup = groups.firstOrNull{it.id == groupId}
+    val isLoading = vm.isLoading
+    val errorMessage = vm.errorMessage
 
-    val peopleInGroup = currentGroup?.members ?: emptyList()
+    LaunchedEffect(memberId) {
+        vm.fetchMembers(groupId)
+    }
 
-    var groupMembers = remember { mutableStateListOf<String>() }
+
+//    val groups = groupsVm.groups
+//    val currentGroup = groups.firstOrNull{it.id == groupId}
+
+//    val peopleInGroup = currentGroup?.members ?: emptyList()
+
+//    var groupMembers = remember { mutableStateListOf<String>() }
 
     val gradient = Brush.horizontalGradient(
         listOf(Color(0xFFBADFFF), Color(0XFF3F92DA))
@@ -90,11 +98,25 @@ fun AddExpensePage(navController: NavController, groupId: String, memberId: Stri
         //Button
         Button(
             onClick = {
-                println("$memberId added expense: $amount to this group: $description")
-                navController.navigate("${Destination.GROUPVIEW.route}/$groupId")
+                val amount = amount.toDoubleOrNull()
+                if (amount == null) {
+                    println("Invalid amount")
+                    return@Button
+                }
+                vm.createExpenseForGroup(
+                    groupId = groupId,
+                    memberId = memberId,
+                    amount = amount,
+                    description = description,
+                    onSuccess = {
+                        println("$memberId added expense: $amount to this group: $description")
+                        navController.navigate("${Destination.GROUPVIEW.route}/$groupId")
+                    },
+                    onError = {error -> println("Error: $error")}
+                )
+            },
+            enabled = !isLoading,
 
-
-                      },
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             modifier = Modifier
@@ -103,7 +125,7 @@ fun AddExpensePage(navController: NavController, groupId: String, memberId: Stri
                 .background(gradient, shape = RoundedCornerShape(12.dp))
         ) {
             Text(
-                text = "Add expense",
+                text = if(isLoading) "Saving..." else "Add expense",
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 textAlign = TextAlign.Center

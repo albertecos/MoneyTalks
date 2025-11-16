@@ -51,7 +51,7 @@ fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    val startMemberID = "68661b1b-6586-4f3c-ac0b-a02fa35d60f7"
+    val startMemberID = "3d26fd4d-9c81-46e2-ac1b-334adc1e6013"
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -75,7 +75,8 @@ fun MoneyTalksApp() {
             }
             composable("${Destination.ADDEXPENSE.route}/{groupId}") { backStackEntry ->
                 val groupId = backStackEntry.arguments?.getString("groupId")!!
-                AddExpensePage(navController = navController, groupId = groupId)
+                val memberId = backStackEntry.arguments?.getString("memberId")!!
+                AddExpensePage(navController = navController, groupId = groupId, memberId = memberId)
             }
         }
     }

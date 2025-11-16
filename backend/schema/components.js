@@ -5,22 +5,22 @@ var Components = {
             properties: {
                 id: {type: 'string', format: 'uuid'},
                 name: {type: 'string'},
-                members: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            id: {type: 'string', format: 'uuid'},
-                            username: {type: 'string'},
-                            profile_picture: {type: 'string', format: 'uri'},
-                            full_name: {type: 'string'},
-                            email: {type: 'string', format: 'email'},
-                            password: {type: 'string'},
-                            accepted: {type: 'boolean'}
-                        },
-                        required: ['id', 'username', 'profile_picture', 'full_name', 'email', 'password', 'accepted']
-                    }
-                }
+//                members: {
+//                    type: 'array',
+//                    items: {
+//                        type: 'object',
+//                        properties: {
+//                            id: {type: 'string', format: 'uuid'},
+//                            username: {type: 'string'},
+//                            profile_picture: {type: 'string', format: 'uri'},
+//                            full_name: {type: 'string'},
+//                            email: {type: 'string', format: 'email'},
+//                            password: {type: 'string'},
+//                            accepted: {type: 'boolean'}
+//                        },
+//                        required: ['id', 'username', 'profile_picture', 'full_name', 'email', 'password', 'accepted']
+//                    }
+//                }
             },
             required: ['id', 'name', 'members']
         },
