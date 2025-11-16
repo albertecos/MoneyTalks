@@ -39,26 +39,20 @@ fun AddExpensePage(
     navController: NavController,
     groupId: String,
     memberId: String,
-    vm: AddExpenseViewModel = viewModel()
+    addExpenseViewModel: AddExpenseViewModel = viewModel(),
+    groupViewModel: GroupsViewModel = viewModel()
 ) {
 //    val groupsVm: GroupsViewModel = viewModel()
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
-    val isLoading = vm.isLoading
-    val errorMessage = vm.errorMessage
+    val isLoading = addExpenseViewModel.isLoading
+    val errorMessage = addExpenseViewModel.errorMessage
 
-    LaunchedEffect(memberId) {
-        vm.fetchMembers(groupId)
+    LaunchedEffect(groupId) {
+        addExpenseViewModel.fetchMembers(groupId)
     }
 
-
-//    val groups = groupsVm.groups
-//    val currentGroup = groups.firstOrNull{it.id == groupId}
-
-//    val peopleInGroup = currentGroup?.members ?: emptyList()
-
-//    var groupMembers = remember { mutableStateListOf<String>() }
 
     val gradient = Brush.horizontalGradient(
         listOf(Color(0xFFBADFFF), Color(0XFF3F92DA))
@@ -103,14 +97,14 @@ fun AddExpensePage(
                     println("Invalid amount")
                     return@Button
                 }
-                vm.createExpenseForGroup(
+                addExpenseViewModel.createExpenseForGroup(
                     groupId = groupId,
                     memberId = memberId,
                     amount = amount,
                     description = description,
                     onSuccess = {
                         println("$memberId added expense: $amount to this group: $description")
-                        navController.navigate("${Destination.GROUPVIEW.route}/$groupId")
+                        navController.popBackStack()
                     },
                     onError = {error -> println("Error: $error")}
                 )

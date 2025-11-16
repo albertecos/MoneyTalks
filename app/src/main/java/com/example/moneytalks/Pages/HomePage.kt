@@ -38,9 +38,9 @@ fun HomePage(
         groups.forEach { group ->
             GroupCard(
                 groupName = group.name,
-                payment = 90,
                 navController = navController,
-                groupId = group.id
+                groupId = group.id,
+                memberId = memberId
             )
         }
 

@@ -10,11 +10,11 @@ import kotlinx.coroutines.launch
 class GroupsViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
     var groups = mutableStateListOf<Group>()
 
-    fun fetchGroups(memberId: String) {
+    fun fetchGroups(userId: String) {
         groups.clear()
         viewModelScope.launch{
             try{
-                val response = retrofitClient.api.getGroups(memberId)
+                val response = retrofitClient.api.getGroups(userId)
                 groups.addAll(response)
             }catch (e: Exception) {
                 e.printStackTrace()

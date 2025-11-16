@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneytalks.APISetup.RetrofitClient
 import com.example.moneytalks.DataClasses.CreateExpenseRequest
-import com.example.moneytalks.DataClasses.Member
+import com.example.moneytalks.DataClasses.GroupMember
 import kotlinx.coroutines.launch
 
 class AddExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClient) :
     ViewModel() {
-    var members = mutableStateListOf<Member>()
+    var members = mutableStateListOf<GroupMember>()
         private set
     var isLoading by mutableStateOf(false)
         private set
@@ -46,15 +46,8 @@ class AddExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitC
                     fetchMembers(groupId)
                 }
 
-                val poster = members.firstOrNull { it.groupId == groupId && it.userId == memberId }
-
-                if (poster == null) {
-                    onError("Not a member")
-                    return@launch
-                }
-
                 val request = CreateExpenseRequest(
-                    memberId = poster.id,
+                    memberId = memberId,
                     amount = amount,
                     description = description,
                     action = "expense"
@@ -64,7 +57,7 @@ class AddExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitC
                 if (response.isSuccessful) {
                     onSuccess()
                 }else{
-                    onError("Could not create expense ${response.body()}")
+                    onError("Could not create expense ${response.body()} body: ${response.errorBody()?.string()}.")
                 }
             }catch(e: Exception){
                 e.printStackTrace()

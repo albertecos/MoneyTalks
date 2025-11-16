@@ -97,6 +97,7 @@ var Components = {
                 groupId: {type: 'string', format: 'uuid'},
                 description: {type: 'string'},
                 amount: {type: 'number', format: 'float'},
+                action: {type: 'string'}
             },
             required: ['groupId', 'description', 'amount', 'action']
         }

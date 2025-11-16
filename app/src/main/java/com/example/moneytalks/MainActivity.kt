@@ -51,7 +51,7 @@ fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    val startMemberID = "3d26fd4d-9c81-46e2-ac1b-334adc1e6013"
+val startMemberID = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -69,13 +69,15 @@ fun MoneyTalksApp() {
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
             composable(Destination.CREATEGROUP.route) { CreateGroup() }
-            composable("${Destination.GROUPVIEW.route}/{groupId}") {backStackEntry ->
+            composable("${Destination.GROUPVIEW.route}/{groupId}/{memberId}") {backStackEntry ->
                     val groupId = backStackEntry.arguments?.getString("groupId")!!
-                    GroupView(navController = navController, groupId = groupId)
+                    val memberId = startMemberID
+                    GroupView(navController = navController, groupId = groupId, memberId = memberId)
             }
-            composable("${Destination.ADDEXPENSE.route}/{groupId}") { backStackEntry ->
+            composable("${Destination.ADDEXPENSE.route}/{groupId}/{memberId}") { backStackEntry ->
                 val groupId = backStackEntry.arguments?.getString("groupId")!!
-                val memberId = backStackEntry.arguments?.getString("memberId")!!
+//                val memberId = backStackEntry.arguments?.getString("memberId")!!
+                val memberId = startMemberID
                 AddExpensePage(navController = navController, groupId = groupId, memberId = memberId)
             }
         }

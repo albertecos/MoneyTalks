@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navArgument
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
-import com.example.moneytalks.Popup.ShowLeavePopup
+//import com.example.moneytalks.Popup.ShowLeavePopup
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.LightBlue
 import com.example.moneytalks.ui.theme.LilyScriptOne
@@ -38,10 +38,10 @@ import com.example.moneytalks.ui.theme.LilyScriptOne
 fun GroupCard(
     groupName: String,
     navController: NavController,
-    payment: Int,
     groupId: String,
+    memberId: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { navController.navigate("${Destination.GROUPVIEW.route}/$groupId") },
+    onClick: () -> Unit = { navController.navigate("${Destination.GROUPVIEW.route}/$groupId/$memberId") },
 ) {
     var showLeavePopup = remember { mutableStateOf(false) }
 
@@ -90,7 +90,7 @@ fun GroupCard(
             )
         }
     }
-    ShowLeavePopup(groupName, payment, navController, showLeavePopup)
+//    ShowLeavePopup(groupId, memberId, groupName, navController, showLeavePopup)
 }
 
 

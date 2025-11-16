@@ -40,7 +40,11 @@ import com.example.moneytalks.ui.theme.blueDebtFreeV2
 
 //@Preview
 @Composable
-fun GroupView(modifier: Modifier = Modifier, navController: NavController, groupId: String) {
+fun GroupView(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    groupId: String,
+    memberId: String) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -70,7 +74,7 @@ fun GroupView(modifier: Modifier = Modifier, navController: NavController, group
             OwnBubble(PAY,300)
         }
 
-        AllButtonsBar(navController, groupId)
+        AllButtonsBar(navController, groupId, memberId)
     }
 }
 
@@ -119,13 +123,13 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
 }
 
 @Composable
-fun AllButtonsBar(navController: NavController, groupId: String) {
+fun AllButtonsBar(navController: NavController, groupId: String, memberId: String) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
     )  {
-        AddExpenseButton(navController, groupId)
+        AddExpenseButton(navController, groupId, memberId)
         TransactionButton()
     }
 }
@@ -150,7 +154,7 @@ fun TransactionButton() {
 }
 
 @Composable
-fun AddExpenseButton(navController: NavController, groupId: String) {
+fun AddExpenseButton(navController: NavController, groupId: String, memberId: String) {
     //var buttonText by remember { mutableStateOf("Add expense to group?") }
     Button(
         modifier = Modifier
@@ -163,7 +167,7 @@ fun AddExpenseButton(navController: NavController, groupId: String) {
             ),
         colors = ButtonDefaults.buttonColors(GreyColor),
         onClick = {
-            navController.navigate("${Destination.ADDEXPENSE.route}/$groupId")
+            navController.navigate("${Destination.ADDEXPENSE.route}/$groupId/$memberId")
         }
     ) {
         Image(painter = painterResource(R.drawable.add),

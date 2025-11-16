@@ -138,39 +138,39 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
     },
     responses: {
         200: {
-            description: 'Expense created successfully'
+            description: 'Expense created successfully',
+            content: {
+                'application/json': {
+                    schema: Components.schemas.Expense
+                    }
+                }
+            }
         },
         404: {
             description: 'Failed to create expense'
         }
-    }
 }, handler: (req, res) => {
-    const userId = req.query.userId;
+    const {memberId, description, amount, action} = req.body;
 
-    if (!userId) {
-        return res.status(400).send({error: 'userId query parameter is required'});
+    if(!description || typeof amount !== "number"){
+        return res.status(400).send({error: "Invalid input"});
     }
 
-    const { groupId, amount, description } = req.body;
-
-    if (!groupId || !amount || !description) {
-        return res.status(400).send({error: 'Please provide groupId, amount, and description for the expense'});
-    }
-
-    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId})[0];
-
-    Database.getInstance('expenses').insert({
+    const newExpense = {
         id: uuidv4(),
-        member_id: member.id,
+//        groupId,
+        memberId,
+        description,
+        amount,
         date: new Date().toISOString(),
-        amount: amount,
-        description: description,
-        action: 'expense'
-    });
+        action: action || "expense"
+    };
+    Database.getInstance('expenses').insert(newExpense);
+
+    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: memberId})[0];
 
     // Todo: Notify other group members about the new expense
-
-    res.status(201).send({message: 'Expense created successfully'});
+    res.status(201).json(newExpense);
 }});
 
 endPoints.push({method: 'POST', path: '/payOwed', oapi: {
