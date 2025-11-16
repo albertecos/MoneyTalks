@@ -29,9 +29,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.moneytalks.Cards.BalanceBox
+import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Pages.PossibleActions.*
 import com.example.moneytalks.Popup.PaymentPopup
 import com.example.moneytalks.ui.theme.DarkGrey
@@ -40,13 +41,12 @@ import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 import kotlin.Unit
 
-@Preview
 @Composable
 //TODO: API CALL TO GROUP
-fun GroupView(modifier: Modifier = Modifier) {
+fun GroupView(navController: NavController, modifier: Modifier = Modifier) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
-    var expenseValue by remember { mutableStateOf(-10.20) } //TODO: API CALL TO VALUE
+    var expenseValue by remember { mutableStateOf(10.20) } //TODO: API CALL TO VALUE
 
     Column(
         modifier = modifier
@@ -79,6 +79,7 @@ fun GroupView(modifier: Modifier = Modifier) {
         }
 
         AllButtonsBar(
+            navController,
             onPayClick = {showPaymentPopup = true }
         )
 
@@ -142,13 +143,13 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
 }
 
 @Composable
-fun AllButtonsBar(onPayClick:() -> Unit ) {
+fun AllButtonsBar(navController: NavController, onPayClick:() -> Unit ) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
     )  {
-        AddExpenseButton()
+        AddExpenseButton(navController)
         TransactionButton(onPayClick)
     }
 }
@@ -173,7 +174,9 @@ fun TransactionButton(onPayClick:() -> Unit ) {
 }
 
 @Composable
-fun AddExpenseButton() {
+fun AddExpenseButton(
+    navController: NavController,
+    ) {
     //var buttonText by remember { mutableStateOf("Add expense to group?") }
     Button(
         modifier = Modifier
@@ -185,7 +188,7 @@ fun AddExpenseButton() {
                 CircleShape
             ),
         colors = ButtonDefaults.buttonColors(GreyColor),
-        onClick = { "Added Expense!" } //TODO
+        onClick = { navController.navigate(Destination.ADDEXPENSE.route)} //TODO, give her the needed parameters?
     ) {
         Image(painter = painterResource(R.drawable.add),
             "Add expense icon"

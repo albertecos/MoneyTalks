@@ -31,7 +31,8 @@ enum class Destination(
     SETTINGS("settings", "Settings", "Settings"),
     NOTIFICATIONS("notifications", "Notifications", "Notifications"),
     EDITGROUP("editGroup", "EditGroup", "EditGroup"),
-    GROUPVIEW("groupview", "Groupview", "Groupview")
+    GROUPVIEW("groupview", "Groupview", "Groupview"),
+    ADDEXPENSE("addexpense", "AddExpense", "AddExpense")
 }
 
 enum class NavIcon(
