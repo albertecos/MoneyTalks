@@ -46,6 +46,8 @@ fun ShowLeavePopup(
     balanceViewModel: BalanceViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
+    val groupsViewModel: GroupsViewModel = viewModel()
+
     if(dialogState.value){
 
         LaunchedEffect(dialogState.value) {
@@ -97,7 +99,13 @@ fun ShowLeavePopup(
                             )
                         }
                         Button(
-                            onClick = { navController.navigate(Destination.EDITGROUP.route) },
+                            onClick = {
+                                groupsViewModel.leaveGroup(
+                                    userId = userId,
+                                    groupId = groupId
+                                )
+                                dialogState.value = false
+                            },
                             enabled = canLeave,
                             colors = ButtonDefaults.buttonColors(DarkBlue)
                         ) {

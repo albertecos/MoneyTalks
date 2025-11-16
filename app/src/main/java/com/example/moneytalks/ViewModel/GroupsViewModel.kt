@@ -22,4 +22,19 @@ class GroupsViewModel(private val retrofitClient: RetrofitClient = RetrofitClien
 
         }
     }
+
+    fun leaveGroup(
+        userId: String,
+        groupId: String
+    ){
+        viewModelScope.launch {
+            try {
+                retrofitClient.api.leaveGroup(userId, groupId)
+
+                groups.removeAll { it.id == groupId}
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
 }
