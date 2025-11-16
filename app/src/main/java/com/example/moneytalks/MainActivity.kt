@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.Bars.NavBar
 import com.example.moneytalks.Bars.TopBar
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.Pages.AddExpensePage
 import com.example.moneytalks.Pages.GroupView
 import com.example.moneytalks.Pages.HomePage
 import com.example.moneytalks.Pages.NotificationPage
@@ -63,12 +64,19 @@ fun MoneyTalksApp() {
             modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding)
         ){
             composable(Destination.PROFILE.route) { ProfilePage() }
-            composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
+            composable(Destination.HOME.route) { HomePage(memberId = startMemberID, navController = navController) }
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
             composable(Destination.CREATEGROUP.route) { CreateGroup() }
-            composable(Destination.GROUPVIEW.route) { GroupView() }
+            composable("${Destination.GROUPVIEW.route}/{groupId}") {backStackEntry ->
+                    val groupId = backStackEntry.arguments?.getString("groupId")!!
+                    GroupView(navController = navController, groupId = groupId)
+            }
+            composable("${Destination.ADDEXPENSE.route}/{groupId}") { backStackEntry ->
+                val groupId = backStackEntry.arguments?.getString("groupId")!!
+                AddExpensePage(navController = navController, groupId = groupId)
+            }
         }
     }
 

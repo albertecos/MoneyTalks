@@ -39,7 +39,8 @@ fun HomePage(
             GroupCard(
                 groupName = group.name,
                 payment = 90,
-                navController = navController
+                navController = navController,
+                groupId = group.id
             )
         }
 

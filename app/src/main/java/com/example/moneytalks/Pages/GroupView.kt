@@ -29,16 +29,18 @@ import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.moneytalks.Cards.BalanceBox
+import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Pages.PossibleActions.*
 import com.example.moneytalks.ui.theme.DarkGrey
 import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 
-@Preview
+//@Preview
 @Composable
-fun GroupView(modifier: Modifier = Modifier) {
+fun GroupView(modifier: Modifier = Modifier, navController: NavController, groupId: String) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -68,7 +70,7 @@ fun GroupView(modifier: Modifier = Modifier) {
             OwnBubble(PAY,300)
         }
 
-        AllButtonsBar()
+        AllButtonsBar(navController, groupId)
     }
 }
 
@@ -117,13 +119,13 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
 }
 
 @Composable
-fun AllButtonsBar() {
+fun AllButtonsBar(navController: NavController, groupId: String) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
     )  {
-        AddExpenseButton()
+        AddExpenseButton(navController, groupId)
         TransactionButton()
     }
 }
@@ -148,7 +150,7 @@ fun TransactionButton() {
 }
 
 @Composable
-fun AddExpenseButton() {
+fun AddExpenseButton(navController: NavController, groupId: String) {
     //var buttonText by remember { mutableStateOf("Add expense to group?") }
     Button(
         modifier = Modifier
@@ -160,7 +162,9 @@ fun AddExpenseButton() {
                 CircleShape
             ),
         colors = ButtonDefaults.buttonColors(GreyColor),
-        onClick = { "Added Expense!" } //TODO
+        onClick = {
+            navController.navigate("${Destination.ADDEXPENSE.route}/$groupId")
+        }
     ) {
         Image(painter = painterResource(R.drawable.add),
             "Add expense icon"

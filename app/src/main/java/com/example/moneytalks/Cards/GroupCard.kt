@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.navArgument
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Popup.ShowLeavePopup
@@ -38,8 +39,9 @@ fun GroupCard(
     groupName: String,
     navController: NavController,
     payment: Int,
+    groupId: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { navController.navigate(Destination.GROUPVIEW.route) },
+    onClick: () -> Unit = { navController.navigate("${Destination.GROUPVIEW.route}/$groupId") },
 ) {
     var showLeavePopup = remember { mutableStateOf(false) }
 

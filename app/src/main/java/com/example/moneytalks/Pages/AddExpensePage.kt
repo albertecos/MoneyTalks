@@ -7,16 +7,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,21 +26,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.ViewModel.GroupsViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExpensePage(navController: NavController) {
-    var poster by remember { mutableStateOf("") }
+fun AddExpensePage(navController: NavController, groupId: String, memberId: String) {
+    val groupsVm: GroupsViewModel = viewModel()
+
+    LaunchedEffect(memberId) {
+        groupsVm.fetchGroups(memberId)
+    }
+
+    val poster = memberId
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
 
-    val peopleInGroup = listOf("p1", "p2", "p3")
+    val groups = groupsVm.groups
+    val currentGroup = groups.firstOrNull{it.id == groupId}
 
-    var selectedMembers = remember { mutableStateListOf<String>() }
+    val peopleInGroup = currentGroup?.members ?: emptyList()
+
+    var groupMembers = remember { mutableStateListOf<String>() }
 
     val gradient = Brush.horizontalGradient(
         listOf(Color(0xFFBADFFF), Color(0XFF3F92DA))
@@ -71,55 +77,6 @@ fun AddExpensePage(navController: NavController) {
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier.fillMaxWidth()
         )
-        //Select person
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
-        ) {
-            OutlinedTextField(
-                value = if (selectedMembers.isEmpty()) "" else selectedMembers.joinToString(", "),
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("Select people to share expense") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier
-                    .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp)
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                peopleInGroup.forEach { person ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(person)
-                                Checkbox(
-                                    checked = person in selectedMembers,
-                                    onCheckedChange = {
-                                        if (it) selectedMembers.add(person)
-                                        else selectedMembers.remove(person)
-                                    }
-                                )
-                            }
-                        },
-                        onClick = {
-                            if (person in selectedMembers) {
-                                selectedMembers.remove(person)
-                            } else {
-                                selectedMembers.add(person)
-                            }
-                        }
-                    )
-                }
-            }
-        }
 
         OutlinedTextField(
             value = description,
@@ -133,9 +90,11 @@ fun AddExpensePage(navController: NavController) {
         //Button
         Button(
             onClick = {
-                println("Added expense: $amount to this group: $description")
-                navController.navigate(Destination.HOME.route)
-            },
+                println("$memberId added expense: $amount to this group: $description")
+                navController.navigate("${Destination.GROUPVIEW.route}/$groupId")
+
+
+                      },
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             modifier = Modifier
