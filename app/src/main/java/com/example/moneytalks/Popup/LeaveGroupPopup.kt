@@ -28,23 +28,38 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.ViewModel.BalanceViewModel
 import com.example.moneytalks.ViewModel.GroupsViewModel
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.LightLightBlue
 import com.example.moneytalks.ui.theme.greenCreditor
 import com.example.moneytalks.ui.theme.redInDebt
+import kotlin.math.roundToInt
 
 @Composable
 fun ShowLeavePopup(
+    groupId: String,
+    userId: String,
     groupName: String,
-    payment: Int,
     navController: NavController,
     dialogState: MutableState<Boolean>,
+    balanceViewModel: BalanceViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val canLeave = payment >= 0
-
     if(dialogState.value){
+
+        LaunchedEffect(dialogState.value) {
+            if (dialogState.value){
+                balanceViewModel.fetchBalance(groupId, userId)
+            }
+        }
+
+        val balanceNum = balanceViewModel.balance.value
+
+        val payment = balanceNum?.balance?.roundToInt() ?: 0
+
+        val canLeave = payment >= 0
+
         Popup(
             alignment = Alignment.TopStart,
             properties = PopupProperties()
@@ -113,7 +128,7 @@ fun LeaveGroupText(payment: Int, groupName: String){
         Text(text = message, color = DarkBlue, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(35.dp))
         Text(
-            text = "${payment.toString()} KR",
+            text = "${payment} KR",
             color = amountColor,
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold

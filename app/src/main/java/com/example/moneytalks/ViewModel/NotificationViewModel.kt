@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneytalks.APISetup.RetrofitClient
 import com.example.moneytalks.DataClasses.Notification
+import com.example.moneytalks.ui.theme.gradient
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
@@ -26,7 +27,7 @@ class NotificationViewModel(private val retrofitClient: RetrofitClient = Retrofi
     fun acceptInvite(notification: Notification){
         viewModelScope.launch {
             try{
-                retrofitClient.api.acceptInvite(notification.userId)
+                retrofitClient.api.acceptInvite(userId = notification.userId, groupId = notification.groupId)
 
                 notifications.remove(notification)
             }catch (e: Exception){

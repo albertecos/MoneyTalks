@@ -48,16 +48,22 @@ endPoints.push({method: 'GET', path: '/getNotifications', oapi: {
 }});
 
 endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
-    summary: 'Accept invite by member ID',
+    summary: 'Accept invite by user ID',
     parameters: [
         {
-            name: 'memberId',
+            name: 'userId',
             in: 'query',
             required: true,
             schema: {
                 type: 'string',
                 format: 'uuid'
             }
+        },
+        {
+            name: 'groupId',
+            in: 'query',
+            required: true,
+            schema: { type: 'string', format: 'uuid' }
         }
     ],
     responses: {
@@ -69,12 +75,18 @@ endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const memberId = req.query.memberId;
+    const {userId, groupId } = req.query;
+
+    if (!userId || !groupId) {
+        return res.status(400).send({ error: 'userId and groupId are required' });
+    }
 
     const notificationsDb = Database.getInstance('notifications');
+    const groupMembersDb = Database.getInstance('group_members');
 
     const invites = notificationsDb.select({
-        userId: memberId,
+        userId,
+        groupId,
         action: 'INVITE'
     });
 
@@ -86,14 +98,29 @@ endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
         notificationsDb.update(invite.id, {seen: true })
     })
 
+    const members = groupMembersDb.select({ group_id: groupId, user_id: userId });
+
+    if(members.length === 0) {
+        groupMembersDb.insert({
+            id: uuidv4(),
+            group_id: groupId,
+            user_id: userId,
+            accepted: true
+        });
+    } else {
+        members.forEach(member => {
+            groupMembersDb.update(member.id, { accepted: true });
+        });
+    }
+
     res.send({ ok: true })
 }});
 
 endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
-    summary: 'Decline invite by member ID',
+    summary: 'Decline invite by user ID',
     parameters: [
         {
-            name: 'memberId',
+            name: 'userId',
             in: 'query',
             required: true,
             schema: {
@@ -111,12 +138,12 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const memberId = req.query.memberId;
+    const userId = req.query.userId;
 
     const notificationsDb = Database.getInstance('notifications');
 
     const invites = notificationsDb.select({
-        userId: memberId,
+        userId: userId,
         action: 'INVITE'
     });
 

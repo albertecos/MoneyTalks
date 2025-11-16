@@ -37,8 +37,9 @@ import com.example.moneytalks.ui.theme.LilyScriptOne
 @Composable
 fun GroupCard(
     groupName: String,
+    groupId: String,
+    memberId: String,
     navController: NavController,
-    payment: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = { navController.navigate(Destination.GROUPVIEW.route) },
 ) {
@@ -89,7 +90,7 @@ fun GroupCard(
             )
         }
     }
-    ShowLeavePopup(groupName, payment, navController, showLeavePopup)
+    ShowLeavePopup(groupId, memberId, groupName, navController, showLeavePopup)
 }
 
 
