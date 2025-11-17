@@ -172,6 +172,7 @@ fun CreateGroup(navController: NavController) {
                     val userId = userVM.currentUser.value?.id
                     if (userId != null) {
                         groupVM.createGroup(userId, groupName, peopleList.map { it.id })
+                        navController.navigateUp()
                     }
                 },
                 shape = RoundedCornerShape(20.dp),
