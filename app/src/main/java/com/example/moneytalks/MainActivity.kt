@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -21,13 +22,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.bars.NavBar
 import com.example.moneytalks.bars.TopBar
+import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.AddExpensePage
 import com.example.moneytalks.pages.CreateAccount
 import com.example.moneytalks.pages.GroupView
 import com.example.moneytalks.pages.HomePage
 import com.example.moneytalks.pages.NotificationPage
-import com.example.moneytalks.pages.ProfilePage
 import com.example.moneytalks.pages.SettingsPage
 import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
@@ -73,26 +74,48 @@ fun MoneyTalksApp() {
         NavHost(
             navController = navController,
             startDestination = Destination.LOGIN.route,
-            modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding)
-        ){
-            composable(Destination.PROFILE.route) { ProfilePage() }
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+        ) {
+            val group = navController.previousBackStackEntry?.savedStateHandle?.get<Group>("group")
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
             composable(Destination.SETTINGS.route) { SettingsPage() }
-            composable(Destination.NOTIFICATIONS.route) { NotificationPage(startMemberID, navController) }
+            composable(Destination.NOTIFICATIONS.route) {NotificationPage(startMemberID, navController)}
             composable(Destination.EDITGROUP.route) {
-                val group = navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.get<com.example.moneytalks.dataclasses.Group>("group")
-                
+//                val group = navController.previousBackStackEntry
+//                    ?.savedStateHandle
+//                    ?.get<Group>("group")
+
                 if (group != null) {
                     EditGroupPage(group, navController)
                 } else {
-                    androidx.compose.material3.Text("Group not found")
+                    Text("Group not found")
                 }
             }
             composable(Destination.CREATEGROUP.route) { CreateGroup(navController) }
-            composable(Destination.GROUPVIEW.route) { GroupView(navController) }
-            composable(Destination.ADDEXPENSE.route) { AddExpensePage(navController) }
+            composable(Destination.GROUPVIEW.route) {
+//                val group = navController.previousBackStackEntry
+//                    ?.savedStateHandle
+//                    ?.get<Group>("group")
+
+                if (group != null) {
+                    GroupView(navController, group)
+                } else {
+                    Text("Group not found for GroupView")
+                }
+            }
+            composable(Destination.ADDEXPENSE.route) {
+//                val group = navController.previousBackStackEntry
+//                    ?.savedStateHandle
+//                    ?.get<Group>("group")
+
+                if (group != null) {
+                    AddExpensePage(navController, group)
+                } else {
+                    Text("Group not found for AddExpense")
+                }
+            }
             composable(Destination.LOGIN.route) { LoginScreen(navController) }
             composable(Destination.CREATEACCOUNT.route) { CreateAccount(navController) }
         }

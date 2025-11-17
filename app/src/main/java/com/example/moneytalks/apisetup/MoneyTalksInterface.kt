@@ -1,6 +1,7 @@
 package com.example.moneytalks.apisetup
 
 import com.example.moneytalks.dataclasses.Balance
+import com.example.moneytalks.dataclasses.Expense
 import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupCreate
@@ -18,6 +19,12 @@ interface MoneyTalksInterface {
     suspend fun createGroup(
         @Query("userId") userId: String,
         @Body group: GroupCreate)
+
+    @POST("createExpense")
+    suspend fun createExpense(
+        @Query("userId") userId: String,
+        @Body expense: Expense
+    )
 
     @POST("editGroup")
     suspend fun editGroup(@Body group: GroupEdit)

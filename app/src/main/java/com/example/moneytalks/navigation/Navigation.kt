@@ -14,7 +14,6 @@ enum class Destination(
     val contentDescription: String
 
 ){
-    PROFILE("profile", "Profile", "Profile"),
     HOME("home", "Home", "Home"),
     SETTINGS("settings", "Settings", "Settings"),
     NOTIFICATIONS("notifications", "Notifications", "Notifications"),
@@ -30,7 +29,6 @@ enum class NavIcon(
     var destination: Destination,
     val icon: ImageVector,
 ){
-    PROFILE(Destination.PROFILE, Icons.Outlined.Person),
     HOME(Destination.HOME, Icons.Outlined.Home),
     SETTINGS(Destination.SETTINGS, Icons.Outlined.Settings),
     NOTIFICATIONS(Destination.NOTIFICATIONS, Icons.Outlined.Notifications),

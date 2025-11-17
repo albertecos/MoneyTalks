@@ -167,9 +167,7 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         description: description,
         action: 'expense'
     });
-
     // Todo: Notify other group members about the new expense
-
     res.status(201).send({message: 'Expense created successfully'});
 }});
 
