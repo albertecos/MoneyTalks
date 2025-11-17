@@ -22,23 +22,32 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.moneytalks.Cards.BalanceBox
+import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Pages.PossibleActions.*
+import com.example.moneytalks.Popup.PaymentPopup
 import com.example.moneytalks.ui.theme.DarkGrey
 import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
+import kotlin.Unit
 
-@Preview
 @Composable
-fun GroupView(modifier: Modifier = Modifier) {
+//TODO: API CALL TO GROUP
+fun GroupView(navController: NavController, modifier: Modifier = Modifier) {
+
+    var showPaymentPopup by remember { mutableStateOf(false) }
+    var expenseValue by remember { mutableStateOf(10.20) } //TODO: API CALL TO VALUE
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,7 +61,7 @@ fun GroupView(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(10.dp)
         )
-        BalanceBox(0.20) //TODO - skal kalde API :)
+        BalanceBox(expenseValue)
 
         // Transactions
         Column(modifier = modifier
@@ -60,15 +69,32 @@ fun GroupView(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
         ) {
-            FriendsBubble("Alberte", R.drawable.babygator,PAY, 500)
-            FriendsBubble("Asta", R.drawable.arghhh,PAY, 200)
+            //TODO: API CALL TO EXPENSE LOG
+            FriendsBubble("Alberte", R.drawable.babygator,PAID, 500)
+            FriendsBubble("Asta", R.drawable.arghhh,PAID, 200)
             OwnBubble(REMOVE_EXPENSE,150)
             FriendsBubble("Maria", R.drawable.batman,ADD_EXPENSE, 200)
             OwnBubble(ADD_EXPENSE,300)
-            OwnBubble(PAY,300)
+            OwnBubble(PAID,300)
         }
 
-        AllButtonsBar()
+        AllButtonsBar(
+            navController,
+            onPayClick = {showPaymentPopup = true }
+        )
+
+        if (showPaymentPopup) {
+            PaymentPopup(
+                value = expenseValue,
+                onDismiss = {showPaymentPopup = false},
+                onConfirm = {
+                    if (expenseValue > 0.0) {
+                        expenseValue = 0.0;
+                    }
+                    showPaymentPopup = false
+                }
+            )
+        }
     }
 }
 
@@ -117,19 +143,19 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
 }
 
 @Composable
-fun AllButtonsBar() {
+fun AllButtonsBar(navController: NavController, onPayClick:() -> Unit ) {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
     )  {
-        AddExpenseButton()
-        TransactionButton()
+        AddExpenseButton(navController)
+        TransactionButton(onPayClick)
     }
 }
 
 @Composable
-fun TransactionButton() {
+fun TransactionButton(onPayClick:() -> Unit ) {
     Button(
         modifier = Modifier
             .size(80.dp)
@@ -140,7 +166,7 @@ fun TransactionButton() {
                 CircleShape
             ),
         colors = ButtonDefaults.buttonColors(GreyColor),
-        onClick = { "Payment!" } //TODO
+        onClick = { onPayClick() } //TODO
     ) {
         Image(painter = painterResource(R.drawable.payment),
             "payment icon")
@@ -148,7 +174,9 @@ fun TransactionButton() {
 }
 
 @Composable
-fun AddExpenseButton() {
+fun AddExpenseButton(
+    navController: NavController,
+    ) {
     //var buttonText by remember { mutableStateOf("Add expense to group?") }
     Button(
         modifier = Modifier
@@ -160,7 +188,7 @@ fun AddExpenseButton() {
                 CircleShape
             ),
         colors = ButtonDefaults.buttonColors(GreyColor),
-        onClick = { "Added Expense!" } //TODO
+        onClick = { navController.navigate(Destination.ADDEXPENSE.route)} //TODO, give her the needed parameters?
     ) {
         Image(painter = painterResource(R.drawable.add),
             "Add expense icon"
@@ -170,14 +198,14 @@ fun AddExpenseButton() {
 
 fun returnTextForAction(value: PossibleActions): String {
     return when (value) {
-        PAY -> "Payed "
+        PAID -> "Paid "
         ADD_EXPENSE -> "Added expense of "
         REMOVE_EXPENSE -> "Removed expense of "
     }
 }
 
 enum class PossibleActions {
-    PAY,
+    PAID,
     ADD_EXPENSE,
     REMOVE_EXPENSE
 }

@@ -38,7 +38,7 @@ endPoints.push({method: 'GET', path: '/getNotifications', oapi: {
 
     let notifications = Database.getInstance('notifications').all();
 
-    notifications = notifications.filter(n => n.userId === userId && !n.seen)
+    notifications = notifications.filter(n => n.userId === userId && !n.interacted)
 
     if(notifications.length === 0){
         return res.status(404).send({error: 'No notifications on for this user id'})
@@ -95,7 +95,7 @@ endPoints.push({method: 'POST', path: '/acceptInvite', oapi: {
     }
 
     invites.forEach(invite => {
-        notificationsDb.update(invite.id, {seen: true })
+        notificationsDb.update(invite.id, {interacted: true })
     })
 
     const members = groupMembersDb.select({ group_id: groupId, user_id: userId });
@@ -157,7 +157,7 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
 
     const invite = invites[0]
 
-    notificationsDb.update(invite.id, { seen: true })
+    notificationsDb.update(invite.id, { interacted: true })
 
     res.send({ ok: true })
 }});

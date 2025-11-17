@@ -10,6 +10,7 @@ data class Notification(
     val userId: String,
     val amount: Double?,
     val date: String,
+    val interacted: Boolean,
     val seen: Boolean,
     val description: String
 )

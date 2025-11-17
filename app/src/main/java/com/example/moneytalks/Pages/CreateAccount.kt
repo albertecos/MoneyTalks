@@ -15,14 +15,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-@Preview(
-    showBackground = true,
-)
+import androidx.navigation.NavController
+import com.example.moneytalks.Navigation.Destination
 
 
 @Composable
-fun CreateAccount() {
+fun CreateAccount(navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var fullName by remember {mutableStateOf("") }
@@ -184,7 +182,7 @@ fun CreateAccount() {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { /* handle login */ },
+                onClick = { navController.navigate(Destination.HOME.route) },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
