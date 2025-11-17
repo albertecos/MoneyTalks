@@ -1,6 +1,7 @@
 package com.example.moneytalks.ViewModel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneytalks.APISetup.RetrofitClient
@@ -20,6 +21,49 @@ class GroupsViewModel(private val retrofitClient: RetrofitClient = RetrofitClien
                 e.printStackTrace()
             }
 
+        }
+    }
+
+    fun createGroup(
+        userId: String,
+        groupName: String,
+        memberIds: List<String>
+    ){
+        viewModelScope.launch {
+            try {
+                val groupCreate = com.example.moneytalks.DataClasses.GroupCreate(
+                    name = groupName,
+                    members = memberIds
+                )
+                retrofitClient.api.createGroup(userId, groupCreate)
+
+                fetchGroups(userId)
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun editGroup(
+        groupId: String,
+        newName: String
+    ){
+        viewModelScope.launch {
+            try {
+                val groupEdit = com.example.moneytalks.DataClasses.GroupEdit(
+                    id = groupId,
+                    name = newName
+                )
+                retrofitClient.api.editGroup(groupEdit)
+
+                val index = groups.indexOfFirst { it.id == groupId }
+                if (index != -1) {
+                    val updatedGroup = groups[index].copy(name = newName)
+                    groups[index] = updatedGroup
+                }
+            } catch (e: Exception){
+                e.printStackTrace()
+            }
         }
     }
 

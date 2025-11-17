@@ -36,8 +36,7 @@ import com.example.moneytalks.ui.theme.LilyScriptOne
 
 @Composable
 fun GroupCard(
-    groupName: String,
-    groupId: String,
+    group: Group,
     memberId: String,
     navController: NavController,
     modifier: Modifier = Modifier,
@@ -67,7 +66,10 @@ fun GroupCard(
                 verticalAlignment = Alignment.Top
             ) {
 
-                IconButton(onClick = { navController.navigate(Destination.EDITGROUP.route) }) {
+                IconButton(onClick = { 
+                    navController.currentBackStackEntry?.savedStateHandle?.set("group", group)
+                    navController.navigate(Destination.EDITGROUP.route)
+                }) {
                     Icon(
                         imageVector = NavIcon.EDITGROUP.icon,
                         contentDescription = NavIcon.EDITGROUP.destination.contentDescription
@@ -81,7 +83,7 @@ fun GroupCard(
                 }
             }
             Text(
-                text = groupName,
+                text = group.name,
                 modifier = modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
@@ -90,7 +92,7 @@ fun GroupCard(
             )
         }
     }
-    ShowLeavePopup(groupId, memberId, groupName, navController, showLeavePopup)
+    ShowLeavePopup(group.id, memberId, group.name, navController, showLeavePopup)
 }
 
 

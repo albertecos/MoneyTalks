@@ -80,10 +80,20 @@ fun MoneyTalksApp() {
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(startMemberID, navController) }
-            composable(Destination.EDITGROUP.route) { EditGroupPage() }
+            composable(Destination.EDITGROUP.route) {
+                val group = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<com.example.moneytalks.DataClasses.Group>("group")
+                
+                if (group != null) {
+                    EditGroupPage(group, navController)
+                } else {
+                    androidx.compose.material3.Text("Group not found")
+                }
+            }
+            composable(Destination.CREATEGROUP.route) { CreateGroup(navController) }
             composable(Destination.GROUPVIEW.route) { GroupView(navController) }
             composable(Destination.ADDEXPENSE.route) { AddExpensePage(navController) }
-            composable(Destination.CREATEGROUP.route) { CreateGroup() }
             composable(Destination.LOGIN.route) { LoginScreen(navController) }
             composable(Destination.CREATEACCOUNT.route) { CreateAccount(navController) }
         }

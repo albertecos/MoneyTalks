@@ -17,15 +17,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.moneytalks.DataClasses.User
+import com.example.moneytalks.ViewModel.GroupsViewModel
 
 @Preview(
     showBackground = true,
 )
 @Composable
-fun EditGroupPage() {
-    var groupName by remember { mutableStateOf("") }
-    var addPeople by remember { mutableStateOf("") }
+fun EditGroupPage(group: com.example.moneytalks.DataClasses.Group? = null, navController: NavController) {
+    if (group == null) {
+        navController.navigateUp()
+        return
+    }
+    var groupName by remember { mutableStateOf(group.name) }
+    var groupVM: GroupsViewModel = viewModel()
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
@@ -77,37 +84,6 @@ fun EditGroupPage() {
             )
         }
 
-        //Add people field
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .border(2.dp, gradient, RoundedCornerShape(20.dp))
-        ){
-            OutlinedTextField(
-                value = addPeople,
-                onValueChange = { addPeople = it },
-                label = { Text("Add people...") },
-                shape = RoundedCornerShape(20.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
-                    .padding(0.dp), // remove extra padding
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedContainerColor = Color.Transparent,   // Transparent so Box handles outer border
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.DarkGray,
-                    focusedLabelColor = Color.Gray,
-                    unfocusedLabelColor = Color.Gray
-                ),
-                singleLine = true
-            )
-        }
-
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Members:",
@@ -118,7 +94,10 @@ fun EditGroupPage() {
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         )
-        MemberListElement(User(id = "placeholder", full_name = "John Doe", username = "johndoe", email = "john@example.com", password = "password"))
+        for (groupMember in group.members) {
+            MemberListElement(member = groupMember)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         // Edit group button
@@ -130,7 +109,10 @@ fun EditGroupPage() {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { /* handle save edits */ },
+                onClick = { 
+                    groupVM.editGroup(group.id, groupName)
+                    navController.navigateUp()
+                },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
