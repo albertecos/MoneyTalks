@@ -4,7 +4,7 @@ const { Components } = require('../schema/components');
 
 var endPoints = [];
 
-endPoints.push({method: 'GET', path: '/users/search', oapi: {
+endPoints.push({method: 'GET', path: '/searchUsers', oapi: {
     summary: 'Search for users',
     parameters: [
         {
@@ -40,7 +40,7 @@ endPoints.push({method: 'GET', path: '/users/search', oapi: {
     res.json(users);
 }});
 
-endPoints.push({method: 'POST', path: '/users/update', oapi: {
+endPoints.push({method: 'POST', path: '/updateUser', oapi: {
     summary: 'Update an existing user',
     requestBody: {
         required: true,
@@ -156,7 +156,8 @@ endPoints.push({method: 'POST', path: '/signup', oapi: {
         return res.status(409).send({error: 'Username already taken'});
     }
 
-    const newUser = {id: uuidv4(), username, full_name, email, password};
+    // TODO: profile picture
+    const newUser = {id: uuidv4(), username, full_name, email, password, profile_picture: ""};
     Database.getInstance('users').insert(newUser);
 
     res.status(201).json(newUser);

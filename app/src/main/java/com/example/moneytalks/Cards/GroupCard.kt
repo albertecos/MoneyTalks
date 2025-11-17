@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moneytalks.DataClasses.Group
 import com.example.moneytalks.Navigation.Destination
 import com.example.moneytalks.Navigation.NavIcon
 import com.example.moneytalks.Popup.ShowLeavePopup
@@ -36,8 +37,9 @@ import com.example.moneytalks.ui.theme.LilyScriptOne
 @Composable
 fun GroupCard(
     groupName: String,
+    groupId: String,
+    memberId: String,
     navController: NavController,
-    payment: Int,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = { navController.navigate(Destination.GROUPVIEW.route) },
 ) {
@@ -88,7 +90,7 @@ fun GroupCard(
             )
         }
     }
-    ShowLeavePopup(groupName, payment, navController, showLeavePopup)
+    ShowLeavePopup(groupId, memberId, groupName, navController, showLeavePopup)
 }
 
 

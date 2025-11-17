@@ -12,18 +12,20 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.moneytalks.Navigation.Destination
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import com.example.moneytalks.DataClasses.User
 
-
-
-
+@Preview(
+    showBackground = true,
+)
 @Composable
-fun LoginScreen(navController: NavController) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun CreateGroup() {
+    var groupName by remember { mutableStateOf("") }
+    var addPeople by remember { mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
@@ -37,14 +39,14 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center
     ){
         Text(
-            text = "Login",
+            text = "Create group",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        //username field
+        //Group name field
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -52,9 +54,9 @@ fun LoginScreen(navController: NavController) {
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
         ){
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
+                value = groupName,
+                onValueChange = { groupName = it },
+                label = { Text("Group name") },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,19 +77,18 @@ fun LoginScreen(navController: NavController) {
             )
         }
 
-        // Password field
+        //Add people field
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-        ) {
+        ){
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
+                value = addPeople,
+                onValueChange = { addPeople = it },
+                label = { Text("Add people...") },
                 shape = RoundedCornerShape(20.dp),
-                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
@@ -107,23 +108,20 @@ fun LoginScreen(navController: NavController) {
             )
         }
 
-        /*
-        //Forgot password - skal slettes?
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Forgot password?",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.Gray,
+            text = "Members:",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.Black,
             modifier = Modifier
-                .align(Alignment.Start)
-                .padding(top = 8.dp, bottom = 24.dp)
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
         )
-         */
-
+        MemberListElement(User(id = "placeholder", full_name = "John Doe", username = "johndoe", email = "john@example.com", password = "password"))
         Spacer(modifier = Modifier.height(16.dp))
 
-
-        // Login button
+        // Create group button
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
@@ -132,9 +130,7 @@ fun LoginScreen(navController: NavController) {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = {
-                    navController.navigate(Destination.HOME.route)
-                },
+                onClick = { /* handle create group */ },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -142,40 +138,64 @@ fun LoginScreen(navController: NavController) {
                 contentPadding = PaddingValues()
             ) {
                 Text(
-                    "Login",
+                    "Create group",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
             }
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Create account button
+@Composable
+fun MemberListElement(member: User) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Placeholder for profile picture
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .height(48.dp)
-                .border(2.dp, gradient, RoundedCornerShape(20.dp))
-                .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
+                .size(40.dp)
+                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Text(
+            text = member.full_name,
+            fontSize = 18.sp,
+            color = Color.Black
+        )
+
+        Text(
+            text = " (@${member.username})",
+            fontSize = 14.sp,
+            color = Color.DarkGray,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .weight(1f),
+            contentAlignment = Alignment.CenterEnd
         ) {
             Button(
-                onClick = { navController.navigate(Destination.CREATEACCOUNT.route) },
-                shape = RoundedCornerShape(20.dp),
+                onClick = { /* Remove member action */ },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues()
+                contentPadding = PaddingValues(0.dp),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
             ) {
-                Text(
-                    "Create Account",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Remove member",
+                    tint = Color.Red,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
-
     }
 }
