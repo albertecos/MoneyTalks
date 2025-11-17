@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.Bars.NavBar
 import com.example.moneytalks.Bars.TopBar
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.Pages.AddExpensePage
 import com.example.moneytalks.Pages.CreateAccount
 import com.example.moneytalks.Pages.GroupView
 import com.example.moneytalks.Pages.HomePage
@@ -80,8 +81,9 @@ fun MoneyTalksApp() {
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(startMemberID, navController) }
             composable(Destination.EDITGROUP.route) { EditGroupPage() }
+            composable(Destination.GROUPVIEW.route) { GroupView(navController) }
+            composable(Destination.ADDEXPENSE.route) { AddExpensePage(navController) }
             composable(Destination.CREATEGROUP.route) { CreateGroup() }
-            composable(Destination.GROUPVIEW.route) { GroupView() }
             composable(Destination.LOGIN.route) { LoginScreen(navController) }
             composable(Destination.CREATEACCOUNT.route) { CreateAccount(navController) }
         }

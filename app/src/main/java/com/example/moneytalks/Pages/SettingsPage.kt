@@ -33,11 +33,23 @@ data class DummyUserData(val email: String, val password: String)
 @Composable
 fun SettingsPage(modifier: Modifier = Modifier) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val launcher = rememberLauncherForActivityResult(
+
+    //image launcher
+    val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUri = uri
     }
+
+    //permission launcher
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { grantedAccess ->
+        if (grantedAccess) {
+            imageLauncher.launch("image/*")
+        }
+    }
+
     var notificationsEnabled by remember { mutableStateOf(true) }
     var userData by remember { mutableStateOf(DummyUserData("user@example.com", "password123")) }
     var showChangeEmailDialog by remember { mutableStateOf(false) }
@@ -108,7 +120,7 @@ fun SettingsPage(modifier: Modifier = Modifier) {
 
                 // Add Icon Overlay
                 IconButton(
-                    onClick = { launcher.launch("image/*") },
+                    onClick = { permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES) },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                 ) {

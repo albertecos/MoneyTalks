@@ -33,6 +33,7 @@ enum class Destination(
     CREATEGROUP("createGroup", "CreateGroup", "Create a group"),
     EDITGROUP("editGroup", "EditGroup", "EditGroup"),
     GROUPVIEW("groupview", "Groupview", "Groupview"),
+    ADDEXPENSE("addexpense", "AddExpense", "AddExpense")
     LOGIN("login", "Login", "Login"),
     CREATEACCOUNT("createAccount", "CreateAccount", "Create Account")
 }
