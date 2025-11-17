@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
@@ -24,24 +25,43 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.Navigation.Destination
+import com.example.moneytalks.ViewModel.BalanceViewModel
+import com.example.moneytalks.ViewModel.GroupsViewModel
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.LightLightBlue
 import com.example.moneytalks.ui.theme.greenCreditor
 import com.example.moneytalks.ui.theme.redInDebt
+import kotlin.math.roundToInt
 
 @Composable
 fun ShowLeavePopup(
+    groupId: String,
+    userId: String,
     groupName: String,
-    payment: Int,
     navController: NavController,
     dialogState: MutableState<Boolean>,
+    balanceViewModel: BalanceViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val canLeave = payment >= 0
+    val groupsViewModel: GroupsViewModel = viewModel()
 
     if(dialogState.value){
+
+        LaunchedEffect(dialogState.value) {
+            if (dialogState.value){
+                balanceViewModel.fetchBalance(groupId, userId)
+            }
+        }
+
+        val balanceNum = balanceViewModel.balance.value
+
+        val payment = balanceNum?.balance?.roundToInt() ?: 0
+
+        val canLeave = payment >= 0
+
         Popup(
             alignment = Alignment.TopStart,
             properties = PopupProperties()
@@ -79,7 +99,13 @@ fun ShowLeavePopup(
                             )
                         }
                         Button(
-                            onClick = { navController.navigate(Destination.EDITGROUP.route) },
+                            onClick = {
+                                groupsViewModel.leaveGroup(
+                                    userId = userId,
+                                    groupId = groupId
+                                )
+                                dialogState.value = false
+                            },
                             enabled = canLeave,
                             colors = ButtonDefaults.buttonColors(DarkBlue)
                         ) {
@@ -110,7 +136,7 @@ fun LeaveGroupText(payment: Int, groupName: String){
         Text(text = message, color = DarkBlue, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(35.dp))
         Text(
-            text = "${payment.toString()} KR",
+            text = "${payment} KR",
             color = amountColor,
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold

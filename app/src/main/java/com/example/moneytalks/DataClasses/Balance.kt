@@ -1,5 +1,5 @@
 package com.example.moneytalks.DataClasses
 
-data class MemberRef(
-    val id: String
+data class Balance(
+    val balance: Float
 )

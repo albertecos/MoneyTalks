@@ -57,7 +57,7 @@ fun GroupInviteNotify(
                 ) {Text("Accept") }
 
                 Button(
-                    onClick = onAccept,
+                    onClick = onDecline,
                     shape = RoundedCornerShape(20.dp),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                     colors = ButtonDefaults.buttonColors(
