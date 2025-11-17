@@ -12,17 +12,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.moneytalks.Navigation.Destination
 
-@Preview(
-    showBackground = true,
-)
+
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -133,7 +132,9 @@ fun LoginScreen() {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { /* handle login */ },
+                onClick = {
+                    navController.navigate(Destination.HOME.route)
+                },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -160,7 +161,7 @@ fun LoginScreen() {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { /* handle login */ },
+                onClick = { navController.navigate(Destination.CREATEACCOUNT.route) },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier

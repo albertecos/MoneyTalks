@@ -32,7 +32,9 @@ enum class Destination(
     NOTIFICATIONS("notifications", "Notifications", "Notifications"),
     CREATEGROUP("createGroup", "CreateGroup", "Create a group"),
     EDITGROUP("editGroup", "EditGroup", "EditGroup"),
-    GROUPVIEW("groupview", "Groupview", "Groupview")
+    GROUPVIEW("groupview", "Groupview", "Groupview"),
+    LOGIN("login", "Login", "Login"),
+    CREATEACCOUNT("createAccount", "CreateAccount", "Create Account")
 }
 
 enum class NavIcon(
