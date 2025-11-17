@@ -31,7 +31,7 @@
     "userId": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
     "amount": null,
     "date": "2025-11-14T16:44:51.097Z",
-    "interacted": true,
+    "interacted": false,
     "seen": false,
     "description": "You have been invited"
   },
@@ -43,7 +43,7 @@
     "userId": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
     "amount": null,
     "date": "2025-11-14T16:44:51.097Z",
-    "interacted": true,
+    "interacted": false,
     "seen": false,
     "description": "You have been invited"
   }

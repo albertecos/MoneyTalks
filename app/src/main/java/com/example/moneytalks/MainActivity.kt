@@ -15,24 +15,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.moneytalks.Bars.NavBar
-import com.example.moneytalks.Bars.TopBar
-import com.example.moneytalks.Navigation.Destination
-import com.example.moneytalks.Pages.AddExpensePage
-import com.example.moneytalks.Pages.CreateAccount
-import com.example.moneytalks.Pages.GroupView
-import com.example.moneytalks.Pages.HomePage
-import com.example.moneytalks.Pages.NotificationPage
-import com.example.moneytalks.Pages.ProfilePage
-import com.example.moneytalks.Pages.SettingsPage
-import com.example.moneytalks.Pages.EditGroupPage
-import com.example.moneytalks.Pages.CreateGroup
-import com.example.moneytalks.Pages.LoginScreen
+import com.example.moneytalks.bars.NavBar
+import com.example.moneytalks.bars.TopBar
+import com.example.moneytalks.navigation.Destination
+import com.example.moneytalks.pages.AddExpensePage
+import com.example.moneytalks.pages.CreateAccount
+import com.example.moneytalks.pages.GroupView
+import com.example.moneytalks.pages.HomePage
+import com.example.moneytalks.pages.NotificationPage
+import com.example.moneytalks.pages.ProfilePage
+import com.example.moneytalks.pages.SettingsPage
+import com.example.moneytalks.pages.EditGroupPage
+import com.example.moneytalks.pages.CreateGroup
+import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 
 
@@ -83,7 +82,7 @@ fun MoneyTalksApp() {
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry
                     ?.savedStateHandle
-                    ?.get<com.example.moneytalks.DataClasses.Group>("group")
+                    ?.get<com.example.moneytalks.dataclasses.Group>("group")
                 
                 if (group != null) {
                     EditGroupPage(group, navController)
