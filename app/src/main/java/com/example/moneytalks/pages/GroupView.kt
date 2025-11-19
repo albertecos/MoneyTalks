@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.cards.BalanceBox
 import com.example.moneytalks.dataclasses.Group
@@ -41,16 +42,27 @@ import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.LilyScriptOne
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
+import com.example.moneytalks.viewmodel.ExpenseViewModel
+import com.example.moneytalks.viewmodel.UserViewModel
 import kotlin.Unit
 
 @Composable
 fun GroupView(
     navController: NavController,
     group: Group,
-    modifier: Modifier = Modifier) {
+    expenseVM: ExpenseViewModel = viewModel(),
+    userVm: UserViewModel = viewModel(),
+    modifier: Modifier = Modifier
+) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
-    var expenseValue by remember { mutableStateOf(10.20) } //TODO: API CALL TO VALUE
+    var expenseValue by remember { mutableStateOf(10.20) } //TODO: API CALL TO BALANCE?
+    val currentUserId = userVm.currentUserId //for own bubble
+    val expenses = expenseVM.expenseHistory.value
+
+    LaunchedEffect(group.id) {
+        expenseVM.getExpenseHistoryByGroupId(group.id)
+    }
 
     Column(
         modifier = modifier
@@ -73,13 +85,22 @@ fun GroupView(
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
         ) {
-            //TODO: API CALL TO EXPENSE LOG
-            FriendsBubble("Alberte", R.drawable.babygator,PAID, 500)
-            FriendsBubble("Asta", R.drawable.arghhh,PAID, 200)
-            OwnBubble(REMOVE_EXPENSE,150)
-            FriendsBubble("Maria", R.drawable.batman,ADD_EXPENSE, 200)
-            OwnBubble(ADD_EXPENSE,300)
-            OwnBubble(PAID,300)
+            expenses.forEach { expense ->
+
+                val ifMyself = expense.userId == currentUserId
+                val actionEnum = mapActionToEnum(expense.action)
+
+                if (ifMyself) {
+                    OwnBubble(actionEnum, expense.amount)
+                } else {
+                    FriendsBubble(
+                        //TODO: Display correct userID, is this through.... group members?
+                        "PLAYER",
+                        R.drawable.babygator,
+                        actionEnum,
+                        expense.amount)
+                }
+            }
         }
 
         AllButtonsBar(
@@ -118,7 +139,9 @@ fun GroupBar(groupName: String) {
 }
 
 @Composable
-fun OwnBubble(action: PossibleActions, value: Int) {
+fun OwnBubble(action: PossibleActions, value: Double) {
+    val formattedPrice = String.format("%.2f", Math.abs(value))
+
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
@@ -129,14 +152,16 @@ fun OwnBubble(action: PossibleActions, value: Int) {
             horizontalAlignment = Alignment.End
         ) {
             Text("You", fontWeight = FontWeight.Bold)
-            Text(returnTextForAction(action) + value + ".-", color = DarkGrey)
+            Text(returnTextForAction(action) + formattedPrice + ".-", color = DarkGrey)
         }
     }
 }
 
 
 @Composable
-fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, value: Int) {
+fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, value: Double) {
+    val formattedPrice = String.format("%.2f", Math.abs(value))
+
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp),
@@ -156,7 +181,7 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
             .padding(8.dp),
         ) {
             Text(username, fontWeight = FontWeight.Bold)
-            Text(returnTextForAction(action) + value + ".-", color = DarkGrey)
+            Text(returnTextForAction(action) + formattedPrice + ".-", color = DarkGrey)
         }
     }
 }
@@ -225,6 +250,15 @@ fun returnTextForAction(value: PossibleActions): String {
         PAID -> "Paid "
         ADD_EXPENSE -> "Added expense of "
         REMOVE_EXPENSE -> "Removed expense of "
+    }
+}
+
+fun mapActionToEnum(action: String): PossibleActions {
+    return when (action.uppercase()) {
+        "PAYMENT" -> PAID
+        "EXPENSE" -> ADD_EXPENSE
+        "REMOVE_EXPENSE" -> REMOVE_EXPENSE //whats the name of this one...
+        else -> {ADD_EXPENSE}
     }
 }
 

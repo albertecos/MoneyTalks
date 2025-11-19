@@ -61,7 +61,7 @@ interface MoneyTalksInterface {
     suspend fun searchUsers(@Query("username") query: String): List<com.example.moneytalks.dataclasses.User>
 
     @GET("expenseHistory")
-    suspend fun getExpendHistory(
+    suspend fun getExpenseHistory(
         @Query("groupId") groupId: String
     ): List<Expense>
 }
