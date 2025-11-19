@@ -38,12 +38,12 @@ import com.example.moneytalks.pages.PossibleActions.*
 import com.example.moneytalks.popup.PaymentPopup
 import com.example.moneytalks.ui.theme.DarkGrey
 import com.example.moneytalks.ui.theme.GreyColor
+import com.example.moneytalks.ui.theme.LilyScriptOne
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 import kotlin.Unit
 
 @Composable
-//TODO: API CALL TO GROUP
 fun GroupView(
     navController: NavController,
     group: Group,
@@ -59,11 +59,11 @@ fun GroupView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-
+        GroupBar(group.name)
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(4.dp)
         )
         BalanceBox(expenseValue)
 
@@ -100,6 +100,20 @@ fun GroupView(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun GroupBar(groupName: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(blueDebtFree)
+            .padding(2.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+
+        ) {
+        Text(groupName, color = blueDebtFreeV2, fontFamily = LilyScriptOne)
     }
 }
 
