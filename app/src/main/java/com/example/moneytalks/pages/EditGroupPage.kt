@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,9 +36,12 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

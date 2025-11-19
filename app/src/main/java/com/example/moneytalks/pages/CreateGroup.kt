@@ -3,6 +3,8 @@ package com.example.moneytalks.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -32,6 +34,22 @@ fun CreateGroup(navController: NavController) {
     var searchResults by remember { mutableStateOf<List<com.example.moneytalks.dataclasses.User>>(emptyList()) }
     var userVM: com.example.moneytalks.viewmodel.UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     var groupVM: com.example.moneytalks.viewmodel.GroupsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
+    // add current user to the group by default
+    val currentUser = userVM.currentUser.value
+    if (currentUser != null) {
+        peopleList.add(
+            GroupMember(
+                id = currentUser.id,
+                full_name = currentUser.full_name,
+                profile_picture = currentUser.profile_picture,
+                username = currentUser.username,
+                email = currentUser.email,
+                password = currentUser.password,
+                accepted = true
+            )
+        )
+    }
     
     // LaunchedEffect triggered whenever addPeople changes
     LaunchedEffect(addPeople) {
@@ -47,9 +65,12 @@ fun CreateGroup(navController: NavController) {
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -127,6 +148,9 @@ fun CreateGroup(navController: NavController) {
         }
 
         for (member in searchResults) {
+            if (peopleList.any { it.id == member.id }) {
+                continue // Skip if already in the group
+            }
             SearchedMemberListElement(member = member, onAddClick = {
                 peopleList.add(
                     GroupMember(
@@ -139,6 +163,7 @@ fun CreateGroup(navController: NavController) {
                         accepted = false
                     )
                 )
+                addPeople = ""
             })
         }
 
@@ -172,6 +197,8 @@ fun CreateGroup(navController: NavController) {
                     if (userId != null) {
                         groupVM.createGroup(userId, groupName, peopleList.map { it.id })
                         navController.navigateUp()
+                    } else {
+                        navController.navigate(com.example.moneytalks.navigation.Destination.LOGIN.route)
                     }
                 },
                 shape = RoundedCornerShape(20.dp),
@@ -274,24 +301,11 @@ fun MemberListElement(member: GroupMember) {
             modifier = Modifier.padding(start = 8.dp)
         )
 
-        Box(
-            modifier = Modifier
-                .weight(1f),
-            contentAlignment = Alignment.CenterEnd
-        ) {
-            Button(
-                onClick = { /* Remove member action */ },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                contentPadding = PaddingValues(0.dp),
-                elevation = ButtonDefaults.buttonElevation(0.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Remove member",
-                    tint = Color.Red,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
+        Text(
+            text = if (member.accepted) "Accepted" else "Pending",
+            fontSize = 14.sp,
+            color = if (member.accepted) Color.Green else Color.Gray,
+            modifier = Modifier.padding(start = 8.dp)
+        )
     }
 }
