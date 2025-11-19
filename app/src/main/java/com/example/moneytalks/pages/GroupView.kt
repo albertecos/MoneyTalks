@@ -1,5 +1,6 @@
 package com.example.moneytalks.pages
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,7 @@ import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.LilyScriptOne
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
+import com.example.moneytalks.viewmodel.BalanceViewModel
 import com.example.moneytalks.viewmodel.ExpenseViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 import kotlin.Unit
@@ -52,17 +54,21 @@ fun GroupView(
     group: Group,
     expenseVM: ExpenseViewModel = viewModel(),
     userVm: UserViewModel = viewModel(),
+    balanceVm: BalanceViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
-    var expenseValue by remember { mutableStateOf(10.20) } //TODO: API CALL TO BALANCE?
     val currentUserId = userVm.currentUserId //for own bubble
     val expenses = expenseVM.expenseHistory.value
 
     LaunchedEffect(group.id) {
         expenseVM.getExpenseHistoryByGroupId(group.id)
+        balanceVm.fetchBalance(group.id, currentUserId)
     }
+
+    val balanceNum = balanceVm.balance.value
+    var balance = balanceNum?.balance?.toDouble() ?: 0.0
 
     Column(
         modifier = modifier
@@ -77,7 +83,7 @@ fun GroupView(
                 .fillMaxWidth()
                 .padding(4.dp)
         )
-        BalanceBox(expenseValue)
+        BalanceBox(balance)
 
         // Transactions
         Column(modifier = modifier
@@ -111,11 +117,11 @@ fun GroupView(
 
         if (showPaymentPopup) {
             PaymentPopup(
-                value = expenseValue,
+                value = balance,
                 onDismiss = {showPaymentPopup = false},
                 onConfirm = {
-                    if (expenseValue > 0.0) {
-                        expenseValue = 0.0;
+                    if (balance > 0.0) {
+                        balance = 0.0
                     }
                     showPaymentPopup = false
                 }
@@ -138,6 +144,7 @@ fun GroupBar(groupName: String) {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun OwnBubble(action: PossibleActions, value: Double) {
     val formattedPrice = String.format("%.2f", Math.abs(value))
@@ -158,6 +165,7 @@ fun OwnBubble(action: PossibleActions, value: Double) {
 }
 
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, value: Double) {
     val formattedPrice = String.format("%.2f", Math.abs(value))
