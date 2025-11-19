@@ -197,7 +197,8 @@ fun AddExpenseButton(navController: NavController, group: Group) {
         colors = ButtonDefaults.buttonColors(GreyColor),
         onClick = {
             navController.currentBackStackEntry?.savedStateHandle?.set("group", group)
-            navController.navigate(Destination.ADDEXPENSE.route)} //TODO, give her the needed parameters?
+            navController.navigate(Destination.ADDEXPENSE.route)
+        } //TODO, give her the needed parameters?
     ) {
         Image(painter = painterResource(R.drawable.add),
             "Add expense icon"

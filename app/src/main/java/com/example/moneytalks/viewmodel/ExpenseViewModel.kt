@@ -1,6 +1,5 @@
 package com.example.moneytalks.viewmodel
 
-import androidx.collection.arrayMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import retrofit2.HttpException

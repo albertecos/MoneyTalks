@@ -78,14 +78,13 @@ fun MoneyTalksApp() {
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
         ) {
-            val group = navController.previousBackStackEntry?.savedStateHandle?.get<Group>("group")
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
             composable(Destination.SETTINGS.route) { SettingsPage() }
             composable(Destination.NOTIFICATIONS.route) {NotificationPage(startMemberID, navController)}
             composable(Destination.EDITGROUP.route) {
-//                val group = navController.previousBackStackEntry
-//                    ?.savedStateHandle
-//                    ?.get<Group>("group")
+                val group = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Group>("group")
 
                 if (group != null) {
                     EditGroupPage(group, navController)
@@ -95,9 +94,9 @@ fun MoneyTalksApp() {
             }
             composable(Destination.CREATEGROUP.route) { CreateGroup(navController) }
             composable(Destination.GROUPVIEW.route) {
-//                val group = navController.previousBackStackEntry
-//                    ?.savedStateHandle
-//                    ?.get<Group>("group")
+                val group = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Group>("group")
 
                 if (group != null) {
                     GroupView(navController, group)
@@ -106,9 +105,9 @@ fun MoneyTalksApp() {
                 }
             }
             composable(Destination.ADDEXPENSE.route) {
-//                val group = navController.previousBackStackEntry
-//                    ?.savedStateHandle
-//                    ?.get<Group>("group")
+                val group = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Group>("group")
 
                 if (group != null) {
                     AddExpensePage(navController, group)

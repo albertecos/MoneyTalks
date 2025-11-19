@@ -86,7 +86,7 @@ fun AddExpensePage(
         Button(
             onClick = {
                 println("Added expense: $amount to this group: $description")
-                val userId = userVm.currentUser.toString()
+                val userId = userVm.currentUserId
                 val amount = amount.toDouble()
                 val groupId = group.id
 
