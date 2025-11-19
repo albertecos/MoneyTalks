@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.viewmodel.ExpenseViewModel
+import com.example.moneytalks.viewmodel.NotificationViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 
 
@@ -37,7 +38,8 @@ fun AddExpensePage(
     navController: NavController,
     group: Group? = null,
     userVm: UserViewModel = viewModel(),
-    expenseVM: ExpenseViewModel = viewModel()
+    expenseVM: ExpenseViewModel = viewModel(),
+    notificationVM: NotificationViewModel = viewModel()
 ) {
     if(group == null){
         navController.navigateUp()
@@ -91,7 +93,7 @@ fun AddExpensePage(
                 val groupId = group.id
 
                 expenseVM.createExpense(userId, groupId, amount, description)
-
+                notificationVM.createNotification(userId, "EXPENSE", groupId, group.name, amount, description)
                 navController.navigateUp()
             },
             shape = RoundedCornerShape(12.dp),

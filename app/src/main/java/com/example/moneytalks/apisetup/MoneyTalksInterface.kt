@@ -6,6 +6,7 @@ import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupCreate
 import com.example.moneytalks.dataclasses.GroupEdit
+import com.example.moneytalks.dataclasses.NotificationCreate
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -36,6 +37,11 @@ interface MoneyTalksInterface {
 
     @GET("getNotifications")
     suspend fun getNotifications(@Query("userId") userId: String): List<Notification>
+
+    @POST("createNotification")
+    suspend fun createNotification(
+        @Query("userId") userId: String,
+        @Body notification: NotificationCreate)
 
     @POST("acceptInvite")
     suspend fun acceptInvite(
