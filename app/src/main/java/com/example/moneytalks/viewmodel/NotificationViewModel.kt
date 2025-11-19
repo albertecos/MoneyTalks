@@ -3,8 +3,10 @@ package com.example.moneytalks.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.network.HttpException
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Notification
+import com.example.moneytalks.dataclasses.NotificationCreate
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
@@ -20,6 +22,35 @@ class NotificationViewModel(private val retrofitClient: RetrofitClient = Retrofi
                 e.printStackTrace()
             }
 
+        }
+    }
+    
+    fun createNotification(
+        userId: String,
+        action: String,
+        groupId: String,
+        groupName: String,
+        amount: Double?,
+        description: String
+    ){
+        viewModelScope.launch { 
+            try {
+                val notification = NotificationCreate(
+                    action = action,
+                    groupId = groupId,
+                    groupName = groupName,
+                    userId = userId,
+                    amount = amount,
+                    description = description,
+                )
+
+                retrofitClient.api.createNotification(userId, notification)
+            }catch (e: HttpException) {
+                e.printStackTrace()
+                println("HTTP ERROR: ${e.message}")
+            }catch(e: Exception){
+                    e.printStackTrace()
+            }
         }
     }
 
