@@ -14,20 +14,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
-
-
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val isLoading by remember { derivedStateOf { userViewModel.isLoading.value } }
+    val error by remember { derivedStateOf { userViewModel.errorMessage.value } }
+    val user by remember { derivedStateOf { userViewModel.currentUser.value } }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
+
+    LaunchedEffect(user) {
+        if (user != null) {
+            navController.navigate(Destination.HOME.route) {
+                // optional: clear login screen from backstack
+                popUpTo(Destination.LOGIN.route) { inclusive = true }
+            }
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -133,7 +147,7 @@ fun LoginScreen(navController: NavController) {
         ) {
             Button(
                 onClick = {
-                    navController.navigate(Destination.HOME.route)
+                    userViewModel.login(username, password)
                 },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -148,6 +162,15 @@ fun LoginScreen(navController: NavController) {
                     color = Color.Black
                 )
             }
+        }
+
+        error?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

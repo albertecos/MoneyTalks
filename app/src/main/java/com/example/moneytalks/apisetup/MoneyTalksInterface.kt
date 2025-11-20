@@ -6,7 +6,12 @@ import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupCreate
 import com.example.moneytalks.dataclasses.GroupEdit
+import com.example.moneytalks.dataclasses.LoginRequest
+import com.example.moneytalks.dataclasses.LoginResponse
 import com.example.moneytalks.dataclasses.NotificationCreate
+import com.example.moneytalks.dataclasses.SignupRequest
+import com.example.moneytalks.dataclasses.SignupResponse
+import com.example.moneytalks.dataclasses.User
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -55,9 +60,18 @@ interface MoneyTalksInterface {
     suspend fun getBalance(
         @Query("groupId") groupId: String,
         @Query("userId") userId: String)
-    : Balance
+            : Balance
 
     @GET("searchUsers")
     suspend fun searchUsers(@Query("username") query: String): List<com.example.moneytalks.dataclasses.User>
-    
+
+
+
+    @POST("signup")
+    suspend fun signup(@Body request: SignupRequest): SignupResponse
+
+    @POST("login")
+    suspend fun login(@Body request: LoginRequest): LoginResponse
+
+
 }

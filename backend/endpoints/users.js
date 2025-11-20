@@ -87,38 +87,49 @@ endPoints.push({method: 'POST', path: '/login', oapi: {
                     type: 'object',
                     properties: {
                         email: {type: 'string', format: 'email'},
+                        username: { type: 'string' },
                         password: {type: 'string'}
                     },
-                    required: ['email', 'password']
+                    required: ['password']
                 }
             }
         },
     },
     responses: {
         200: {
-            description: 'Login successful',
-            content: {
-                'application/json': {
-                    schema: Components.schemas.User
-                }
-            }
-        },
+                    description: 'Login successful',
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    success: { type: 'boolean' },
+                                    message: { type: 'string' },
+                                    user: { $ref: '#/components/schemas/User' }
+                                }
+                            }
+                        }
+                    }
+                },
         401: {
             description: 'Invalid credentials'
         }
     }
 }, handler: (req, res) => {
-    const {email, password} = req.body;
-    if(!email || !password) {
-        return res.status(400).send({error: 'Please enter a valid email and password'});
+    const {email, username, password} = req.body;
+    if(!email && !username || !password) {
+        return res.status(400).send({error: 'Please enter a valid email/username and password'});
     }
 
-    const users = Database.getInstance('users').select({email, password});
-    if(users.length === 0) {
-        return res.status(401).send({error: 'Invalid credentials'});
-    }
+    const db = Database.getInstance('users');
+    const users = db.select({}).filter(u =>
+                u.password === password &&
+                ((email && u.email === email) || (username && u.username === username))
+            );
 
-    res.json(users[0]);
+            if(users.length === 0) return res.status(401).send({error: 'Invalid credentials'});
+
+    res.status(200).json({ success: true, message: 'Login successful', user: users[0] });
 }});
 
 endPoints.push({method: 'POST', path: '/signup', oapi: {
@@ -147,14 +158,14 @@ endPoints.push({method: 'POST', path: '/signup', oapi: {
         return res.status(400).send({error: 'Please enter a valid username, full name, email and password'});
     }
 
-    let existingUsers = Database.getInstance('users').select({email});
-    if(existingUsers.length > 0) {
-        return res.status(409).send({error: 'User already exists'});
-    }
-    existingUsers = Database.getInstance('users').select({username});
-    if(existingUsers.length > 0) {
-        return res.status(409).send({error: 'Username already taken'});
-    }
+            const db = Database.getInstance('users');
+
+    //let existingUsers = Database.getInstance('users').select({email});
+
+    if(db.select({email}).length > 0) return res.status(409).send({error: 'User already exists'});
+    if(db.select({username}).length > 0) return res.status(409).send({error: 'Username already taken'});
+
+
 
     // TODO: profile picture
     const newUser = {id: uuidv4(), username, full_name, email, password, profile_picture: ""};

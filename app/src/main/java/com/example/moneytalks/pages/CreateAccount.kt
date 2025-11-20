@@ -14,15 +14,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 @Composable
-fun CreateAccount(navController: NavController) {
+fun CreateAccount(navController: NavController, userViewModel: UserViewModel = viewModel()) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var fullName by remember {mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
@@ -137,7 +140,7 @@ fun CreateAccount(navController: NavController) {
             )
         }
 
-        // Confirm password field
+        // Email field
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,11 +148,10 @@ fun CreateAccount(navController: NavController) {
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
         ) {
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Confirm password") },
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
                 shape = RoundedCornerShape(20.dp),
-                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
@@ -181,7 +183,7 @@ fun CreateAccount(navController: NavController) {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { navController.navigate(Destination.HOME.route) },
+                onClick = { userViewModel.signup(username, fullName, email, password) },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -196,11 +198,32 @@ fun CreateAccount(navController: NavController) {
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
 
 
-
-
-
-
+        // GO BACK
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .height(48.dp)
+                .border(2.dp, gradient, RoundedCornerShape(20.dp))
+                .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
+        ) {
+            Button(
+                onClick = { navController.navigate(Destination.LOGIN.route) },
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentPadding = PaddingValues()
+            ) {
+                Text(
+                    "Back",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
     }
 }
