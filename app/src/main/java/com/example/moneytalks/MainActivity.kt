@@ -1,5 +1,9 @@
 package com.example.moneytalks
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -23,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.bars.NavBar
 import com.example.moneytalks.bars.TopBar
 import com.example.moneytalks.dataclasses.Group
+import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.AddExpensePage
 import com.example.moneytalks.pages.CreateAccount
@@ -37,6 +44,9 @@ import com.example.moneytalks.ui.theme.MoneyTalksTheme
 
 
 class MainActivity : ComponentActivity() {
+    private val CHANNEL_ID = "channel"
+    private val NOTIFICATION_ID = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -44,6 +54,33 @@ class MainActivity : ComponentActivity() {
             MoneyTalksTheme {
                 MoneyTalksApp()
             }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Channel"
+            val descriptionText = "The notification channel"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun sendNotification() {
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Hello")
+            .setContentText("This is the notification")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+
+            notify(NOTIFICATION_ID, builder.build())
         }
     }
 }
@@ -80,7 +117,12 @@ fun MoneyTalksApp() {
         ) {
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
             composable(Destination.SETTINGS.route) { SettingsPage() }
-            composable(Destination.NOTIFICATIONS.route) {NotificationPage(startMemberID, navController)}
+            composable(Destination.NOTIFICATIONS.route) {
+                NotificationPage(
+                    startMemberID,
+                    navController
+                )
+            }
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry
                     ?.savedStateHandle
@@ -119,5 +161,6 @@ fun MoneyTalksApp() {
             composable(Destination.CREATEACCOUNT.route) { CreateAccount(navController) }
         }
     }
-
 }
+
+
