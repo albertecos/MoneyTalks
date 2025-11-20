@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,6 +34,7 @@ import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
 import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
 fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val userViewModel: UserViewModel = viewModel()
 
     val startMemberID = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
 
@@ -77,7 +80,7 @@ fun MoneyTalksApp() {
         ){
             composable(Destination.PROFILE.route) { ProfilePage() }
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
-            composable(Destination.SETTINGS.route) { SettingsPage() }
+            composable(Destination.SETTINGS.route) { SettingsPage(userViewModel = userViewModel) }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(startMemberID, navController) }
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry

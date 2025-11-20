@@ -25,141 +25,145 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import com.example.moneytalks.R
-
-// Dummy data class for user information
-data class DummyUserData(val email: String, val password: String)
+import com.example.moneytalks.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsPage(modifier: Modifier = Modifier) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+fun SettingsPage(modifier: Modifier = Modifier, userViewModel: UserViewModel) {
+    val currentUser by userViewModel.currentUser
 
-    //image launcher
-    val imageLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        imageUri = uri
-    }
-
-    //permission launcher
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { grantedAccess ->
-        if (grantedAccess) {
-            imageLauncher.launch("image/*")
+    if (currentUser == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
-    }
+    } else {
+        var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    var notificationsEnabled by remember { mutableStateOf(true) }
-    var userData by remember { mutableStateOf(DummyUserData("user@example.com", "password123")) }
-    var showChangeEmailDialog by remember { mutableStateOf(false) }
-    var showChangePasswordDialog by remember { mutableStateOf(false) }
+        //image launcher
+        val imageLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            imageUri = uri
+        }
 
-    if (showChangeEmailDialog) {
-        ChangeInfoDialog(
-            title = "Change Email",
-            currentValue = userData.email,
-            onDismiss = { showChangeEmailDialog = false },
-            onSave = { newEmail ->
-                userData = userData.copy(email = newEmail)
-                showChangeEmailDialog = false
+        //permission launcher
+        val permissionLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { grantedAccess ->
+            if (grantedAccess) {
+                imageLauncher.launch("image/*")
             }
-        )
-    }
+        }
 
-    if (showChangePasswordDialog) {
-        ChangeInfoDialog(
-            title = "Change Password",
-            currentValue = "", // Don't show current password
-            onDismiss = { showChangePasswordDialog = false },
-            onSave = { newPassword ->
-                userData = userData.copy(password = newPassword)
-                showChangePasswordDialog = false
-            }
-        )
-    }
+        var notificationsEnabled by remember { mutableStateOf(true) }
+        var showChangeEmailDialog by remember { mutableStateOf(false) }
+        var showChangePasswordDialog by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Profile Settings Section
-        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-            Text(
-                text = "Profile settings",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Profile Picture with Add Icon
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                // Profile Image
-                Image(
-                    painter = if (imageUri != null) {
-                        rememberAsyncImagePainter(imageUri)
-                    } else {
-                        painterResource(id = R.drawable.profileplaceholder)
-                    },
-                    contentDescription = "Profile Image",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, Color(0xFF4A90E2), CircleShape)
-                        .background(Color(0xFFE0E0E0))
-                )
-
-                // Add Icon Overlay
-                IconButton(
-                    onClick = { permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES) },
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add Photo",
-                        tint = Color.Black,
-                        modifier = Modifier.size(24.dp)
-                    )
+        if (showChangeEmailDialog) {
+            ChangeInfoDialog(
+                title = "Change Email",
+                currentValue = currentUser!!.email,
+                onDismiss = { showChangeEmailDialog = false },
+                onSave = { newEmail ->
+                    userViewModel.updateEmail(newEmail)
+                    showChangeEmailDialog = false
                 }
-            }
+            )
+        }
+
+        if (showChangePasswordDialog) {
+            ChangeInfoDialog(
+                title = "Change Password",
+                currentValue = "", // Don't show current password
+                onDismiss = { showChangePasswordDialog = false },
+                onSave = { newPassword ->
+                    userViewModel.updatePassword(newPassword)
+                    showChangePasswordDialog = false
+                }
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedButtonUI(text = "Change email", onClick = { showChangeEmailDialog = true })
-            OutlinedButtonUI(text = "Change password", onClick = { showChangePasswordDialog = true })
+            // Profile Settings Section
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                Text(
+                    text = "Profile settings",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Profile Picture with Add Icon
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    // Profile Image
+                    Image(
+                        painter = if (imageUri != null) {
+                            rememberAsyncImagePainter(imageUri)
+                        } else {
+                            painterResource(id = R.drawable.batman)
+                        },
+                        contentDescription = "Profile Image",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, Color(0xFF4A90E2), CircleShape)
+                            .background(Color(0xFFE0E0E0))
+                    )
+
+                    // Add Icon Overlay
+                    IconButton(
+                        onClick = { permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES) },
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add Photo",
+                            tint = Color.Black,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedButtonUI(text = "Change email", onClick = { showChangeEmailDialog = true })
+                OutlinedButtonUI(text = "Change password", onClick = { showChangePasswordDialog = true })
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Notification Settings Section
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                Text(
+                    text = "Notification settings",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                OutlinedButtonUI(
+                    text = if (notificationsEnabled) "Turn off notifications" else "Turn on notifications",
+                    onClick = { notificationsEnabled = !notificationsEnabled }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Notification Settings Section
-        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-            Text(
-                text = "Notification settings",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedButtonUI(
-                text = if (notificationsEnabled) "Turn off notifications" else "Turn on notifications",
-                onClick = { notificationsEnabled = !notificationsEnabled }
-            )
-            OutlinedButtonUI(text = "...")
-            OutlinedButtonUI(text = "...")
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
     }
 }
 

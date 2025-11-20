@@ -5,6 +5,7 @@ import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupCreate
 import com.example.moneytalks.dataclasses.GroupEdit
+import com.example.moneytalks.dataclasses.User
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -45,6 +46,8 @@ interface MoneyTalksInterface {
     : Balance
 
     @GET("searchUsers")
-    suspend fun searchUsers(@Query("username") query: String): List<com.example.moneytalks.dataclasses.User>
-    
+    suspend fun searchUsers(@Query("username") query: String): List<User>
+
+    @POST("updateUser")
+    suspend fun updateUser(@Body user: User): User
 }

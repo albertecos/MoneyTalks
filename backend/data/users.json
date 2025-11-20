@@ -17,10 +17,10 @@
   },
   {
     "id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
-    "username": "user1",
-    "full_name": "string",
-    "email": "user1@example.com",
-    "password": "string",
+    "username": "testuser",
+    "full_name": "Test User",
+    "email": "test1@example.com",
+    "password": "password",
     "profile_picture": ""
   },
   {
