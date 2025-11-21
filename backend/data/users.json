@@ -21,7 +21,8 @@
     "full_name": "Test User",
     "email": "test1@example.com",
     "password": "password",
-    "profile_picture": ""
+    "profile_picture": "",
+    "notifications_enabled": false
   },
   {
     "id": "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",

@@ -162,4 +162,80 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
     res.send({ ok: true })
 }});
 
+endPoints.push({method: 'POST', path: '/disableNotifications', oapi: {
+    summary: 'Disable notifications for a user',
+    parameters: [{
+        name: 'userId',
+        in: 'query',
+        required: true,
+        schema: {
+            type: 'string',
+            format: 'uuid'
+        }
+    }],
+    responses: {
+        200: {
+            description: 'Notifications disabled successfully'
+        },
+        404: {
+            description: 'User not found'
+        }
+    }
+}, handler: (req, res) => {
+    const { userId } = req.query;
+    if (!userId) {
+        return res.status(400).send({ error: 'userId is required' });
+    }
+
+    const usersDb = Database.getInstance('users');
+    const users = usersDb.select({ id: userId });
+
+    if (users.length === 0) {
+        return res.status(404).send({ error: 'User not found' });
+    }
+
+    const user = users[0];
+    usersDb.update(user.id, { notifications_enabled: false });
+
+    res.send({ ok: true, message: 'Notifications disabled' });
+}});
+
+endPoints.push({method: 'POST', path: '/enableNotifications', oapi: {
+    summary: 'Enable notifications for a user',
+    parameters: [{
+        name: 'userId',
+        in: 'query',
+        required: true,
+        schema: {
+            type: 'string',
+            format: 'uuid'
+        }
+    }],
+    responses: {
+        200: {
+            description: 'Notifications enabled successfully'
+        },
+        404: {
+            description: 'User not found'
+        }
+    }
+}, handler: (req, res) => {
+    const { userId } = req.query;
+    if (!userId) {
+        return res.status(400).send({ error: 'userId is required' });
+    }
+
+    const usersDb = Database.getInstance('users');
+    const users = usersDb.select({ id: userId });
+
+    if (users.length === 0) {
+        return res.status(404).send({ error: 'User not found' });
+    }
+
+    const user = users[0];
+    usersDb.update(user.id, { notifications_enabled: true });
+
+    res.send({ ok: true, message: 'Notifications enabled' });
+}});
+
 module.exports = endPoints;

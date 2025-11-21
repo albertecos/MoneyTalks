@@ -34,6 +34,7 @@ import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
 import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
+import com.example.moneytalks.viewmodel.NotificationViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 
 
@@ -56,6 +57,7 @@ fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val userViewModel: UserViewModel = viewModel()
+    val notificationViewModel: NotificationViewModel = viewModel()
 
     val startMemberID = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
 
@@ -80,7 +82,7 @@ fun MoneyTalksApp() {
         ){
             composable(Destination.PROFILE.route) { ProfilePage() }
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
-            composable(Destination.SETTINGS.route) { SettingsPage(userViewModel = userViewModel) }
+            composable(Destination.SETTINGS.route) { SettingsPage(userViewModel = userViewModel, notificationViewModel = notificationViewModel) }
             composable(Destination.NOTIFICATIONS.route) { NotificationPage(startMemberID, navController) }
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry

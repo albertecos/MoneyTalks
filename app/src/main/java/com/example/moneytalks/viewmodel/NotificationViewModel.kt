@@ -1,6 +1,7 @@
 package com.example.moneytalks.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneytalks.apisetup.RetrofitClient
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
     var notifications = mutableStateListOf<Notification>()
+    val notificationsEnabled = mutableStateOf(true)
 
     fun fetchNotifications(userId: String) {
         notifications.clear()
@@ -42,6 +44,28 @@ class NotificationViewModel(private val retrofitClient: RetrofitClient = Retrofi
 
                 notifications.remove(notification)
             }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun enableNotifications(userId: String) {
+        viewModelScope.launch {
+            try {
+                retrofitClient.api.enableNotifications(userId)
+                notificationsEnabled.value = true
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun disableNotifications(userId: String) {
+        viewModelScope.launch {
+            try {
+                retrofitClient.api.disableNotifications(userId)
+                notificationsEnabled.value = false
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }

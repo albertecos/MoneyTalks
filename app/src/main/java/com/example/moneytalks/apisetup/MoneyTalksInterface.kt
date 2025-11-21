@@ -47,7 +47,13 @@ interface MoneyTalksInterface {
 
     @GET("searchUsers")
     suspend fun searchUsers(@Query("username") query: String): List<User>
-
+    
     @POST("updateUser")
     suspend fun updateUser(@Body user: User): User
+
+    @POST("enableNotifications")
+    suspend fun enableNotifications(@Query("userId") userId: String)
+
+    @POST("disableNotifications")
+    suspend fun disableNotifications(@Query("userId") userId: String)
 }

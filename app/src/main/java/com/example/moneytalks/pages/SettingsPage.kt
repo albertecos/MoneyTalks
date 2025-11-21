@@ -25,12 +25,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberAsyncImagePainter
 import com.example.moneytalks.R
+import com.example.moneytalks.viewmodel.NotificationViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsPage(modifier: Modifier = Modifier, userViewModel: UserViewModel) {
+fun SettingsPage(
+    modifier: Modifier = Modifier, 
+    userViewModel: UserViewModel, 
+    notificationViewModel: NotificationViewModel
+) {
     val currentUser by userViewModel.currentUser
+    val notificationsEnabled by notificationViewModel.notificationsEnabled
 
     if (currentUser == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -55,7 +61,6 @@ fun SettingsPage(modifier: Modifier = Modifier, userViewModel: UserViewModel) {
             }
         }
 
-        var notificationsEnabled by remember { mutableStateOf(true) }
         var showChangeEmailDialog by remember { mutableStateOf(false) }
         var showChangePasswordDialog by remember { mutableStateOf(false) }
 
@@ -157,7 +162,13 @@ fun SettingsPage(modifier: Modifier = Modifier, userViewModel: UserViewModel) {
 
                 OutlinedButtonUI(
                     text = if (notificationsEnabled) "Turn off notifications" else "Turn on notifications",
-                    onClick = { notificationsEnabled = !notificationsEnabled }
+                    onClick = {
+                        if (notificationsEnabled) {
+                            notificationViewModel.disableNotifications(currentUser!!.id)
+                        } else {
+                            notificationViewModel.enableNotifications(currentUser!!.id)
+                        }
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
