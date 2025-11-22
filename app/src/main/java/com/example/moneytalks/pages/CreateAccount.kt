@@ -14,12 +14,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 @Composable
-fun CreateAccount(navController: NavController) {
+fun CreateAccount(
+    navController: NavController,
+    userVM: UserViewModel = viewModel()
+    ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var fullName by remember {mutableStateOf("") }
@@ -181,7 +186,9 @@ fun CreateAccount(navController: NavController) {
                 .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
         ) {
             Button(
-                onClick = { navController.navigate(Destination.HOME.route) },
+                onClick = {
+                    userVM.signup(username, profile_picture = "", fullName, email = "", password)
+                    navController.navigate(Destination.HOME.route) },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier

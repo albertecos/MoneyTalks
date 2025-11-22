@@ -14,20 +14,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
-
-
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    userVM: UserViewModel = viewModel()
+    ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
+
+    LaunchedEffect(username) {
+        val results = userVM.searchUsers(username) ?: emptyList()
+        userVM.currentUser.value = results.firstOrNull{it.username == username}
+        println("userid in login is ${userVM.currentUser.value?.id}")
+    }
 
     Column(
         modifier = Modifier
@@ -133,6 +142,7 @@ fun LoginScreen(navController: NavController) {
         ) {
             Button(
                 onClick = {
+
                     navController.navigate(Destination.HOME.route)
                 },
                 shape = RoundedCornerShape(20.dp),
