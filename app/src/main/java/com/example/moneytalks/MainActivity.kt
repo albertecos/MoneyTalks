@@ -79,7 +79,7 @@ fun MoneyTalksApp() {
                 .consumeWindowInsets(innerPadding)
         ) {
             composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
-            composable(Destination.SETTINGS.route) { SettingsPage() }
+            composable(Destination.SETTINGS.route) { SettingsPage(navController) }
             composable(Destination.NOTIFICATIONS.route) {NotificationPage(startMemberID, navController)}
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry

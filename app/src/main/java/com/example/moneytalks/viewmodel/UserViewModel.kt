@@ -19,4 +19,8 @@ class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient)
             null
         }
     }
+
+    fun logout(){
+        currentUser.value = null
+    }
 }

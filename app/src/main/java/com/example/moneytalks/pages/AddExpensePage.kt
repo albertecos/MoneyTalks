@@ -41,7 +41,7 @@ fun AddExpensePage(
     expenseVM: ExpenseViewModel = viewModel(),
     notificationVM: NotificationViewModel = viewModel()
 ) {
-    if(group == null){
+    if (group == null) {
         navController.navigateUp()
         return
     }
@@ -87,14 +87,25 @@ fun AddExpensePage(
         //Button
         Button(
             onClick = {
-                println("Added expense: $amount to this group: $description")
-                val userId = userVm.currentUserId
-                val amount = amount.toDouble()
-                val groupId = group.id
+                if (amount != "" && description != "") {
+                    println("Added expense: $amount to this group: $description")
+                    val userId = userVm.currentUserId
+                    val amount = amount.toDouble()
+                    val groupId = group.id
 
-                expenseVM.createExpense(userId, groupId, amount, description)
-                notificationVM.createNotification(userId, "EXPENSE", groupId, group.name, amount, description)
-                navController.navigateUp()
+                    expenseVM.createExpense(userId, groupId, amount, description)
+                    notificationVM.createNotification(
+                        userId,
+                        "EXPENSE",
+                        groupId,
+                        group.name,
+                        amount,
+                        description
+                    )
+                    navController.navigateUp()
+                }else{
+                    println("Please fill out amount and description.")
+                }
             },
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
