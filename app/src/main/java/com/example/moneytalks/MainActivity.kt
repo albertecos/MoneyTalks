@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.bars.NavBar
 import com.example.moneytalks.bars.TopBar
 import com.example.moneytalks.dataclasses.Group
+import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.AddExpensePage
 import com.example.moneytalks.pages.CreateAccount
@@ -49,6 +51,8 @@ import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
 import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
+import com.example.moneytalks.viewmodel.UserViewModel
+
 import kotlin.jvm.java
 
 class MainActivity : ComponentActivity() {
@@ -156,8 +160,7 @@ class MainActivity : ComponentActivity() {
 fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
-    val startMemberID = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    val userVM: UserViewModel = viewModel()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -180,13 +183,24 @@ fun MoneyTalksApp() {
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
         ) {
-            composable(Destination.HOME.route) { HomePage(startMemberID, navController) }
-            composable(Destination.SETTINGS.route) { SettingsPage() }
+            composable(Destination.HOME.route) {
+                val user = userVM.currentUser.value
+                if (user != null) {
+                    HomePage(user.id, navController)
+                }else{
+                    println("User is null")
+                }
+            }
+            composable(Destination.SETTINGS.route) {
+                SettingsPage(navController, userVM)
+            }
             composable(Destination.NOTIFICATIONS.route) {
-                NotificationPage(
-                    startMemberID,
-                    navController
-                )
+                val user = userVM.currentUser.value
+                if (user != null) {
+                    NotificationPage(user.id, navController)
+                }else{
+                    println("User is null")
+                }
             }
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry
@@ -199,7 +213,9 @@ fun MoneyTalksApp() {
                     Text("Group not found")
                 }
             }
-            composable(Destination.CREATEGROUP.route) { CreateGroup(navController) }
+            composable(Destination.CREATEGROUP.route) {
+                CreateGroup(navController, userVM)
+            }
             composable(Destination.GROUPVIEW.route) {
                 val group = navController.previousBackStackEntry
                     ?.savedStateHandle
@@ -217,13 +233,17 @@ fun MoneyTalksApp() {
                     ?.get<Group>("group")
 
                 if (group != null) {
-                    AddExpensePage(navController, group)
+                    AddExpensePage(navController, group, userVM)
                 } else {
                     Text("Group not found for AddExpense")
                 }
             }
-            composable(Destination.LOGIN.route) { LoginScreen(navController) }
-            composable(Destination.CREATEACCOUNT.route) { CreateAccount(navController) }
+            composable(Destination.LOGIN.route) {
+                LoginScreen(navController, userVM)
+            }
+            composable(Destination.CREATEACCOUNT.route) {
+                CreateAccount(navController, userVM)
+            }
         }
     }
 }

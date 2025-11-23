@@ -39,7 +39,7 @@ import com.example.moneytalks.viewmodel.UserViewModel
 fun AddExpensePage(
     navController: NavController,
     group: Group? = null,
-    userVm: UserViewModel = viewModel(),
+    userVm: UserViewModel,
     expenseVM: ExpenseViewModel = viewModel(),
     notificationVM: NotificationViewModel = viewModel()
 ) {
@@ -91,19 +91,32 @@ fun AddExpensePage(
         //Button
         Button(
             onClick = {
-                println("Added expense: $amount to this group: $description")
-                val userId = userVm.currentUserId
-                val amount = amount.toDouble()
-                val groupId = group.id
+                if (amount != "" && description != "") {
+                    println("Added expense: $amount to this group: $description")
+                    val userId = userVm.currentUser.value!!.id
+                    val amount = amount.toDouble()
+                    val groupId = group.id
 
-                expenseVM.createExpense(userId, groupId, amount, description)
+                    expenseVM.createExpense(userId, groupId, amount, description)
+                    notificationVM.createNotification(
+                        userId,
+                        "EXPENSE",
+                        groupId,
+                        group.name,
+                        amount,
+                        description
+                    )
+                    val expenseTitle = "Expense added to your group!"
+                    val currentUser = userVm.currentUser.value
+                    if(currentUser != null){
+                        val expenseMessage = "${currentUser.username} added the expense: $description: $amount,-"
+                        activity?.sendNotification(expenseTitle, expenseMessage)
+                    }
 
-                val expenseTitle = "Expense added to your group!"
-                val expenseMessage = "${userVm.currentUserName} added the expense: $description: $amount,-"
-
-                activity?.sendNotification(expenseTitle, expenseMessage)
-
-                navController.navigateUp()
+                    navController.navigateUp()
+                }else{
+                    println("Please fill out amount and description.")
+                }
             },
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -121,13 +134,6 @@ fun AddExpensePage(
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun AddExpensePreview() {
-//    AddExpensePage()
-//}
 
 fun isNumeric(toCheck: String): Boolean {
     return toCheck.all { char -> char.isDigit() }

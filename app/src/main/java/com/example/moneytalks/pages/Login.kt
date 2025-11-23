@@ -14,20 +14,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
-
-
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    userVM: UserViewModel
+    ) {
     var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
+
 
     Column(
         modifier = Modifier
@@ -52,9 +57,9 @@ fun LoginScreen(navController: NavController) {
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
         ){
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("E-mail") },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,7 +138,15 @@ fun LoginScreen(navController: NavController) {
         ) {
             Button(
                 onClick = {
-                    navController.navigate(Destination.HOME.route)
+                    userVM.login(
+                        email,
+                        password,
+                        onSuccess = {
+                            navController.navigate(Destination.HOME.route)},
+                        onError = {
+                            println("Error in Login")
+                        })
+
                 },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
