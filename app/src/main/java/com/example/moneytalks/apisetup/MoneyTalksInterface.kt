@@ -6,7 +6,9 @@ import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupCreate
 import com.example.moneytalks.dataclasses.GroupEdit
+import com.example.moneytalks.dataclasses.LoginRequest
 import com.example.moneytalks.dataclasses.NotificationCreate
+import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.dataclasses.UserCreate
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -39,6 +41,11 @@ interface MoneyTalksInterface {
     @GET("getNotifications")
     suspend fun getNotifications(@Query("userId") userId: String): List<Notification>
 
+    @POST("login")
+    suspend fun login(
+        @Body request: LoginRequest
+    ): User
+
     @POST("createNotification")
     suspend fun createNotification(
         @Query("userId") userId: String,
@@ -47,7 +54,7 @@ interface MoneyTalksInterface {
     @POST("signup")
     suspend fun signup(
         @Body user: UserCreate
-    )
+    ) : User
 
     @POST("acceptInvite")
     suspend fun acceptInvite(

@@ -22,33 +22,44 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.navigation.NavController
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.dataclasses.User
+import com.example.moneytalks.viewmodel.UserViewModel
 
-@Preview(
-    showBackground = true,
-)
+//@Preview(
+//    showBackground = true,
+//)
 @Composable
-fun CreateGroup(navController: NavController) {
+fun CreateGroup(navController: NavController, userVM: UserViewModel) {
     var groupName by remember { mutableStateOf("") }
     var addPeople by remember { mutableStateOf("") }
-    var peopleList = remember { mutableStateListOf<GroupMember>() }
-    var searchResults by remember { mutableStateOf<List<com.example.moneytalks.dataclasses.User>>(emptyList()) }
-    var userVM: com.example.moneytalks.viewmodel.UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-    var groupVM: com.example.moneytalks.viewmodel.GroupsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    var searchResults by remember {
+        mutableStateOf<List<com.example.moneytalks.dataclasses.User>>(
+            emptyList()
+        )
+    }
+//    var userVM: com.example.moneytalks.viewmodel.UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    var groupVM: com.example.moneytalks.viewmodel.GroupsViewModel =
+        androidx.lifecycle.viewmodel.compose.viewModel()
 
     // add current user to the group by default
     val currentUser = userVM.currentUser.value
-    if (currentUser != null) {
-        peopleList.add(
-            GroupMember(
-                id = currentUser.id,
-                full_name = currentUser.full_name,
-                profile_picture = currentUser.profile_picture,
-                username = currentUser.username,
-                email = currentUser.email,
-                password = currentUser.password,
-                accepted = true
-            )
-        )
+
+
+    val peopleList = remember(currentUser?.id) {
+        mutableStateListOf<GroupMember>().apply {
+            if (currentUser != null) {
+                add(
+                    GroupMember(
+                        id = currentUser.id,
+                        full_name = currentUser.full_name,
+                        profile_picture = currentUser.profile_picture,
+                        username = currentUser.username,
+                        email = currentUser.email,
+                        password = currentUser.password,
+                        accepted = true
+                    )
+                )
+            }
+        }
     }
     
     // LaunchedEffect triggered whenever addPeople changes

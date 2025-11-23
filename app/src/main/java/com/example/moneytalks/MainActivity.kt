@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.bars.NavBar
 import com.example.moneytalks.bars.TopBar
 import com.example.moneytalks.dataclasses.Group
+import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.AddExpensePage
 import com.example.moneytalks.pages.CreateAccount
@@ -57,7 +58,6 @@ fun MoneyTalksApp() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val userVM: UserViewModel = viewModel()
-//    val startMemberID = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -80,9 +80,25 @@ fun MoneyTalksApp() {
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
         ) {
-            composable(Destination.HOME.route) { HomePage(userVM.currentUser.value!!.id, navController) }
-            composable(Destination.SETTINGS.route) { SettingsPage(navController) }
-            composable(Destination.NOTIFICATIONS.route) {NotificationPage(userVM.currentUser.value!!.id, navController)}
+            composable(Destination.HOME.route) {
+                val user = userVM.currentUser.value
+                if (user != null) {
+                    HomePage(user.id, navController)
+                }else{
+                    println("User is null")
+                }
+            }
+            composable(Destination.SETTINGS.route) {
+                SettingsPage(navController, userVM)
+            }
+            composable(Destination.NOTIFICATIONS.route) {
+                val user = userVM.currentUser.value
+                if (user != null) {
+                    NotificationPage(user.id, navController)
+                }else{
+                    println("User is null")
+                }
+            }
             composable(Destination.EDITGROUP.route) {
                 val group = navController.previousBackStackEntry
                     ?.savedStateHandle
@@ -94,7 +110,9 @@ fun MoneyTalksApp() {
                     Text("Group not found")
                 }
             }
-            composable(Destination.CREATEGROUP.route) { CreateGroup(navController) }
+            composable(Destination.CREATEGROUP.route) {
+                CreateGroup(navController, userVM)
+            }
             composable(Destination.GROUPVIEW.route) {
                 val group = navController.previousBackStackEntry
                     ?.savedStateHandle
@@ -112,13 +130,17 @@ fun MoneyTalksApp() {
                     ?.get<Group>("group")
 
                 if (group != null) {
-                    AddExpensePage(navController, group)
+                    AddExpensePage(navController, group, userVM)
                 } else {
                     Text("Group not found for AddExpense")
                 }
             }
-            composable(Destination.LOGIN.route) { LoginScreen(navController) }
-            composable(Destination.CREATEACCOUNT.route) { CreateAccount(navController) }
+            composable(Destination.LOGIN.route) {
+                LoginScreen(navController, userVM)
+            }
+            composable(Destination.CREATEACCOUNT.route) {
+                CreateAccount(navController, userVM)
+            }
         }
     }
 

@@ -4,21 +4,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneytalks.apisetup.RetrofitClient
+import com.example.moneytalks.dataclasses.LoginRequest
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.dataclasses.UserCreate
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
-class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
+class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient) : ViewModel() {
     var currentUser = mutableStateOf<User?>(null)
-
-    //temporary to make stuff work. currentUser should be set when logged in
-    val currentUserId = "c4d21a74-c59c-4a4b-8dea-9eb519428543"
 
     suspend fun searchUsers(query: String): List<User>? {
         return try {
             retrofitClient.api.searchUsers(query)
+        }catch(e: HttpException){
+            println("HTTP error in UserViewModel searchUsers: ${e.message}")
+            e.printStackTrace()
+            null
         } catch (e: Exception) {
             e.printStackTrace()
+            println("Error in searchUsers in UserViewModel")
             null
         }
     }
@@ -29,6 +33,8 @@ class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient)
         fullName: String,
         email: String,
         password: String,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit = {}
     ) {
         viewModelScope.launch {
             try {
@@ -39,9 +45,34 @@ class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient)
                     email = email,
                     password = password,
                 )
-                retrofitClient.api.signup(user)
+                val current = retrofitClient.api.signup(user)
+                currentUser.value = current
+                onSuccess()
+            } catch (e: HttpException) {
+                println(e.message)
+                println(e.stackTrace)
+                onError(e)
             } catch (e: Exception) {
                 e.printStackTrace()
+                onError(e)
+            }
+        }
+    }
+
+    fun login(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            try {
+                val current = retrofitClient.api.login(LoginRequest(email, password))
+                currentUser.value = current
+                onSuccess()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                onError(e)
             }
         }
     }

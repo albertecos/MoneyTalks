@@ -37,7 +37,7 @@ import com.example.moneytalks.viewmodel.UserViewModel
 fun AddExpensePage(
     navController: NavController,
     group: Group? = null,
-    userVm: UserViewModel = viewModel(),
+    userVm: UserViewModel,
     expenseVM: ExpenseViewModel = viewModel(),
     notificationVM: NotificationViewModel = viewModel()
 ) {
@@ -89,7 +89,7 @@ fun AddExpensePage(
             onClick = {
                 if (amount != "" && description != "") {
                     println("Added expense: $amount to this group: $description")
-                    val userId = userVm.currentUserId
+                    val userId = userVm.currentUser.value!!.id
                     val amount = amount.toDouble()
                     val groupId = group.id
 

@@ -38,7 +38,7 @@ data class DummyUserData(val email: String, val password: String)
 @Composable
 fun SettingsPage(
     navController: NavController,
-    userVM: UserViewModel = viewModel()
+    userVM: UserViewModel
 ) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 

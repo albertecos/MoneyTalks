@@ -23,20 +23,16 @@ import com.example.moneytalks.viewmodel.UserViewModel
 @Composable
 fun LoginScreen(
     navController: NavController,
-    userVM: UserViewModel = viewModel()
+    userVM: UserViewModel
     ) {
     var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
 
-    LaunchedEffect(username) {
-        val results = userVM.searchUsers(username) ?: emptyList()
-        userVM.currentUser.value = results.firstOrNull{it.username == username}
-        println("userid in login is ${userVM.currentUser.value?.id}")
-    }
 
     Column(
         modifier = Modifier
@@ -61,9 +57,9 @@ fun LoginScreen(
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
         ){
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("E-mail") },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,8 +138,15 @@ fun LoginScreen(
         ) {
             Button(
                 onClick = {
+                    userVM.login(
+                        email,
+                        password,
+                        onSuccess = {
+                            navController.navigate(Destination.HOME.route)},
+                        onError = {
+                            println("Error in Login")
+                        })
 
-                    navController.navigate(Destination.HOME.route)
                 },
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
