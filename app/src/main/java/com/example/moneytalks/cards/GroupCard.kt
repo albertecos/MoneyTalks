@@ -40,7 +40,10 @@ fun GroupCard(
     memberId: String,
     navController: NavController,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { navController.navigate(Destination.GROUPVIEW.route) },
+    onClick: () -> Unit = {
+        navController.currentBackStackEntry?.savedStateHandle?.set("group", group)
+        navController.navigate(Destination.GROUPVIEW.route)
+    },
 ) {
     var showLeavePopup = remember { mutableStateOf(false) }
 

@@ -162,4 +162,76 @@ endPoints.push({method: 'POST', path: '/declineInvite', oapi: {
     res.send({ ok: true })
 }});
 
+
+
+endPoints.push({method: 'POST', path: '/createNotification', oapi: {
+    summary: 'Create a notification',
+    parameters: [
+        {
+            name: 'userId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
+    requestBody: {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        groupId: {type: 'string', format: 'uuid'},
+                        groupName: {type: 'string'},
+                        action: { type: 'string'},
+                        amount: { type: ['number', 'null']},
+                        description: { type: 'string' }
+                    },
+                    required: ['groupId', 'groupName', 'action', 'description']
+                }
+            }
+        }
+    },
+    responses: {
+        200: {
+            description: 'Notification created successfully'
+        },
+        404: {
+            description: 'Failed to create notification'
+        }
+    }
+}, handler: (req, res) => {
+    const userId = req.query.userId;
+
+    if (!userId) {
+        return res.status(400).send({error: 'userId query parameter is required'});
+    }
+
+    const {groupId, groupName, action, amount, description } = req.body;
+
+    if (!groupId || !groupName || !action|| !amount || !description) {
+        return res.status(400).send({error: 'Please provide groupId, amount, and description for the expense'});
+    }
+
+//    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId})[0];
+
+    Database.getInstance('notifications').insert({
+        id: uuidv4(),
+        action,
+        groupId,
+        groupName,
+        userId,
+        amount: amount ?? null,
+        date: new Date().toISOString(),
+        interacted: false,
+        seen: false,
+        description,
+
+    });
+    res.status(201).send({message: 'Notification created successfully'});
+}});
+
 module.exports = endPoints;

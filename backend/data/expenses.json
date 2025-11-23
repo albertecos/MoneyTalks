@@ -14,5 +14,21 @@
     "amount": 25,
     "description": "Payment of owed expenses",
     "action": "payment"
+  },
+  {
+    "id": "66e4510c-60c4-4644-917d-33a7277c2247",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-11-23T15:09:14.733Z",
+    "amount": 22,
+    "description": "hej",
+    "action": "expense"
+  },
+  {
+    "id": "4c182c08-4915-4273-ba04-363b2c04b5a5",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-11-23T15:09:30.844Z",
+    "amount": 323232,
+    "description": "nono",
+    "action": "expense"
   }
 ]

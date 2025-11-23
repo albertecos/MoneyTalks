@@ -168,7 +168,36 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         action: 'expense'
     });
 
-    // Todo: Notify other group members about the new expense
+    const notificationsDb = Database.getInstance('notifications');
+    const groupsDb = Database.getInstance('groups');
+    const usersDb = Database.getInstance('users');
+
+    const group = groupsDb.select({ id: groupId })[0];
+    const groupName = group ? group.name: 'default group name';
+
+    const creatorUser = usersDb.select({ id: userId })[0];
+    const creatorName = creatorUser ? creatorUser.full_name : 'unknow user'
+
+    const members = Database.getInstance('groups_members').select({ group_id: groupId });
+
+    members.forEach(m => {
+        if (m.user_id === userId) {
+            return
+        }
+
+        notificationsDb.insert({
+            id: uuidv4(),
+            action: 'EXPENSE',
+            groupId,
+            groupName,
+            userId: m.user_id,
+            amount,
+            date: new Date().toISOString(),
+            interacted: false,
+            seen: false,
+            description: `${creatorName} added an expense: ${description} (${amount})`
+        });
+    });
 
     res.status(201).send({message: 'Expense created successfully'});
 }});
@@ -233,7 +262,38 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
         action: 'payment'
     });
 
-    // Todo: Notify other group members about the payment
+    const notificationsDb = Database.getInstance('notifications');
+    const groupsDb = Database.getInstance('groups');
+    const usersDb = Database.getInstance('users');
+
+    const group = groupsDb.select({ id: groupId })[0];
+    const groupName = group ? group.name: 'default group name';
+
+    const payerUser = usersDb.select({ id: userId })[0];
+    const payerName = payerUser ? payerUser.full_name : 'unknow user'
+
+    const members = Database.getInstance('groups_members').select({ group_id: groupId });
+
+    const totalAmountPaid = -balance;
+
+    members.forEach(m => {
+        const isPayer = m.user_id === userId;
+
+        notificationsDb.insert({
+            id: uuidv4(),
+            action: isPayer ? 'PAYMENT' : 'RECEIVEMENT',
+            groupId,
+            groupName,
+            userId: m.user_id,
+            amount: totalAmountPaid,
+            date: new Date().toISOString(),
+            interacted: false,
+            seen: false,
+            description: isPayer
+                ? `You paid ${totalAmountPaid} to settle your balance in ${groupName}`
+                : `${payerName} paid ${totalAmountPaid} in ${groupName}`
+        });
+    });
 
     res.status(201).send({message: 'Expense paid successfully'});
 }});
