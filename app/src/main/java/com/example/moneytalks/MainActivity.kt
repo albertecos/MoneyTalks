@@ -63,6 +63,8 @@ class MainActivity : ComponentActivity() {
         }
 
         createNotificationChannel()
+        requestNotificationPermission()
+
     }
 
     companion object {

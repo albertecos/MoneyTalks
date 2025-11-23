@@ -181,7 +181,17 @@ endPoints.push({method: 'POST', path: '/createNotification', oapi: {
         required: true,
         content: {
             'application/json': {
-                schema: Components.schemas.ExpenseWithoutId
+                schema: {
+                    tye: 'object',
+                    properties: {
+                        groupId: {type: 'string', format: 'uuid'}
+                        groupName: {type: 'string'},
+                        action: { type: 'string'},
+                        amount: { type: ['number', 'null']},
+                        description: { type: 'string' }
+                    },
+                    required: ['groupId', 'groupName', 'action', 'description']
+                }
             }
         }
     },
@@ -210,15 +220,15 @@ endPoints.push({method: 'POST', path: '/createNotification', oapi: {
 
     Database.getInstance('notifications').insert({
         id: uuidv4(),
-        action: action,
-        groupId: groupId,
-        groupName: groupName,
-        userId: userId,
-        amount: amount,
+        action,
+        groupId,
+        groupName,
+        userId,
+        amount: amount ?? null,
         date: new Date().toISOString(),
         interacted: false,
         seen: false,
-        description: description,
+        description,
 
     });
     res.status(201).send({message: 'Notification created successfully'});

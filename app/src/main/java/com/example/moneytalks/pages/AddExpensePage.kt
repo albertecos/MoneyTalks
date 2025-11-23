@@ -97,10 +97,10 @@ fun AddExpensePage(
                 val groupId = group.id
 
                 expenseVM.createExpense(userId, groupId, amount, description)
-                notificationVM.createNotification(userId, "EXPENSE", groupId, group.name, amount, description)
+                //notificationVM.createNotification(userId, "EXPENSE", groupId, group.name, amount, description)
 
                 val expenseTitle = "Expense added to your group!"
-                val expenseMessage = "${/*userVm.currentUser.value?.full_name*/ userVm.currentUserName} added the expense: ${description}: ${amount},-"
+                val expenseMessage = "${/*userVm.currentUser.value?.full_name*/ userVm.currentUserName} added the expense: $description: $amount,-"
 
                 activity?.sendNotification(expenseTitle, expenseMessage)
 

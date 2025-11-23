@@ -118,7 +118,30 @@ endPoints.push({method: 'POST', path: '/createGroup', oapi: {
     }));
     members.forEach(member => Database.getInstance('group_members').insert(member));
 
-    // TODO send invitations to other members
+    const notificationDb = Database.getInstance('notifications');
+    const usersDb = Database.getInstance('users');
+
+    const creator = usersDb.select({ id: userId })[0];
+    const creatorName = creator ? creator.full_name : 'Unknown user';
+
+    members.forEach(member => {
+        if (member.user_id === userId) {
+        return;
+        }
+
+        notificationDb.insert({
+            id: uuidv4(),
+            action: 'INVITE',
+            groupId: group.id,
+            groupName: group.name,
+            userId: member.user_id,
+            amount: null,
+            date: new Date().toISOString(),
+            interacted: false,
+            seen: false,
+            description: `${creatorName} added an expense: ${group.name}`
+        });
+    });
 
     res.status(201).json({...group, members: members});
 }});
