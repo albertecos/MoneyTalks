@@ -1,15 +1,24 @@
 package com.example.moneytalks
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +31,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -56,6 +66,45 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private var requestPermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (!isGranted) {
+                Log.d("POST_NOTIFICATION_PERMISSION", "USER DENIED PERMISSION")
+            } else {
+                Log.d("POST_NOTIFICATION_PERMISSION", "USER GRANTED PERMISSION")
+            }
+        }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val permission = Manifest.permission.POST_NOTIFICATIONS
+            when {
+                ContextCompat.checkSelfPermission(
+                    this, permission
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_LONG).show()
+                }
+
+                shouldShowRequestPermissionRationale(permission) -> {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    requestPermissionLauncher.launch(permission)
+                }
+            }
+        }else{
+            Toast.makeText(this, "No required permission", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_prompt)
+        .setContentTitle(/*textTitle*/ "")
+        .setContentText(/*textContent*/"")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

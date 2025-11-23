@@ -2,7 +2,9 @@ package com.example.moneytalks.notificationmanagement
 
 import android.Manifest
 import android.os.Build
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -21,11 +23,19 @@ fun requestNotificationPermission() {
     val context = LocalContext.current
 
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { grantedAccess ->
-        if (grantedAccess) {
-            //set notification permission to true
+//    val permissionLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.RequestPermission()
+//    ) { grantedAccess ->
+//        if (grantedAccess) {
+//            //set notification permission to true
+//        }
+//    }
+}
+private var requestPermissionLauncher: ActivityResultLauncher<String> =
+    registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (!isGranted) {
+            Log.d("POST_NOTIFICATION_PERMISSION", "USER DENIED PERMISSION")
+        } else {
+            Log.d("POST_NOTIFICATION_PERMISSION", "USER GRANTED PERMISSION")
         }
     }
-}
