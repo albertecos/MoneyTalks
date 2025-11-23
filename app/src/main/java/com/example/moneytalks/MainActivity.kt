@@ -3,10 +3,13 @@ package com.example.moneytalks
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -51,11 +54,9 @@ import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
 import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
-
+import kotlin.jvm.java
 
 class MainActivity : ComponentActivity() {
-    private val CHANNEL_ID = "channel"
-    private val NOTIFICATION_ID = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +66,15 @@ class MainActivity : ComponentActivity() {
                 MoneyTalksApp()
             }
         }
+
+        createNotificationChannel()
     }
 
+    companion object{
+        private const val CHANNEL_ID = "notification_channel"
+        private const val CHANNEL_NAME = "Notification Channel"
+        private const val NOTIFICATION_ID = 1
+    }
     private var requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (!isGranted) {
@@ -104,8 +112,6 @@ class MainActivity : ComponentActivity() {
         .setContentText(/*textContent*/"")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Channel"
@@ -118,20 +124,53 @@ class MainActivity : ComponentActivity() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+
     }
 
+
     private fun sendNotification() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle("Hello")
+            .setContentTitle("My notification title")
             .setContentText("This is the notification")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(this)) {
 
             notify(NOTIFICATION_ID, builder.build())
         }
     }
+
+    private fun showNotification(title:String? = "Hello", message: String? = "World"){
+        val notificationManager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .build()
+
+        notificationManager.notify(NOTIFICATION_ID, notification)
+    }
+
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
