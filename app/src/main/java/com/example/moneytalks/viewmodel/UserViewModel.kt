@@ -7,6 +7,7 @@ import com.example.moneytalks.dataclasses.User
 
 class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
     var currentUser = mutableStateOf<User?>(null)
+    val currentUserName = "string"
 
     //temporary to make stuff work. currentUser should be set when logged in
     val currentUserId = "c4d21a74-c59c-4a4b-8dea-9eb519428543"

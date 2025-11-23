@@ -20,12 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.moneytalks.MainActivity
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.viewmodel.ExpenseViewModel
 import com.example.moneytalks.viewmodel.NotificationViewModel
@@ -48,6 +50,8 @@ fun AddExpensePage(
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
+    val activity = context as? MainActivity
 
     val gradient = Brush.horizontalGradient(
         listOf(Color(0xFFBADFFF), Color(0XFF3F92DA))
@@ -94,6 +98,12 @@ fun AddExpensePage(
 
                 expenseVM.createExpense(userId, groupId, amount, description)
                 notificationVM.createNotification(userId, "EXPENSE", groupId, group.name, amount, description)
+
+                val expenseTitle = "Expense added to your group!"
+                val expenseMessage = "${/*userVm.currentUser.value?.full_name*/ userVm.currentUserName} added the expense: ${description}: ${amount},-"
+
+                activity?.sendNotification(expenseTitle, expenseMessage)
+
                 navController.navigateUp()
             },
             shape = RoundedCornerShape(12.dp),

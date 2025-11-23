@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -19,9 +18,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,7 +38,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.bars.NavBar
 import com.example.moneytalks.bars.TopBar
 import com.example.moneytalks.dataclasses.Group
-import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.AddExpensePage
 import com.example.moneytalks.pages.CreateAccount
@@ -70,16 +65,18 @@ class MainActivity : ComponentActivity() {
         createNotificationChannel()
     }
 
-    companion object{
+    companion object {
         private const val CHANNEL_ID = "notification_channel"
-        private const val CHANNEL_NAME = "Notification Channel"
-        private const val NOTIFICATION_ID = 1
     }
+
+
     private var requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (!isGranted) {
+                requestNotificationPermission()
                 Log.d("POST_NOTIFICATION_PERMISSION", "USER DENIED PERMISSION")
             } else {
+                sendNotification("title", "text")
                 Log.d("POST_NOTIFICATION_PERMISSION", "USER GRANTED PERMISSION")
             }
         }
@@ -97,20 +94,21 @@ class MainActivity : ComponentActivity() {
                 shouldShowRequestPermissionRationale(permission) -> {
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_LONG).show()
                 }
+
                 else -> {
                     requestPermissionLauncher.launch(permission)
                 }
             }
-        }else{
+        } else {
             Toast.makeText(this, "No required permission", Toast.LENGTH_LONG).show()
         }
     }
 
-    var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-        .setSmallIcon(R.drawable.notification_prompt)
-        .setContentTitle(/*textTitle*/ "")
-        .setContentText(/*textContent*/"")
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//    var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+//        .setSmallIcon(R.drawable.notification_prompt)
+//        .setContentTitle(/*textTitle*/ "")
+//        .setContentText(/*textContent*/"")
+//        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -128,33 +126,41 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    private fun sendNotification() {
+    fun sendNotification(title: String, text: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+        }
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle("My notification title")
-            .setContentText("This is the notification")
+            .setContentTitle(title)
+            .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(this)) {
-
-            notify(NOTIFICATION_ID, builder.build())
+            notify(1, builder.build())
         }
     }
 
-    private fun showNotification(title:String? = "Hello", message: String? = "World"){
+    private fun showNotification(title: String? = "Hello", message: String? = "World") {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
+                CHANNEL_ID, "CHANNEL", NotificationManager.IMPORTANCE_DEFAULT
             )
             notificationManager.createNotificationChannel(channel)
         }
@@ -167,7 +173,7 @@ class MainActivity : ComponentActivity() {
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(NOTIFICATION_ID, notification)
+        notificationManager.notify(1, notification)
     }
 
 
