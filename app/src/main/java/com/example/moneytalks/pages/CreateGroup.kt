@@ -24,19 +24,16 @@ import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.viewmodel.UserViewModel
 
-//@Preview(
-//    showBackground = true,
-//)
+
 @Composable
 fun CreateGroup(navController: NavController, userVM: UserViewModel) {
     var groupName by remember { mutableStateOf("") }
     var addPeople by remember { mutableStateOf("") }
     var searchResults by remember {
-        mutableStateOf<List<com.example.moneytalks.dataclasses.User>>(
+        mutableStateOf<List<User>>(
             emptyList()
         )
     }
-//    var userVM: com.example.moneytalks.viewmodel.UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     var groupVM: com.example.moneytalks.viewmodel.GroupsViewModel =
         androidx.lifecycle.viewmodel.compose.viewModel()
 

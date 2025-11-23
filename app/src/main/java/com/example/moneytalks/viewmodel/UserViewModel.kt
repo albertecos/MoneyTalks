@@ -12,6 +12,7 @@ import retrofit2.HttpException
 
 class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient) : ViewModel() {
     var currentUser = mutableStateOf<User?>(null)
+    val currentUserName = "string"
 
     suspend fun searchUsers(query: String): List<User>? {
         return try {
