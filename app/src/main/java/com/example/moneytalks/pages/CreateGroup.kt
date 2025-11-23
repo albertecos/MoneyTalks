@@ -23,9 +23,7 @@ import androidx.navigation.NavController
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.dataclasses.User
 
-@Preview(
-    showBackground = true,
-)
+
 @Composable
 fun CreateGroup(navController: NavController) {
     var groupName by remember { mutableStateOf("") }
