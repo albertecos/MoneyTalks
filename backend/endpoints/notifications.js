@@ -182,9 +182,9 @@ endPoints.push({method: 'POST', path: '/createNotification', oapi: {
         content: {
             'application/json': {
                 schema: {
-                    tye: 'object',
+                    type: 'object',
                     properties: {
-                        groupId: {type: 'string', format: 'uuid'}
+                        groupId: {type: 'string', format: 'uuid'},
                         groupName: {type: 'string'},
                         action: { type: 'string'},
                         amount: { type: ['number', 'null']},

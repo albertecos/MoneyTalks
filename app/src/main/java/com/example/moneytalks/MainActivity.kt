@@ -75,10 +75,8 @@ class MainActivity : ComponentActivity() {
     private var requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (!isGranted) {
-                requestNotificationPermission()
                 Log.d("POST_NOTIFICATION_PERMISSION", "USER DENIED PERMISSION")
             } else {
-                sendNotification("title", "text")
                 Log.d("POST_NOTIFICATION_PERMISSION", "USER GRANTED PERMISSION")
             }
         }
@@ -105,12 +103,6 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this, "No required permission", Toast.LENGTH_LONG).show()
         }
     }
-
-//    var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-//        .setSmallIcon(R.drawable.notification_prompt)
-//        .setContentTitle(/*textTitle*/ "")
-//        .setContentText(/*textContent*/"")
-//        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -155,29 +147,6 @@ class MainActivity : ComponentActivity() {
             notify(1, builder.build())
         }
     }
-
-    private fun showNotification(title: String? = "Hello", message: String? = "World") {
-        val notificationManager =
-            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID, "CHANNEL", NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true)
-            .build()
-
-        notificationManager.notify(1, notification)
-    }
-
 
 }
 
