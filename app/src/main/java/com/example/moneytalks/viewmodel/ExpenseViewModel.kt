@@ -1,5 +1,6 @@
 package com.example.moneytalks.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import retrofit2.HttpException
@@ -9,11 +10,14 @@ import kotlinx.coroutines.launch
 
 class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
 
+    var expenseHistory = mutableStateOf<List<Expense>>(emptyList())
+
     fun createExpense(
         userId: String,
         groupId: String,
         amount: Double,
-        description: String
+        description: String,
+        action: String
     ){
         viewModelScope.launch {
             try {
@@ -22,6 +26,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
                     userId = userId,
                     amount = amount,
                     description = description,
+                    action = action
                 )
                 retrofitClient.api.createExpense(userId, expense)
 
@@ -31,6 +36,22 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
 
 
             }catch (e: Exception){
+                e.printStackTrace()
+                println(e.message)
+            }
+        }
+    }
+
+    fun getExpenseHistoryByGroupId(groupId: String) {
+        viewModelScope.launch {
+            try {
+                val response = retrofitClient.api.getExpenseHistory(groupId)
+                expenseHistory.value = response
+            } catch (e: HttpException) {
+                println(e.message)
+                println(e.response()?.errorBody().toString())
+
+            } catch (e: Exception) {
                 e.printStackTrace()
                 println(e.message)
             }
