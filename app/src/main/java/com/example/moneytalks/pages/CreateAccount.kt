@@ -60,7 +60,7 @@ fun CreateAccount(
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-        ){
+        ) {
             OutlinedTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
@@ -68,7 +68,10 @@ fun CreateAccount(
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -91,7 +94,7 @@ fun CreateAccount(
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-        ){
+        ) {
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
@@ -99,7 +102,10 @@ fun CreateAccount(
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -164,7 +170,10 @@ fun CreateAccount(
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -196,7 +205,10 @@ fun CreateAccount(
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -222,7 +234,14 @@ fun CreateAccount(
                 .fillMaxWidth(0.6f)
                 .height(48.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-                .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(
+                            Color(0XFFBADFFF).copy(alpha = 0.5f),
+                            Color(0xFF3F92DA).copy(alpha = 0.5f)
+                        )
+                    ), RoundedCornerShape(20.dp)
+                )
         ) {
             Button(
                 onClick = {
@@ -255,7 +274,39 @@ fun CreateAccount(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(32.dp))
 
+        // GO BACK
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .height(48.dp)
+                .border(2.dp, gradient, RoundedCornerShape(20.dp))
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(
+                            Color(0XFFBADFFF).copy(alpha = 0.5f),
+                            Color(0xFF3F92DA).copy(alpha = 0.5f)
+                        )
+                    ), RoundedCornerShape(20.dp)
+                )
+        ) {
+            Button(
+                onClick = { navController.navigate(Destination.LOGIN.route) },
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentPadding = PaddingValues()
+            ) {
+                Text(
+                    "Back",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
     }
+    Spacer(modifier = Modifier.height(32.dp))
+
 }
