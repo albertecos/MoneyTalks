@@ -222,7 +222,7 @@ fun MoneyTalksApp() {
                     ?.get<Group>("group")
 
                 if (group != null) {
-                    GroupView(navController, group)
+                    GroupView(navController, group, userVM)
                 } else {
                     Text("Group not found for GroupView")
                 }

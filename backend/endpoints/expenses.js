@@ -108,7 +108,6 @@ function getBalance(groupId, userId) {
     if(!member){
         return 0;
     }
-    const memberIds = member.amd(m => m.id);
 
     const expenses = Database.getInstance('expenses').all().filter(e => members.map(m => m.id).includes(e.member_id));
 
