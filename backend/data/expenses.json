@@ -30,5 +30,13 @@
     "amount": 323232,
     "description": "nono",
     "action": "expense"
+  },
+  {
+    "id": "db8cee61-055f-4d43-ab26-c7c3b679b6eb",
+    "member_id": "4cb3b8b4-6c97-405c-b328-cfe4269d4df3",
+    "date": "2025-11-24T09:58:23.394Z",
+    "amount": 123,
+    "description": "testing",
+    "action": "expense"
   }
 ]

@@ -42,15 +42,14 @@ fun ReceivementNotify(
             Column(modifier = Modifier.weight(1f)) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "You received ",
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
                         text = payment,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF228B22)
                     )
-
+                    Text(
+                        text = " payment",
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
 
                 Text(

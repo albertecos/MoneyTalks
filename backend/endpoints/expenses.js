@@ -39,7 +39,7 @@ endPoints.push({method: 'GET', path: '/expenseHistory', oapi: {
         return res.status(400).send({error: 'groupId query parameter is required'});
     }
 
-    const memberIds = Database.getInstance('group_members').select({group_id: groupId}).map(m => m.id);
+    const memberIds = Database.getInstance('group_members').select({group_id: groupId, accepted: true}).map(m => m.id);
     const expenses = Database.getInstance('expenses').all().filter(e => memberIds.includes(e.member_id));
     if(expenses.length === 0) {
         return res.status(404).send({error: 'No expense history found for this group ID'});
@@ -103,8 +103,13 @@ endPoints.push({method: 'GET', path: '/getBalance', oapi: {
 }});
 
 function getBalance(groupId, userId) {
-    const members = Database.getInstance('group_members').select({group_id: groupId});
+    const members = Database.getInstance('group_members').select({group_id: groupId, accepted: true});
     const member = members.find(m => m.user_id === userId);
+    if(!member){
+        return 0;
+    }
+    const memberIds = member.amd(m => m.id);
+
     const expenses = Database.getInstance('expenses').all().filter(e => members.map(m => m.id).includes(e.member_id));
 
     let owed = expenses.filter(e => e.action === 'expense').reduce((sum, e) => sum + e.amount, 0) / members.length;
@@ -157,7 +162,7 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         return res.status(400).send({error: 'Please provide groupId, amount, and description for the expense'});
     }
 
-    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId})[0];
+    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId, accepted: true})[0];
 
     Database.getInstance('expenses').insert({
         id: uuidv4(),
@@ -178,7 +183,7 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
     const creatorUser = usersDb.select({ id: userId })[0];
     const creatorName = creatorUser ? creatorUser.full_name : 'unknow user'
 
-    const members = Database.getInstance('groups_members').select({ group_id: groupId });
+    const members = Database.getInstance('group_members').select({ group_id: groupId, accepted: true });
 
     members.forEach(m => {
         if (m.user_id === userId) {
@@ -251,7 +256,7 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
         return res.status(400).send({error: 'No owed expenses to pay'});
     }
 
-    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId})[0];
+    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId, accepted: true})[0];
 
     Database.getInstance('expenses').insert({
         id: uuidv4(),
@@ -272,7 +277,7 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
     const payerUser = usersDb.select({ id: userId })[0];
     const payerName = payerUser ? payerUser.full_name : 'unknow user'
 
-    const members = Database.getInstance('groups_members').select({ group_id: groupId });
+    const members = Database.getInstance('group_members').select({ group_id: groupId, accepted: true });
 
     const totalAmountPaid = -balance;
 
