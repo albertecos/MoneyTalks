@@ -19,6 +19,7 @@ import com.example.moneytalks.notifications.GroupInviteNotify
 import com.example.moneytalks.notifications.PaymentNotify
 import com.example.moneytalks.notifications.ReceivementNotify
 import com.example.moneytalks.viewmodel.NotificationViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -77,6 +78,13 @@ fun NotificationPage(
             expenseNotifications.forEach { notification ->
                 when (notification.action){
                     "PAYMENT" -> PaymentNotify(
+                        payment = notification.amount?.toString() ?: "0",
+                        groupName = notification.groupName,
+                        date = notification.date.take(10),
+                        navController = navController
+                    )
+
+                    "EXPENSE" -> PaymentNotify(
                         payment = notification.amount?.toString() ?: "0",
                         groupName = notification.groupName,
                         date = notification.date.take(10),

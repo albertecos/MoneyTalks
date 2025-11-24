@@ -46,5 +46,41 @@
     "interacted": false,
     "seen": false,
     "description": "You have been invited"
+  },
+  {
+    "id": "87028249-8c80-41f1-aaa6-03cb92c6b355",
+    "action": "EXPENSE",
+    "groupId": "a8602b88-8236-4596-9235-01a6040ab116",
+    "groupName": "Spain Trip 2027",
+    "userId": "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",
+    "amount": 123,
+    "date": "2025-11-24T09:17:22.807Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: house (123)"
+  },
+  {
+    "id": "2e364866-9b56-4955-89a8-e22b06d3baf0",
+    "action": "EXPENSE",
+    "groupId": "a8602b88-8236-4596-9235-01a6040ab116",
+    "groupName": "Spain Trip 2027",
+    "userId": "4fdf2d6a-c65b-47b7-96a0-3d0c748616d9",
+    "amount": 123,
+    "date": "2025-11-24T09:17:22.808Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: house (123)"
+  },
+  {
+    "id": "f552d4dd-4ed5-4f81-bb6b-460dd4399be1",
+    "action": "EXPENSE",
+    "groupId": "a8602b88-8236-4596-9235-01a6040ab116",
+    "groupName": "Spain Trip 2027",
+    "userId": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
+    "amount": 123,
+    "date": "2025-11-24T09:17:22.808Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: house (123)"
   }
 ]

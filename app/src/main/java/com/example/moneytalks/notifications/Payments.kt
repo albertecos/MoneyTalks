@@ -46,15 +46,14 @@ fun PaymentNotify(
             Column(modifier = Modifier.weight(1f)) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "You owe ",
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
                         text = payment,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFFDC143C)
                     )
-
+                    Text(
+                        text = " added expense",
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
                 Text(
                     text = "Group: $groupName",

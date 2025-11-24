@@ -178,7 +178,7 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
     const creatorUser = usersDb.select({ id: userId })[0];
     const creatorName = creatorUser ? creatorUser.full_name : 'unknow user'
 
-    const members = Database.getInstance('groups_members').select({ group_id: groupId });
+    const members = Database.getInstance('group_members').select({ group_id: groupId });
 
     members.forEach(m => {
         if (m.user_id === userId) {
@@ -272,7 +272,7 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
     const payerUser = usersDb.select({ id: userId })[0];
     const payerName = payerUser ? payerUser.full_name : 'unknow user'
 
-    const members = Database.getInstance('groups_members').select({ group_id: groupId });
+    const members = Database.getInstance('group_members').select({ group_id: groupId });
 
     const totalAmountPaid = -balance;
 

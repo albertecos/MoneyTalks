@@ -30,5 +30,13 @@
     "amount": 323232,
     "description": "nono",
     "action": "expense"
+  },
+  {
+    "id": "439dc523-caaf-48a5-9bc4-fba8c267d325",
+    "member_id": "983c20c3-3a59-4a4e-bfe5-e81283b79d83",
+    "date": "2025-11-24T09:17:22.806Z",
+    "amount": 123,
+    "description": "house",
+    "action": "expense"
   }
 ]
