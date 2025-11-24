@@ -59,7 +59,8 @@ fun GroupView(
 ) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
-    val currentUserId = userVm.currentUserId //for own bubble
+    val currentUser = userVm.currentUser //for own bubble
+    val currentUserId = currentUser.value?.id ?: " "
     val expenses = expenseVM.expenseHistory.value
 
     LaunchedEffect(group.id) {
@@ -93,7 +94,7 @@ fun GroupView(
         ) {
             expenses.forEach { expense ->
 
-                val ifMyself = expense.userId == currentUserId
+                val ifMyself = expense.groupMemberId == currentUserId
                 val actionEnum = mapActionToEnum(expense.action)
 
                 if (ifMyself) {

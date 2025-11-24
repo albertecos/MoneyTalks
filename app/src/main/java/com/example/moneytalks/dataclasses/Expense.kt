@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Expense (
-    val userId: String,
+    val groupMemberId: String,
     val groupId: String,
     val amount: Double,
     val description: String,

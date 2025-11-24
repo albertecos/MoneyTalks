@@ -13,7 +13,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
     var expenseHistory = mutableStateOf<List<Expense>>(emptyList())
 
     fun createExpense(
-        userId: String,
+        groupMemberId: String,
         groupId: String,
         amount: Double,
         description: String,
@@ -23,12 +23,12 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
             try {
                 val expense = Expense(
                     groupId = groupId,
-                    userId = userId,
+                    groupMemberId = groupMemberId,
                     amount = amount,
                     description = description,
                     action = action
                 )
-                retrofitClient.api.createExpense(userId, expense)
+                retrofitClient.api.createExpense(groupMemberId, expense)
 
             } catch(e: HttpException){
                 println(e.message)
