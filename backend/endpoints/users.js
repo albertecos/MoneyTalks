@@ -156,8 +156,7 @@ endPoints.push({method: 'POST', path: '/signup', oapi: {
         return res.status(409).send({error: 'Username already taken'});
     }
 
-    // TODO: profile picture
-    const newUser = {id: uuidv4(), username, full_name, email, password, profile_picture: ""};
+    const newUser = {id: uuidv4(), username, full_name, email, password, profile_picture: "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"};
     Database.getInstance('users').insert(newUser);
 
     res.status(201).json(newUser);

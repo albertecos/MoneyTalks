@@ -20,12 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.moneytalks.MainActivity
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.viewmodel.ExpenseViewModel
 import com.example.moneytalks.viewmodel.NotificationViewModel
@@ -37,7 +39,7 @@ import com.example.moneytalks.viewmodel.UserViewModel
 fun AddExpensePage(
     navController: NavController,
     group: Group? = null,
-    userVm: UserViewModel = viewModel(),
+    userVm: UserViewModel,
     expenseVM: ExpenseViewModel = viewModel(),
     notificationVM: NotificationViewModel = viewModel()
 ) {
@@ -49,6 +51,8 @@ fun AddExpensePage(
     var description by remember { mutableStateOf("") }
     var action by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
+    val activity = context as? MainActivity
 
     val gradient = Brush.horizontalGradient(
         listOf(Color(0xFFBADFFF), Color(0XFF3F92DA))
@@ -88,14 +92,25 @@ fun AddExpensePage(
         //Button
         Button(
             onClick = {
-                println("Added expense: $amount to this group: $description")
-                val userId = userVm.currentUserId
-                val amount = amount.toDouble()
-                val groupId = group.id
+                if (amount != "" && description != "") {
+                    println("Added expense: $amount to this group: $description")
+                    val userId = userVm.currentUser.value!!.id
+                    val amount = amount.toDouble()
+                    val groupId = group.id
 
                 expenseVM.createExpense(userId, groupId, amount, description, action)
-                notificationVM.createNotification(userId, "EXPENSE", groupId, group.name, amount, description)
-                navController.navigateUp()
+                    
+                    val expenseTitle = "Expense added to your group!"
+                    val currentUser = userVm.currentUser.value
+                    if(currentUser != null){
+                        val expenseMessage = "${currentUser.username} added the expense: $description: $amount,-"
+                        activity?.sendNotification(expenseTitle, expenseMessage)
+                    }
+
+                    navController.navigateUp()
+                }else{
+                    println("Please fill out amount and description.")
+                }
             },
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -113,13 +128,6 @@ fun AddExpensePage(
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun AddExpensePreview() {
-//    AddExpensePage()
-//}
 
 fun isNumeric(toCheck: String): Boolean {
     return toCheck.all { char -> char.isDigit() }

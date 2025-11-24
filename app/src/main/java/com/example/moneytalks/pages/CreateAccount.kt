@@ -3,7 +3,9 @@ package com.example.moneytalks.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,27 +16,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.navigation.Destination
+import com.example.moneytalks.viewmodel.UserViewModel
 
 
 @Composable
-fun CreateAccount(navController: NavController) {
+fun CreateAccount(
+    navController: NavController,
+    userVM: UserViewModel
+) {
     var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var fullName by remember {mutableStateOf("") }
+    var fullName by remember { mutableStateOf("") }
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
+        verticalArrangement = Arrangement.Top
+    ) {
         Text(
             text = "Create account",
             fontSize = 32.sp,
@@ -49,7 +60,7 @@ fun CreateAccount(navController: NavController) {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-        ){
+        ) {
             OutlinedTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
@@ -57,7 +68,10 @@ fun CreateAccount(navController: NavController) {
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -80,7 +94,7 @@ fun CreateAccount(navController: NavController) {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-        ){
+        ) {
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
@@ -88,7 +102,43 @@ fun CreateAccount(navController: NavController) {
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
+                    .padding(0.dp), // remove extra padding
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,   // Transparent so Box handles outer border
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.DarkGray,
+                    focusedLabelColor = Color.Gray,
+                    unfocusedLabelColor = Color.Gray
+                ),
+                singleLine = true
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .border(2.dp, gradient, RoundedCornerShape(20.dp))
+        ) {
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("E-mail") },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -120,7 +170,10 @@ fun CreateAccount(navController: NavController) {
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -152,7 +205,10 @@ fun CreateAccount(navController: NavController) {
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .background(
+                        Color(0xFFF0F0F0),
+                        RoundedCornerShape(20.dp)
+                    ) // match grey background + rounded corners
                     .padding(0.dp), // remove extra padding
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -178,10 +234,32 @@ fun CreateAccount(navController: NavController) {
                 .fillMaxWidth(0.6f)
                 .height(48.dp)
                 .border(2.dp, gradient, RoundedCornerShape(20.dp))
-                .background(Brush.horizontalGradient(listOf(Color(0XFFBADFFF).copy(alpha=0.5f), Color(0xFF3F92DA).copy(alpha=0.5f))), RoundedCornerShape(20.dp))
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(
+                            Color(0XFFBADFFF).copy(alpha = 0.5f),
+                            Color(0xFF3F92DA).copy(alpha = 0.5f)
+                        )
+                    ), RoundedCornerShape(20.dp)
+                )
         ) {
             Button(
-                onClick = { navController.navigate(Destination.HOME.route) },
+                onClick = {
+                    userVM.signup(
+                        username,
+                        profile_picture = "",
+                        fullName,
+                        email,
+                        password,
+                        onSuccess = {
+                            navController.navigate(Destination.HOME.route)
+                        },
+                        onError = {
+                            println("Error in CreateAccount")
+                        }
+                    )
+                },
+
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 modifier = Modifier
@@ -197,10 +275,38 @@ fun CreateAccount(navController: NavController) {
             }
         }
 
-
-
-
-
-
+        // GO BACK
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .height(48.dp)
+                .border(2.dp, gradient, RoundedCornerShape(20.dp))
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(
+                            Color(0XFFBADFFF).copy(alpha = 0.5f),
+                            Color(0xFF3F92DA).copy(alpha = 0.5f)
+                        )
+                    ), RoundedCornerShape(20.dp)
+                )
+        ) {
+            Button(
+                onClick = { navController.navigate(Destination.LOGIN.route) },
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentPadding = PaddingValues()
+            ) {
+                Text(
+                    "Back",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+        }
     }
+    Spacer(modifier = Modifier.height(32.dp))
+
 }

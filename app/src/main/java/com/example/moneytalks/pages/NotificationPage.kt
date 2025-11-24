@@ -68,7 +68,7 @@ fun NotificationPage(
         )
 
         val expenseNotifications = notifications.filter {
-            it.action == "PAYMENT" || it.action == "RECEIVEMENT"
+            it.action == "PAYMENT" || it.action == "RECEIVEMENT" || it.action == "EXPENSE"
         }
 
         if(expenseNotifications.isEmpty()){
