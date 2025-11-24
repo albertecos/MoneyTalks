@@ -9,4 +9,5 @@ data class Expense (
     val groupId: String,
     val amount: Double,
     val description: String,
+    val action: String,
 ) : Parcelable

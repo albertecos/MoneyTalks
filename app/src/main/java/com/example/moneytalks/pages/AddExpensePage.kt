@@ -49,6 +49,7 @@ fun AddExpensePage(
     }
     var amount by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var action by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val activity = context as? MainActivity
@@ -97,7 +98,7 @@ fun AddExpensePage(
                     val amount = amount.toDouble()
                     val groupId = group.id
 
-                    expenseVM.createExpense(userId, groupId, amount, description)
+                expenseVM.createExpense(userId, groupId, amount, description, action)
                     
                     val expenseTitle = "Expense added to your group!"
                     val currentUser = userVm.currentUser.value
