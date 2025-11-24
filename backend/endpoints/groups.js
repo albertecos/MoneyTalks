@@ -39,7 +39,7 @@ endPoints.push({method: 'GET', path: '/groups', oapi: {
         return res.status(400).send({error: 'userId query parameter is required'});
     }
 
-    const groupMembers = Database.getInstance('group_members').select({user_id: userId});
+    const groupMembers = Database.getInstance('group_members').select({user_id: userId, accepted: true});
     if(groupMembers.length === 0) {
         return res.status(404).send({error: 'No groups found for this user ID'});
     }
@@ -103,7 +103,12 @@ endPoints.push({method: 'POST', path: '/createGroup', oapi: {
         id: uuidv4(),
         name: groupData.name,
     };
-    Database.getInstance('groups').insert(group);
+    const groupsDb = Database.getInstance('groups');
+    const groupMembersDb = Database.getInstance('group_members');
+    const notificationDb = Database.getInstance('notifications');
+    const usersDb = Database.getInstance('users');
+
+    groupsDb.insert(group);
 
     // if the creator is not in the members list, add them
     if (!groupData.members.includes(userId)) {
@@ -116,15 +121,15 @@ endPoints.push({method: 'POST', path: '/createGroup', oapi: {
         user_id: memberId,
         accepted: memberId === userId // auto-accept if the member is the creator
     }));
-    members.forEach(member => Database.getInstance('group_members').insert(member));
+    members.forEach(member => groupMembersDb.insert(member));
 
-    const notificationDb = Database.getInstance('notifications');
-    const usersDb = Database.getInstance('users');
+    const dBMembers = groupMembersDb.select({ group_id: group.id });
 
     const creator = usersDb.select({ id: userId })[0];
     const creatorName = creator ? creator.full_name : 'Unknown user';
+    const groupName = group.name;
 
-    members.forEach(member => {
+    dBMembers.forEach(member => {
         if (member.user_id === userId) {
         return;
         }
@@ -133,7 +138,7 @@ endPoints.push({method: 'POST', path: '/createGroup', oapi: {
             id: uuidv4(),
             action: 'INVITE',
             groupId: group.id,
-            groupName: group.name,
+            groupName,
             userId: member.user_id,
             amount: null,
             date: new Date().toISOString(),

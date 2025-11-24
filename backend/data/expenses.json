@@ -32,11 +32,11 @@
     "action": "expense"
   },
   {
-    "id": "439dc523-caaf-48a5-9bc4-fba8c267d325",
-    "member_id": "983c20c3-3a59-4a4e-bfe5-e81283b79d83",
-    "date": "2025-11-24T09:17:22.806Z",
+    "id": "db8cee61-055f-4d43-ab26-c7c3b679b6eb",
+    "member_id": "4cb3b8b4-6c97-405c-b328-cfe4269d4df3",
+    "date": "2025-11-24T09:58:23.394Z",
     "amount": 123,
-    "description": "house",
+    "description": "testing",
     "action": "expense"
   }
 ]
