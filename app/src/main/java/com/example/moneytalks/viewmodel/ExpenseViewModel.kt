@@ -1,23 +1,35 @@
 package com.example.moneytalks.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.BackoffPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import retrofit2.HttpException
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Expense
+import com.example.moneytalks.workers.ExpenseSyncWorker
 import kotlinx.coroutines.launch
+import okio.IOException
+import java.util.concurrent.TimeUnit
 
 class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
 
     var expenseHistory = mutableStateOf<List<Expense>>(emptyList())
 
     fun createExpense(
+        context: Context,
         userId: String,
         groupId: String,
         amount: Double,
         description: String,
-        action: String
+        action: String,
+        onSuccess: () -> Unit,
+        onNetworkRetryScheduled: () -> Unit,
+        onError: (String) -> Unit
     ){
         viewModelScope.launch {
             try {
@@ -30,16 +42,47 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
                 )
                 retrofitClient.api.createExpense(userId, expense)
 
+                onSuccess()
+
+            } catch (e: IOException) {
+                scheduleExpenseRetry(context, userId, groupId, amount, description)
+                onNetworkRetryScheduled()
             } catch(e: HttpException){
                 println(e.message)
                 println(e.response()?.errorBody().toString())
 
 
-            }catch (e: Exception){
+            } catch (e: Exception){
                 e.printStackTrace()
                 println(e.message)
             }
         }
+    }
+
+    private fun scheduleExpenseRetry(
+        context: Context,
+        userId: String,
+        groupId: String,
+        amount: Double,
+        description: String,
+    ){
+        val workData = workDataOf(
+            "userId" to userId,
+            "groupId" to groupId,
+            "amount" to amount,
+            "description" to description
+        )
+
+        val request = OneTimeWorkRequestBuilder<ExpenseSyncWorker>()
+            .setInputData(workData)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                TimeUnit.SECONDS.toMillis(30),
+                TimeUnit.MILLISECONDS
+            )
+            .build()
+
+        WorkManager.getInstance(context).enqueue(request)
     }
 
     fun getExpenseHistoryByGroupId(groupId: String) {

@@ -94,5 +94,37 @@
     "amount": 23,
     "description": "r",
     "action": "expense"
+  },
+  {
+    "id": "8bfca880-6661-425e-9502-e3d84256e228",
+    "member_id": "cd0df18a-de54-431f-ba1d-46e1406246fc",
+    "date": "2025-11-27T14:41:35.551Z",
+    "amount": 12,
+    "description": "f",
+    "action": "expense"
+  },
+  {
+    "id": "913ef6db-0ea6-4a6e-b81a-3da0e4974689",
+    "member_id": "cd0df18a-de54-431f-ba1d-46e1406246fc",
+    "date": "2025-11-27T14:43:34.289Z",
+    "amount": 12,
+    "description": "test1",
+    "action": "expense"
+  },
+  {
+    "id": "efc8d1f3-d411-4447-bd48-a171099c5430",
+    "member_id": "cd0df18a-de54-431f-ba1d-46e1406246fc",
+    "date": "2025-11-27T14:45:02.179Z",
+    "amount": 89,
+    "description": "no internet",
+    "action": "expense"
+  },
+  {
+    "id": "6db6bacb-b63c-4824-9ffa-e2de79a63e3d",
+    "member_id": "cd0df18a-de54-431f-ba1d-46e1406246fc",
+    "date": "2025-11-27T14:45:55.861Z",
+    "amount": 17,
+    "description": "no data no internet",
+    "action": "expense"
   }
 ]

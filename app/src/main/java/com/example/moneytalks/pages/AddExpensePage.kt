@@ -1,5 +1,6 @@
 package com.example.moneytalks.pages
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,7 +46,7 @@ fun AddExpensePage(
     expenseVM: ExpenseViewModel = viewModel(),
     notificationVM: NotificationViewModel = viewModel()
 ) {
-    if(group == null){
+    if (group == null) {
         navController.navigateUp()
         return
     }
@@ -98,19 +100,48 @@ fun AddExpensePage(
                     val userId = userVm.currentUser.value!!.id
                     val amount = amount.toDouble()
                     val groupId = group.id
+                    val ctx = context
 
-                expenseVM.createExpense(userId, groupId, amount, description, action)
-                    
-                    val expenseTitle = "Expense added to your group!"
-                    val currentUser = userVm.currentUser.value
-                    if(currentUser != null){
-                        val expenseMessage = "${currentUser.username} added the expense: $description: $amount,-"
-                        NotificationUtil.sendNotification(context, expenseTitle, expenseMessage)
-                    }
+                    expenseVM.createExpense(
+                        context = ctx,
+                        userId = userId,
+                        groupId = groupId,
+                        amount = amount,
+                        description = description,
+                        action = action,
+                        onSuccess = {
+                            Toast.makeText(ctx, "Expense added succesfully", Toast.LENGTH_SHORT)
+                                .show()
 
-                    navController.navigateUp()
-                }else{
-                    println("Please fill out amount and description.")
+                            val currentUser = userVm.currentUser.value
+                            if (currentUser != null) {
+                                val expenseTitle = "Expense added to your group!"
+                                val expenseMessage =
+                                    "${currentUser.username} added the expense: $description: $amount,-"
+                                NotificationUtil.sendNotification(
+                                    context,
+                                    expenseTitle,
+                                    expenseMessage
+                                )
+                            }
+                            navController.navigateUp()
+                        },
+                        onNetworkRetryScheduled = {
+                            Toast.makeText(
+                                ctx,
+                                "Network issue: we will try in the background",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            navController.navigateUp()
+                        },
+                        onError = { errorMsg ->
+                            Toast.makeText(ctx, errorMsg, Toast.LENGTH_LONG).show()
+                        }
+
+                    )
+                } else {
+                    Toast.makeText(context, "Please fill out amount and description.", Toast.LENGTH_LONG)
                 }
             },
             shape = RoundedCornerShape(12.dp),
