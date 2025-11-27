@@ -52,14 +52,15 @@ import kotlin.Unit
 fun GroupView(
     navController: NavController,
     group: Group,
+    userVm: UserViewModel,
     expenseVM: ExpenseViewModel = viewModel(),
-    userVm: UserViewModel = viewModel(),
     balanceVm: BalanceViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
-    val currentUserId = userVm.currentUserId //for own bubble
+    val currentUser = userVm.currentUser //for own bubble
+    val currentUserId = currentUser.value?.id ?: "00cacc5b-55a3-4958-b551-b07668168ca6"
     val expenses = expenseVM.expenseHistory.value
 
     LaunchedEffect(group.id) {
