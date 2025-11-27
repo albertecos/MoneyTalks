@@ -46,5 +46,37 @@
     "email": "user4@example.com",
     "password": "string",
     "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+  },
+  {
+    "id": "9dba0909-a25e-4ecd-81fc-883b4886d3dd",
+    "username": "boblove",
+    "full_name": "Bob",
+    "email": "boblove@mail.com",
+    "password": "1234",
+    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+  },
+  {
+    "id": "202d1ffb-9eb1-4833-8598-c97ead1fd2ee",
+    "username": "love",
+    "full_name": "catlove",
+    "email": "catlove@mail.com",
+    "password": "test",
+    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+  },
+  {
+    "id": "08c4e8ba-ca18-4e5a-b22a-73226fa1c5f6",
+    "username": "aa",
+    "full_name": "Anya Anya ",
+    "email": "aa@mail.com",
+    "password": "test",
+    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+  },
+  {
+    "id": "70892d82-3d5d-41e7-b7fe-9f3a3990157e",
+    "username": "lovedog",
+    "full_name": "doglover",
+    "email": "dogs@mail.com",
+    "password": "test",
+    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
   }
 ]

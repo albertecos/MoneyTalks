@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.moneytalks.MainActivity
 import com.example.moneytalks.dataclasses.Group
+import com.example.moneytalks.utilityclasses.NotificationUtil
 import com.example.moneytalks.viewmodel.ExpenseViewModel
 import com.example.moneytalks.viewmodel.NotificationViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
@@ -104,7 +105,7 @@ fun AddExpensePage(
                     val currentUser = userVm.currentUser.value
                     if(currentUser != null){
                         val expenseMessage = "${currentUser.username} added the expense: $description: $amount,-"
-                        activity?.sendNotification(expenseTitle, expenseMessage)
+                        NotificationUtil.sendNotification(context, expenseTitle, expenseMessage)
                     }
 
                     navController.navigateUp()

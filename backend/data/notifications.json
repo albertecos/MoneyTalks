@@ -43,7 +43,7 @@
     "userId": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
     "amount": null,
     "date": "2025-11-14T16:44:51.097Z",
-    "interacted": false,
+    "interacted": true,
     "seen": false,
     "description": "You have been invited"
   },
@@ -70,5 +70,113 @@
     "interacted": false,
     "seen": false,
     "description": "string added an expense: testing (123)"
+  },
+  {
+    "id": "8bb39c8a-b8d0-4e5c-8a55-d91fc55f164e",
+    "action": "INVITE",
+    "groupId": "88603c55-4235-419d-9084-88cdf62d4da1",
+    "groupName": "test",
+    "userId": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
+    "amount": null,
+    "date": "2025-11-24T19:57:37.037Z",
+    "interacted": true,
+    "seen": false,
+    "description": "Bob added an expense: test"
+  },
+  {
+    "id": "92d185b7-c82b-4fd9-9c3f-90b78b138bab",
+    "action": "EXPENSE",
+    "groupId": "88603c55-4235-419d-9084-88cdf62d4da1",
+    "groupName": "test",
+    "userId": "9dba0909-a25e-4ecd-81fc-883b4886d3dd",
+    "amount": 1123,
+    "date": "2025-11-24T19:58:00.762Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: hey (1123)"
+  },
+  {
+    "id": "271afaa9-0d85-40f4-83b4-06eddf5e76e6",
+    "action": "INVITE",
+    "groupId": "7767cde5-3c0d-4fda-b4f6-8e6ce021de6a",
+    "groupName": "birthday for Bernarrd",
+    "userId": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
+    "amount": null,
+    "date": "2025-11-24T20:04:23.164Z",
+    "interacted": true,
+    "seen": false,
+    "description": "catlove added an expense: birthday for Bernarrd"
+  },
+  {
+    "id": "21f0142e-97fc-4ea8-bf3c-363bbcf3c7a0",
+    "action": "EXPENSE",
+    "groupId": "7767cde5-3c0d-4fda-b4f6-8e6ce021de6a",
+    "groupName": "birthday for Bernarrd",
+    "userId": "202d1ffb-9eb1-4833-8598-c97ead1fd2ee",
+    "amount": 100000,
+    "date": "2025-11-24T20:04:46.881Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: present for bernard (100000)"
+  },
+  {
+    "id": "6bcbde2f-6b04-4cdb-a0cd-59055648018d",
+    "action": "INVITE",
+    "groupId": "f88dd7c5-567d-4e0d-be7e-79495a0e227e",
+    "groupName": "bernard birthday",
+    "userId": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
+    "amount": null,
+    "date": "2025-11-24T20:07:11.490Z",
+    "interacted": true,
+    "seen": false,
+    "description": "Anya Anya  added an expense: bernard birthday"
+  },
+  {
+    "id": "9f8cb36e-7654-4fd2-b2f4-7c1e1676fdcf",
+    "action": "EXPENSE",
+    "groupId": "f88dd7c5-567d-4e0d-be7e-79495a0e227e",
+    "groupName": "bernard birthday",
+    "userId": "08c4e8ba-ca18-4e5a-b22a-73226fa1c5f6",
+    "amount": 10000,
+    "date": "2025-11-24T20:07:37.865Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: Present for Bernard (10000)"
+  },
+  {
+    "id": "ed9c3ff8-b29f-4981-8fee-a4a47ffda410",
+    "action": "INVITE",
+    "groupId": "93c10f31-4533-4765-bfa4-fd7d2126d1bc",
+    "groupName": "bernard birthday",
+    "userId": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
+    "amount": null,
+    "date": "2025-11-24T20:12:59.836Z",
+    "interacted": true,
+    "seen": false,
+    "description": "doglover added an expense: bernard birthday"
+  },
+  {
+    "id": "c99fbf53-3836-4159-a824-9f721834be22",
+    "action": "EXPENSE",
+    "groupId": "93c10f31-4533-4765-bfa4-fd7d2126d1bc",
+    "groupName": "bernard birthday",
+    "userId": "70892d82-3d5d-41e7-b7fe-9f3a3990157e",
+    "amount": 1000000,
+    "date": "2025-11-24T20:13:21.292Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: present for Bernaaaard (1000000)"
+  },
+  {
+    "id": "cc8c28e6-428e-4efd-8b49-d110aeeb4d69",
+    "action": "EXPENSE",
+    "groupId": "88603c55-4235-419d-9084-88cdf62d4da1",
+    "groupName": "testnew",
+    "userId": "9dba0909-a25e-4ecd-81fc-883b4886d3dd",
+    "amount": 10000,
+    "date": "2025-11-26T14:47:56.049Z",
+    "interacted": false,
+    "seen": false,
+    "description": "string added an expense: Give me my money (10000)"
   }
 ]
