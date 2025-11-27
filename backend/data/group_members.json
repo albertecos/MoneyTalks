@@ -30,27 +30,9 @@
     "accepted": true
   },
   {
-    "id": "affdf0e4-e3ce-4efc-b9b1-86af8eb16646",
-    "group_id": "88603c55-4235-419d-9084-88cdf62d4da1",
-    "user_id": "9dba0909-a25e-4ecd-81fc-883b4886d3dd",
-    "accepted": true
-  },
-  {
-    "id": "ccb683fd-5520-43ef-899b-b2a129bbeda2",
-    "group_id": "88603c55-4235-419d-9084-88cdf62d4da1",
-    "user_id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
-    "accepted": true
-  },
-  {
-    "id": "807ff4db-4d82-49c3-88ee-d892dae88b0d",
-    "group_id": "7767cde5-3c0d-4fda-b4f6-8e6ce021de6a",
-    "user_id": "202d1ffb-9eb1-4833-8598-c97ead1fd2ee",
-    "accepted": true
-  },
-  {
-    "id": "cd0df18a-de54-431f-ba1d-46e1406246fc",
-    "group_id": "33330e58-431f-41ea-83d3-b7f896e87351",
-    "user_id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
+    "id": "4cb3b8b4-6c97-405c-b328-cfe4269d4df3",
+    "group_id": "fc22156c-0394-4152-ad9f-e3c12e0be02a",
+    "user_id": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
     "accepted": true
   }
 ]
