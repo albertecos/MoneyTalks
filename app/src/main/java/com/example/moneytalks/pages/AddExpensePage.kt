@@ -254,11 +254,11 @@ fun AddExpensePage(
                         },
                         onError = { errorMsg ->
                             Toast.makeText(ctx, errorMsg, Toast.LENGTH_LONG).show()
-                        }
-
+                        },
+                        payers = chosenMembers
                     )
                 } else {
-                    Toast.makeText(context, "Please fill out amount and description.", Toast.LENGTH_LONG)
+                    Toast.makeText(context, "Please fill out amount and description.", Toast.LENGTH_LONG).show()
                 }
             },
             shape = RoundedCornerShape(12.dp),

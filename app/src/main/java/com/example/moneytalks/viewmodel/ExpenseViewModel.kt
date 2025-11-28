@@ -13,6 +13,7 @@ import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Expense
 import com.example.moneytalks.workers.ExpenseSyncWorker
 import com.example.moneytalks.dataclasses.GroupMember
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okio.IOException
 import java.util.concurrent.TimeUnit
@@ -28,8 +29,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
         amount: Double,
         description: String,
         action: String,
-        payers: List<GroupMember>
-        action: String,
+        payers: List<GroupMember>,
         onSuccess: () -> Unit,
         onNetworkRetryScheduled: () -> Unit,
         onError: (String) -> Unit
@@ -49,7 +49,8 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
                 onSuccess()
 
             } catch (e: IOException) {
-                scheduleExpenseRetry(context, userId, groupId, amount, description)
+                e.printStackTrace()
+                scheduleExpenseRetry(context, userId, groupId, amount, description, payers)
                 onNetworkRetryScheduled()
             } catch(e: HttpException){
                 println(e.message)
@@ -69,12 +70,17 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
         groupId: String,
         amount: Double,
         description: String,
+        payers: List<GroupMember>
     ){
+        val gson = Gson()
+        val payersJson = gson.toJson(payers)
+
         val workData = workDataOf(
             "userId" to userId,
             "groupId" to groupId,
             "amount" to amount,
-            "description" to description
+            "description" to description,
+            "payers" to payersJson
         )
 
         val request = OneTimeWorkRequestBuilder<ExpenseSyncWorker>()
