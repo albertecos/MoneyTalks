@@ -234,4 +234,66 @@ endPoints.push({method: 'POST', path: '/createNotification', oapi: {
     res.status(201).send({message: 'Notification created successfully'});
 }});
 
+endPoints.push({method: 'GET', path: '/sendReminder', oapi: {
+    summary: 'Send reminder notification to user for a group',
+    parameters: [
+        {
+            name: 'userId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        },
+        {
+            name: 'groupId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
+    responses: {
+        200: {
+            description: 'Reminder sent successfully'
+        },
+        404: {
+            description: 'Failed to send reminder'
+        }
+    }
+}, handler: (req, res) => {
+    const { userId,  groupId } = req.query;
+
+    if (!userId || !groupId) {
+        return res.status(400).send({error: 'userId and groupId query parameters are required'});
+    }
+
+    const groupsDb = Database.getInstance('groups');
+    const usersDb = Database.getInstance('users');
+
+    const group = groupsDb.select({ id: groupId })[0];
+    const groupName = group ? group.name: 'default group name';
+
+    const user = usersDb.select({ id: userId })[0];
+    const userName = user ? user.name: 'A user';
+
+    Database.getInstance('notifications').insert({
+        id: uuidv4(),
+        action: 'REMINDER',
+        groupId,
+        groupName,
+        userId,
+        amount: null,
+        date: new Date().toISOString(),
+        interacted: false,
+        seen: false,
+        description: `Reminder: ${userName}, you have pending expenses in the group ${groupName}. Please settle them soon!`
+    });
+
+    res.status(200).send({message: 'Reminder sent successfully'});
+}});
+
 module.exports = endPoints;
