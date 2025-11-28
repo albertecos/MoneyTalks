@@ -12,10 +12,9 @@ import java.io.IOException
 class ExpenseSyncWorker(
     appContext: Context,
     workerParameters: WorkerParameters,
-    private val retrofitClient: RetrofitClient = RetrofitClient
 ) : CoroutineWorker(appContext, workerParameters) {
 
-
+    private val retrofitClient: RetrofitClient = RetrofitClient
     override suspend fun doWork(): Result {
         val userId = inputData.getString("userId") ?: return Result.failure()
         val groupId = inputData.getString("groupId") ?: return Result.failure()

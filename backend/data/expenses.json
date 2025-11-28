@@ -94,5 +94,21 @@
     "amount": 45678,
     "description": "kl",
     "action": "expense"
+  },
+  {
+    "id": "a7509644-f115-4c78-a98b-06e5c00ea43f",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-11-28T16:55:00.553Z",
+    "amount": 45,
+    "description": "w",
+    "action": "expense"
+  },
+  {
+    "id": "71b21e3f-416f-4cb9-aa9f-449b0d5101f4",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-11-28T16:55:58.466Z",
+    "amount": 5463,
+    "description": "h",
+    "action": "expense"
   }
 ]
