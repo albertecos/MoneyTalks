@@ -163,7 +163,7 @@ fun MoneyTalksApp() {
                     ?.get<Group>("group")
 
                 if (group != null) {
-                    EditGroupPage(group, navController)
+                    EditGroupPage(group, navController, userVM)
                 } else {
                     Text("Group not found")
                 }
