@@ -141,7 +141,7 @@ fun AddExpensePage(
 
                     )
                 } else {
-                    Toast.makeText(context, "Please fill out amount and description.", Toast.LENGTH_LONG)
+                    Toast.makeText(context, "Please fill out amount and description.", Toast.LENGTH_LONG).show()
                 }
             },
             shape = RoundedCornerShape(12.dp),

@@ -13,7 +13,7 @@ import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Expense
 import com.example.moneytalks.workers.ExpenseSyncWorker
 import kotlinx.coroutines.launch
-import okio.IOException
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {

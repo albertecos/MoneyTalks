@@ -1,21 +1,20 @@
 package com.example.moneytalks.workers
 
 import android.content.Context
-import androidx.compose.ui.geometry.Rect
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import coil.network.HttpException
+import retrofit2.HttpException
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Expense
 import com.example.moneytalks.utilityclasses.NotificationUtil
-import okio.IOException
+import java.io.IOException
 
 class ExpenseSyncWorker(
     appContext: Context,
-    workerParameters: WorkerParameters
+    workerParameters: WorkerParameters,
+    private val retrofitClient: RetrofitClient = RetrofitClient
 ) : CoroutineWorker(appContext, workerParameters) {
 
-    private val retrofitClient = RetrofitClient
 
     override suspend fun doWork(): Result {
         val userId = inputData.getString("userId") ?: return Result.failure()
