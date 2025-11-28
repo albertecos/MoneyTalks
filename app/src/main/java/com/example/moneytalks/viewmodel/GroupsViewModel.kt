@@ -80,4 +80,17 @@ class GroupsViewModel(private val retrofitClient: RetrofitClient = RetrofitClien
             }
         }
     }
+
+    fun sendReminder(
+        userId: String,
+        groupId: String
+    ) {
+        viewModelScope.launch {
+            try {
+                retrofitClient.api.sendReminder(userId, groupId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

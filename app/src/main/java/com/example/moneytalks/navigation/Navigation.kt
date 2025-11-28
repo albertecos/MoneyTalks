@@ -22,6 +22,7 @@ enum class Destination(
     GROUPVIEW("groupview", "Groupview", "Groupview"),
     ADDEXPENSE("addexpense", "AddExpense", "AddExpense"),
     LOGIN("login", "Login", "Login"),
+    GROUPMEMBERS("groupmembers", "GroupMembers", "Group Members"),
     CREATEACCOUNT("createAccount", "CreateAccount", "Create Account")
 }
 

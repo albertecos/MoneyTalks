@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,9 +21,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.viewmodel.UserViewModel
+import com.example.moneytalks.apisetup.RetrofitClient
 
 
 @Composable
@@ -186,7 +189,17 @@ fun CreateGroup(navController: NavController, userVM: UserViewModel) {
                 .padding(bottom = 8.dp)
         )
         for (groupMember in peopleList) {
-            MemberListElement(member = groupMember)
+            if (groupMember.id == currentUser?.id) {
+                MemberListElement(member = groupMember);
+            } else {
+                MemberListElement(
+                    member = groupMember,
+                    additionalActionIcon = Icons.Default.Delete,
+                    onAdditionalActionClick = {
+                        peopleList.removeAll { it.id == groupMember.id }
+                    }
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -235,8 +248,10 @@ fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Placeholder for profile picture
-        Box(
+        // Profile picture
+        AsyncImage(
+            model = "${RetrofitClient.BASE_URL}image?path=${member.profile_picture}",
+            contentDescription = "Profile picture",
             modifier = Modifier
                 .size(40.dp)
                 .background(Color.Gray, shape = RoundedCornerShape(20.dp))
@@ -271,7 +286,7 @@ fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add member",
-                    tint = Color.Green,
+                    tint = Color.Blue,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -280,15 +295,17 @@ fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
 }
 
 @Composable
-fun MemberListElement(member: GroupMember) {
+fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = null, onAdditionalActionClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Placeholder for profile picture
-        Box(
+        // Profile picture
+        AsyncImage(
+            model = "${RetrofitClient.BASE_URL}image?path=${member.profile_picture}",
+            contentDescription = "Profile picture",
             modifier = Modifier
                 .size(40.dp)
                 .background(Color.Gray, shape = RoundedCornerShape(20.dp))
@@ -315,5 +332,28 @@ fun MemberListElement(member: GroupMember) {
             color = if (member.accepted) Color.Green else Color.Gray,
             modifier = Modifier.padding(start = 8.dp)
         )
+
+        if (additionalActionIcon == null) {
+            return
+        }
+        Box(
+            modifier = Modifier
+                .weight(1f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            Button(
+                onClick = onAdditionalActionClick,
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(0.dp),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
+            ) {
+                Icon(
+                    imageVector = additionalActionIcon,
+                    contentDescription = "Additional action",
+                    tint = Color.Blue,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
     }
 }

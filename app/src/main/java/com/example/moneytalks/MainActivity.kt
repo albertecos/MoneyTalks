@@ -50,6 +50,7 @@ import com.example.moneytalks.pages.SettingsPage
 import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
 import com.example.moneytalks.pages.LoginScreen
+import com.example.moneytalks.pages.GroupMembersPage
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 import com.example.moneytalks.utilityclasses.NotificationUtil
 import com.example.moneytalks.viewmodel.UserViewModel
@@ -197,6 +198,20 @@ fun MoneyTalksApp() {
             }
             composable(Destination.CREATEACCOUNT.route) {
                 CreateAccount(navController, userVM)
+            }
+            composable(Destination.GROUPMEMBERS.route) {
+                val group = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Group>("group")
+
+                if (group != null) {
+                    GroupMembersPage(
+                        navController = navController,
+                        group = group
+                    )
+                } else {
+                    Text("Group not found for Group Members")
+                }
             }
         }
     }

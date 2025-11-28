@@ -97,6 +97,7 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
         )
         for (groupMember in group.members) {
             MemberListElement(member = groupMember)
+            // TODO: Add functionality to remove members
             Spacer(modifier = Modifier.height(8.dp))
         }
         Spacer(modifier = Modifier.height(16.dp))

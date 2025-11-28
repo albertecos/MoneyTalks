@@ -77,4 +77,10 @@ interface MoneyTalksInterface {
     suspend fun getExpenseHistory(
         @Query("groupId") groupId: String
     ): List<Expense>
+
+    @GET("sendReminder")
+    suspend fun sendReminder(
+        @Query("userId") userId: String,
+        @Query("groupId") groupId: String
+    )
 }
