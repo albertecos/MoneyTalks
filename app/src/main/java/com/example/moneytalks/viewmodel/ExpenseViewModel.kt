@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import retrofit2.HttpException
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Expense
+import com.example.moneytalks.dataclasses.GroupMember
 import kotlinx.coroutines.launch
 
 class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
@@ -17,7 +18,8 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
         groupId: String,
         amount: Double,
         description: String,
-        action: String
+        action: String,
+        payers: List<GroupMember>
     ){
         viewModelScope.launch {
             try {
@@ -26,7 +28,8 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
                     userId = userId,
                     amount = amount,
                     description = description,
-                    action = action
+                    action = action,
+                    payers = payers
                 )
                 retrofitClient.api.createExpense(userId, expense)
 

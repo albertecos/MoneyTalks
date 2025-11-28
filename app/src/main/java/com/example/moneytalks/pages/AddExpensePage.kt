@@ -169,8 +169,14 @@ fun AddExpensePage(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        var splitAmount = 0.00
+
+                        if(amount != "") {
+                            splitAmount = amount.toDouble() / chosenMembers.size.toDouble()
+                        }
+                        val formatted = String.format("%.2f", splitAmount)
                         Text(
-                            text = member.username,
+                            text = "${member.username}                    $formatted",
                             color = Color.Gray,
                             fontSize = MaterialTheme.typography.bodyLarge.fontSize
                         )
@@ -209,7 +215,7 @@ fun AddExpensePage(
                     val amount = amount.toDouble()
                     val groupId = group.id
 
-                    expenseVM.createExpense(userId, groupId, amount, description, action)
+                    expenseVM.createExpense(userId, groupId, amount, description, action, chosenMembers)
 
                     val expenseTitle = "Expense added to your group!"
                     val currentUser = userVm.currentUser.value

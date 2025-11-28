@@ -155,9 +155,9 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         return res.status(400).send({error: 'userId query parameter is required'});
     }
 
-    const { groupId, amount, description } = req.body;
+    const { groupId, amount, description, payers } = req.body;
 
-    if (!groupId || !amount || !description) {
+    if (!groupId || !amount || !description || payers == undefined || payers.length == 0) {
         return res.status(400).send({error: 'Please provide groupId, amount, and description for the expense'});
     }
 
@@ -169,7 +169,8 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         date: new Date().toISOString(),
         amount: amount,
         description: description,
-        action: 'expense'
+        action: 'expense',
+        payers: payers
     });
 
     const notificationsDb = Database.getInstance('notifications');
