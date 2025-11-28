@@ -207,7 +207,8 @@ fun MoneyTalksApp() {
                 if (group != null) {
                     GroupMembersPage(
                         navController = navController,
-                        group = group
+                        group = group,
+                        userVM = userVM
                     )
                 } else {
                     Text("Group not found for Group Members")
