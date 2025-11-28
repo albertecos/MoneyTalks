@@ -1,5 +1,6 @@
 package com.example.moneytalks.pages
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +45,7 @@ import androidx.navigation.NavController
 import com.example.moneytalks.MainActivity
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupMember
+import com.example.moneytalks.utilityclasses.NotificationUtil
 import com.example.moneytalks.viewmodel.ExpenseViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 
@@ -214,20 +217,48 @@ fun AddExpensePage(
                     val userId = userVm.currentUser.value!!.id
                     val amount = amount.toDouble()
                     val groupId = group.id
+                    val ctx = context
 
-                    expenseVM.createExpense(userId, groupId, amount, description, action, chosenMembers)
+                    expenseVM.createExpense(
+                        context = ctx,
+                        userId = userId,
+                        groupId = groupId,
+                        amount = amount,
+                        description = description,
+                        action = action,
+                        onSuccess = {
+                            Toast.makeText(ctx, "Expense added succesfully", Toast.LENGTH_SHORT)
+                                .show()
 
-                    val expenseTitle = "Expense added to your group!"
-                    val currentUser = userVm.currentUser.value
-                    if (currentUser != null) {
-                        val expenseMessage =
-                            "${currentUser.username} added the expense: $description: $amount,-"
-                        activity?.sendNotification(expenseTitle, expenseMessage)
-                    }
+                            val currentUser = userVm.currentUser.value
+                            if (currentUser != null) {
+                                val expenseTitle = "Expense added to your group!"
+                                val expenseMessage =
+                                    "${currentUser.username} added the expense: $description: $amount,-"
+                                NotificationUtil.sendNotification(
+                                    context,
+                                    expenseTitle,
+                                    expenseMessage
+                                )
+                            }
+                            navController.navigateUp()
+                        },
+                        onNetworkRetryScheduled = {
+                            Toast.makeText(
+                                ctx,
+                                "Network issue: we will try in the background",
+                                Toast.LENGTH_LONG
+                            ).show()
 
-                    navController.navigateUp()
+                            navController.navigateUp()
+                        },
+                        onError = { errorMsg ->
+                            Toast.makeText(ctx, errorMsg, Toast.LENGTH_LONG).show()
+                        }
+
+                    )
                 } else {
-                    errorMessage = "Invalid input"
+                    Toast.makeText(context, "Please fill out amount and description.", Toast.LENGTH_LONG)
                 }
             },
             shape = RoundedCornerShape(12.dp),
