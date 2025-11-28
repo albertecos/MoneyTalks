@@ -38,7 +38,7 @@ class ExpenseSyncWorkerTest {
     }
 
     @Test
-    fun success_returnSuccess() = runTest {
+    fun networkFailure_returnRetry() = runTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
         val input = workDataOf(
