@@ -60,12 +60,19 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.google.accompanist:accompanist-permissions:0.30.1")
     implementation("androidx.work:work-runtime-ktx:2.11.0")
+    androidTestImplementation("androidx.work:work-testing:2.11.0")
     implementation(libs.androidx.media3.common.ktx) //Permission for notifications
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("org.mockito:mockito-android:5.20.0")
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1"){
+        exclude(group = "org.mockito", module = "mockito-core")
+    }
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.junit)
 }
