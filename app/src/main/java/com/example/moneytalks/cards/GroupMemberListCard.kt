@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.moneytalks.apisetup.RetrofitClient
+import com.example.moneytalks.dataclasses.Expense
 import com.example.moneytalks.dataclasses.Group
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.dataclasses.User
@@ -102,17 +103,7 @@ fun GroupMembersListCard(
                     .verticalScroll(rememberScrollState())
             ) {
                 for (member in group.members) {
-                    if (member.id == userVM.currentUser.value?.id) {
-                        GroupMemberCard(member)
-                    } else if (member.accepted) {
-                        GroupMemberCard(
-                            member = member
-                        )
-                    } else {
-                        GroupMemberCard(
-                            member = member
-                        )
-                    }
+                    GroupMemberCard(member)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
