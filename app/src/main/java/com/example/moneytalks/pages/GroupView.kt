@@ -86,6 +86,17 @@ fun GroupView(
         )
         BalanceBox(balance)
 
+        // TODO: Temporary button for member list navigation
+        Button(
+            onClick = {
+                navController.currentBackStackEntry?.savedStateHandle?.set("group", group)
+                navController.navigate(Destination.GROUPMEMBERS.route)
+            }
+        ) {
+            Text("View Members", fontWeight = FontWeight.Bold)
+        }
+
+
         // Transactions
         Column(modifier = modifier
             .weight(1f)
