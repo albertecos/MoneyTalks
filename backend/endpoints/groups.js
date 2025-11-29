@@ -105,8 +105,6 @@ endPoints.push({method: 'POST', path: '/createGroup', oapi: {
     };
     const groupsDb = Database.getInstance('groups');
     const groupMembersDb = Database.getInstance('group_members');
-    const notificationDb = Database.getInstance('notifications');
-    const usersDb = Database.getInstance('users');
 
     groupsDb.insert(group);
 
@@ -123,41 +121,29 @@ endPoints.push({method: 'POST', path: '/createGroup', oapi: {
     }));
     members.forEach(member => groupMembersDb.insert(member));
 
-    const dBMembers = groupMembersDb.select({ group_id: group.id });
-
-    const creator = usersDb.select({ id: userId })[0];
-    const creatorName = creator ? creator.full_name : 'Unknown user';
-    const groupName = group.name;
-
-    dBMembers.forEach(member => {
-        if (member.user_id === userId) {
-        return;
-        }
-
-        notificationDb.insert({
-            id: uuidv4(),
-            action: 'INVITE',
-            groupId: group.id,
-            groupName,
-            userId: member.user_id,
-            amount: null,
-            date: new Date().toISOString(),
-            interacted: false,
-            seen: false,
-            description: `${creatorName} added an expense: ${group.name}`
-        });
-    });
+    sendGroupInviteNotifications(group.id, userId, groupData.members);
 
     res.status(201).json({...group, members: members});
 }});
 
 endPoints.push({path: '/editGroup', method: 'POST', oapi: {
     summary: 'Edit an existing group',
+    parameters: [
+        {
+            name: 'userId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
     requestBody: {
         required: true,
         content: {
             'application/json': {
-                schema: Components.schemas.GroupWithoutMembers
+                schema: Components.schemas.GroupSimplified
             }
         }
     },
@@ -175,9 +161,10 @@ endPoints.push({path: '/editGroup', method: 'POST', oapi: {
         }
     }
 }, handler: (req, res) => {
-    const {id, name} = req.body;
-    if(!id || !name) {
-        return res.status(400).send({error: 'Please enter a valid id and name'});
+    const {id, name, members} = req.body;
+    const userId = req.query.userId;
+    if(!userId || !id || !name || !Array.isArray(members)) {
+        return res.status(400).send({error: 'Please enter a valid userId, id, name, and members list'});
     }
 
     const existingGroups = Database.getInstance('groups').select({id});
@@ -187,9 +174,54 @@ endPoints.push({path: '/editGroup', method: 'POST', oapi: {
 
     Database.getInstance('groups').update(id, {name});
 
+    const currentMembersRecords = Database.getInstance('group_members').select({group_id: id});
+    const currentMemberIds = currentMembersRecords.map(m => m.user_id);
+
+    members.forEach(memberId => {
+        if(!currentMemberIds.includes(memberId)) {
+            Database.getInstance('group_members').insert({
+                id: uuidv4(),
+                group_id: id,
+                user_id: memberId,
+                accepted: false
+            });
+        }
+    });
+
+    sendGroupInviteNotifications(id, userId, members);
+
     const updatedGroup = Database.getInstance('groups').select({id})[0];
     res.json(updatedGroup);
 }});
+
+function sendGroupInviteNotifications(groupId, inviterId, invitedMemberIds) {
+    const group = Database.getInstance('groups').select({id: groupId})[0];
+    const usersDb = Database.getInstance('users');
+    const notificationDb = Database.getInstance('notifications');
+
+    const inviter = usersDb.select({id: inviterId})[0];
+    const inviterName = inviter ? inviter.full_name : 'Unknown user';
+    const groupName = group.name;
+
+    invitedMemberIds.forEach(memberId => {
+        if (memberId === inviterId) {
+            return;
+        }
+
+        notificationDb.insert({
+            id: uuidv4(),
+            action: 'INVITE',
+            groupId: group.id,
+            groupName,
+            userId: memberId,
+            amount: null,
+            date: new Date().toISOString(),
+            interacted: false,
+            seen: false,
+            description: `${inviterName} invited you to join the group: ${group.name}`
+        });
+    });
+}
 
 endPoints.push({path: '/leaveGroup', method: 'POST', oapi: {
     summary: 'Leave a group by group ID and user ID',

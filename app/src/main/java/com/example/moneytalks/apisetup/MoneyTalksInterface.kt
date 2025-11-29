@@ -31,7 +31,9 @@ interface MoneyTalksInterface {
     )
 
     @POST("editGroup")
-    suspend fun editGroup(@Body group: GroupEdit)
+    suspend fun editGroup(
+        @Query("userId") userId: String,
+        @Body group: GroupEdit)
 
     @POST("leaveGroup")
     suspend fun leaveGroup(

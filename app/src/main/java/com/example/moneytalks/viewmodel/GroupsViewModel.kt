@@ -44,16 +44,19 @@ class GroupsViewModel(private val retrofitClient: RetrofitClient = RetrofitClien
     }
 
     fun editGroup(
+        userId: String,
         groupId: String,
-        newName: String
+        newName: String,
+        newMemberIds: List<String>
     ){
         viewModelScope.launch {
             try {
                 val groupEdit = com.example.moneytalks.dataclasses.GroupEdit(
                     id = groupId,
-                    name = newName
+                    name = newName,
+                    members = newMemberIds
                 )
-                retrofitClient.api.editGroup(groupEdit)
+                retrofitClient.api.editGroup(userId, groupEdit)
 
                 val index = groups.indexOfFirst { it.id == groupId }
                 if (index != -1) {

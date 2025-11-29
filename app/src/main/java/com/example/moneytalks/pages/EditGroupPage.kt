@@ -201,8 +201,7 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
         ) {
             Button(
                 onClick = { 
-                    groupVM.editGroup(group.id, groupName)
-                    // TODO: Handle adding new members to the group on the backend
+                    groupVM.editGroup(userVM.currentUser.value?.id ?: "", group.id, groupName, peopleList.map { it.id })
                     navController.navigateUp()
                 },
                 shape = RoundedCornerShape(20.dp),

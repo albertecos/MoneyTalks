@@ -38,11 +38,18 @@ var Components = {
             },
             required: ['name', 'members']
         },
-        GroupWithoutMembers: {
+        GroupSimplified: {
             type: 'object',
             properties: {
                 id: {type: 'string', format: 'uuid'},
                 name: {type: 'string'},
+                members: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        format: 'uuid'
+                    }
+                }
             },
             required: ['id', 'name']
         },
