@@ -7,7 +7,10 @@ import androidx.work.WorkerParameters
 import coil.network.HttpException
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.Expense
+import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.utilityclasses.NotificationUtil
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okio.IOException
 
 class ExpenseSyncWorker(
@@ -22,14 +25,21 @@ class ExpenseSyncWorker(
         val groupId = inputData.getString("groupId") ?: return Result.failure()
         val description = inputData.getString("description") ?: return Result.failure()
         val amount = inputData.getDouble("amount", -1.0)
+        val payersJson = inputData.getString("payersJson") ?: return Result.failure()
+
         if (amount <= 0.0) return Result.failure()
+
+        val gson = Gson()
+        val type = object : TypeToken<List<GroupMember>>() {}.type
+        val payers: List<GroupMember> = gson.fromJson(payersJson, type)
 
         val expense = Expense(
             userId = userId,
             groupId = groupId,
             amount = amount,
             description = description,
-            action = "expense"
+            action = "expense",
+            payers = payers
         )
 
         return try {
