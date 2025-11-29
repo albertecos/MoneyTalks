@@ -16,27 +16,50 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.moneytalks.dataclasses.GroupMember
+import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.viewmodel.GroupsViewModel
 
-@Preview(
-    showBackground = true,
-)
 @Composable
-fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navController: NavController) {
+fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navController: NavController, userVM: com.example.moneytalks.viewmodel.UserViewModel) {
     if (group == null) {
         navController.navigateUp()
         return
     }
     var groupName by remember { mutableStateOf(group.name) }
+    var addPeople by remember { mutableStateOf("") }
+    var searchResults by remember {
+        mutableStateOf<List<User>>(
+            emptyList()
+        )
+    }
     var groupVM: GroupsViewModel = viewModel()
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
     )
 
+    var currentUser = userVM.currentUser.value
+
+    val peopleList = remember(currentUser?.id) {
+        mutableStateListOf<GroupMember>()
+    }
+
     val scrollState = rememberScrollState()
+
+    // LaunchedEffect triggered whenever addPeople changes
+    LaunchedEffect(addPeople) {
+        if (addPeople.isEmpty()) {
+            searchResults = emptyList()
+            return@LaunchedEffect
+        }
+        val results = userVM.searchUsers(addPeople) ?: emptyList()
+        searchResults = results
+    }
 
     Column(
         modifier = Modifier
@@ -85,6 +108,63 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
             )
         }
 
+                //Add people field
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .border(2.dp, gradient, RoundedCornerShape(20.dp))
+        ){
+            OutlinedTextField(
+                value = addPeople,
+                onValueChange = { 
+                    addPeople = it
+                },
+                label = { Text("Add people...") },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFF0F0F0), RoundedCornerShape(20.dp)) // match grey background + rounded corners
+                    .padding(0.dp), // remove extra padding
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,   // Transparent so Box handles outer border
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    cursorColor = Color.DarkGray,
+                    focusedLabelColor = Color.Gray,
+                    unfocusedLabelColor = Color.Gray
+                ),
+                singleLine = true
+            )
+        }
+
+        for (member in searchResults) {
+            if (peopleList.any { it.id == member.id }) {
+                continue // Skip if already in the group
+            }
+            if (group.members.any { it.id == member.id }) {
+                continue // Skip if already in the group
+            }
+            SearchedMemberListElement(member = member, onAddClick = {
+                peopleList.add(
+                    GroupMember(
+                        id = member.id,
+                        full_name = member.full_name,
+                        profile_picture = member.profile_picture,
+                        username = member.username,
+                        email = member.email,
+                        password = member.password,
+                        accepted = false
+                    )
+                )
+                addPeople = ""
+            })
+        }
+
+
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Members:",
@@ -95,6 +175,16 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
         )
+        for (member in peopleList) {
+            MemberListElement(
+                member = member,
+                additionalActionIcon = Icons.Default.Delete,
+                onAdditionalActionClick = {
+                    peopleList.removeAll { it.id == member.id }
+                }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
         for (groupMember in group.members) {
             MemberListElement(member = groupMember)
             Spacer(modifier = Modifier.height(8.dp))
@@ -111,7 +201,7 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
         ) {
             Button(
                 onClick = { 
-                    groupVM.editGroup(group.id, groupName)
+                    groupVM.editGroup(userVM.currentUser.value?.id ?: "", group.id, groupName, peopleList.map { it.id })
                     navController.navigateUp()
                 },
                 shape = RoundedCornerShape(20.dp),
