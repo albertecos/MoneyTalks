@@ -42,7 +42,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
                     amount = amount,
                     description = description,
                     action = action,
-                    payers = payers
+                    payers = payers.map { it.id }
                 )
                 retrofitClient.api.createExpense(userId, expense)
 
