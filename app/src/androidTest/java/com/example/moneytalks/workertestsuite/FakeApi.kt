@@ -1,4 +1,4 @@
-package com.example.moneytalks.notificationsuite
+package com.example.moneytalks.workertestsuite
 
 import com.example.moneytalks.apisetup.MoneyTalksInterface
 import com.example.moneytalks.dataclasses.Balance
@@ -11,15 +11,28 @@ import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.NotificationCreate
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.dataclasses.UserCreate
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
-class FakeApi(private val behavior: () -> Unit) : MoneyTalksInterface {
+class FakeApi() : MoneyTalksInterface {
+
+    var shouldThrowNetworkError: Boolean = false
+    var shouldThrowHttpException: Boolean = false
 
     override suspend fun createExpense(
         userId: String,
         expense: Expense
     ) {
-        behavior()
+        if (shouldThrowNetworkError){
+            throw IOException("Fake network error")
+        }
+        if (shouldThrowHttpException) {
+            val errorBody = "Fake HTTP error".toResponseBody("text/plain".toMediaType())
+            throw HttpException(Response.error<Unit>(500, errorBody))
+        }
     }
 
     override suspend fun getGroups(userId: String): List<Group> {
