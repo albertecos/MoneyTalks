@@ -59,7 +59,6 @@ import com.example.moneytalks.ui.theme.GreyColor
 fun GroupMembersListCard(
     navController: NavController,
     group: Group? = null,
-    userVM: UserViewModel,
     onClose: () -> Unit
 ) {
     if (group == null) {
@@ -103,7 +102,7 @@ fun GroupMembersListCard(
                     .verticalScroll(rememberScrollState())
             ) {
                 for (member in group.members) {
-                    GroupMemberCard(member)
+                    GroupMemberCard(member, group.id)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -172,7 +171,6 @@ fun GroupMembersListCardPreview() {
     GroupMembersListCard(
         navController = navController,
         group = group,
-        userVM = userVM,
         onClose = { true }
     )
 }

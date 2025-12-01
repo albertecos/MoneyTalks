@@ -3,13 +3,15 @@
     "id": "791c291c-675a-491d-934f-7f655018a66b",
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
-    "accepted": true
+    "accepted": true,
+    "balance": 11.5
   },
   {
     "id": "111c291c-675a-491d-934f-7f655018a66b",
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
-    "accepted": true
+    "accepted": true,
+    "balance": -11.5
   },
   {
     "id": "222c291c-675a-491d-934f-7f655018a66b",

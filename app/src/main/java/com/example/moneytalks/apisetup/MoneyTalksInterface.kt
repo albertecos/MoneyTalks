@@ -80,7 +80,7 @@ interface MoneyTalksInterface {
         @Query("groupId") groupId: String
     ): List<Expense>
 
-    @GET("sendReminder")
+    @POST("sendReminder")
     suspend fun sendReminder(
         @Query("userId") userId: String,
         @Query("groupId") groupId: String

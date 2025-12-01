@@ -77,4 +77,14 @@ class NotificationViewModel(private val retrofitClient: RetrofitClient = Retrofi
             }
         }
     }
+
+    fun sendReminder(userId: String, groupId: String){
+        viewModelScope.launch {
+            try{
+                retrofitClient.api.sendReminder(userId, groupId)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
 }

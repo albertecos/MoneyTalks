@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.moneytalks.notifications.GroupInviteNotify
 import com.example.moneytalks.notifications.PaymentNotify
 import com.example.moneytalks.notifications.ReceivementNotify
+import com.example.moneytalks.notifications.ReminderNotify
 import com.example.moneytalks.viewmodel.NotificationViewModel
 import kotlinx.coroutines.delay
 
@@ -69,7 +70,7 @@ fun NotificationPage(
         )
 
         val expenseNotifications = notifications.filter {
-            it.action == "PAYMENT" || it.action == "RECEIVEMENT" || it.action == "EXPENSE"
+            it.action == "PAYMENT" || it.action == "RECEIVEMENT" || it.action == "EXPENSE" || it.action == "REMINDER"
         }
 
         if(expenseNotifications.isEmpty()){
@@ -92,6 +93,12 @@ fun NotificationPage(
                     )
 
                     "RECEIVEMENT" -> ReceivementNotify(
+                        payment = notification.amount?.toString() ?: "0",
+                        groupName = notification.groupName,
+                        date = notification.date.take(10),
+                        navController = navController
+                    )
+                    "REMINDER" -> ReminderNotify(
                         payment = notification.amount?.toString() ?: "0",
                         groupName = notification.groupName,
                         date = notification.date.take(10),

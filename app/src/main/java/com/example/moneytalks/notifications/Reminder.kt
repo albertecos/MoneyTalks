@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
 
 @Composable
-fun PaymentNotify(
+fun ReminderNotify(
     payment: String,
     groupName: String,
     date: String,
@@ -49,7 +49,7 @@ fun PaymentNotify(
                         color = Color(0xFFDC143C)
                     )
                     Text(
-                        text = " added expense",
+                        text = " Reminder!",
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -63,8 +63,3 @@ fun PaymentNotify(
     }
 }
 
-@Preview
-@Composable
-fun PaymentNotifyPreview() {
-    //PaymentNotify("150", "weekend","10.10.2002")
-}

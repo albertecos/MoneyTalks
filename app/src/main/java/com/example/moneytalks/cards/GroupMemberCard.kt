@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,17 +29,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.redInDebt
+import com.example.moneytalks.viewmodel.NotificationViewModel
 
 @Composable
 fun GroupMemberCard(
-    member: GroupMember
+    member: GroupMember,
+    groupId: String,
+    notificationViewModel: NotificationViewModel = viewModel()
 ) {
+
     if(member.accepted) {
         ElevatedCard(
             modifier = Modifier
@@ -100,7 +106,7 @@ fun GroupMemberCard(
                         .weight(1f),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    IconButton(onClick = {TODO()}) {
+                    IconButton(onClick = {notificationViewModel.sendReminder(member.id, groupId)}) {
                         Icon(
                             imageVector = Icons.Outlined.Notifications,
                             contentDescription = "Additional action",

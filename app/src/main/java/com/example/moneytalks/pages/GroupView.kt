@@ -129,8 +129,7 @@ fun GroupView(
                 GroupMembersListCard(
                     navController = navController,
                     group = group,
-                    userVM = userVm,
-                    onClose = { showMemberCard = false}
+                    onClose = { showMemberCard = false }
                 )
             }
 

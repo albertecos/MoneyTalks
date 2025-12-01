@@ -70,5 +70,17 @@
     "interacted": false,
     "seen": false,
     "description": "string added an expense: testing (123)"
+  },
+  {
+    "id": "1666b307-ce8c-4674-a25d-4dd8a1a8cdc1",
+    "action": "REMINDER",
+    "groupId": "a8602b88-8236-4596-9235-01a6040ab116",
+    "groupName": "Spain Trip 2027",
+    "userId": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "amount": 11.5,
+    "date": "2025-12-01T07:55:26.518Z",
+    "interacted": false,
+    "seen": false,
+    "description": "Reminder: Bob Lars, you have pending expenses in the group Spain Trip 2027. Please settle them soon!"
   }
 ]
