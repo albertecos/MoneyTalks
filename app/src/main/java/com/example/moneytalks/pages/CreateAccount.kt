@@ -275,6 +275,8 @@ fun CreateAccount(
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         // GO BACK
         Box(
             modifier = Modifier

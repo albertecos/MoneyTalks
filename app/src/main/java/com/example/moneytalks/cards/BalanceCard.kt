@@ -23,7 +23,7 @@ import com.example.moneytalks.ui.theme.redInDebt
 import com.example.moneytalks.ui.theme.redInDebtV2
 
 @Composable
-fun BalanceBox(value: Double) {
+fun BalanceBox(value: Double, modifier: Modifier) {
     val balanceStatus = calculateStatus(value)
 
     val borderColor = when (balanceStatus) {
@@ -34,8 +34,8 @@ fun BalanceBox(value: Double) {
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(height = 60.dp, width = 230.dp)
+        modifier = modifier
+            .size(height = 60.dp, width = 300.dp)
             .background(GreyColor, shape = RoundedCornerShape(25.dp))
             .border(
                 width = 3.dp,

@@ -216,8 +216,6 @@ endPoints.push({method: 'POST', path: '/createNotification', oapi: {
         return res.status(400).send({error: 'Please provide groupId, amount, and description for the expense'});
     }
 
-//    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId})[0];
-
     Database.getInstance('notifications').insert({
         id: uuidv4(),
         action,
@@ -234,7 +232,7 @@ endPoints.push({method: 'POST', path: '/createNotification', oapi: {
     res.status(201).send({message: 'Notification created successfully'});
 }});
 
-endPoints.push({method: 'GET', path: '/sendReminder', oapi: {
+endPoints.push({method: 'POST', path: '/sendReminder', oapi: {
     summary: 'Send reminder notification to user for a group',
     parameters: [
         {
@@ -273,20 +271,35 @@ endPoints.push({method: 'GET', path: '/sendReminder', oapi: {
 
     const groupsDb = Database.getInstance('groups');
     const usersDb = Database.getInstance('users');
+    const notificationsDb = Database.getInstance('notifications');
+    const membersDb = Database.getInstance('group_members');
 
     const group = groupsDb.select({ id: groupId })[0];
     const groupName = group ? group.name: 'default group name';
 
-    const user = usersDb.select({ id: userId })[0];
-    const userName = user ? user.name: 'A user';
+    const member = membersDb.select({ group_id: groupId, user_id: userId, accepted: true })[0];
+    if (!member) {
+        return res.status(404).send({ error: 'User is not a member of this group'});
+    }
 
-    Database.getInstance('notifications').insert({
+    const balance = member.balance || 0;
+
+    if (balance >= 0){
+        return res.status(400).send({ error: 'User does not owe anything in this group'});
+    }
+
+    const amountOwed = -balance;
+
+    const user = usersDb.select({ id: userId })[0];
+    const userName = user ? (user.full_name || user.username ||'A user') : 'A user';
+
+    notificationsDb.insert({
         id: uuidv4(),
         action: 'REMINDER',
         groupId,
         groupName,
         userId,
-        amount: null,
+        amount: amountOwed,
         date: new Date().toISOString(),
         interacted: false,
         seen: false,
