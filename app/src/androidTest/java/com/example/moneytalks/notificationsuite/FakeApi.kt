@@ -35,7 +35,7 @@ class FakeApi(private val behavior: () -> Unit) : MoneyTalksInterface {
 
 
 
-    override suspend fun editGroup(group: GroupEdit) {
+    override suspend fun editGroup(userId: String, group: GroupEdit) {
         TODO("Not yet implemented")
     }
 
@@ -85,6 +85,10 @@ class FakeApi(private val behavior: () -> Unit) : MoneyTalksInterface {
     }
 
     override suspend fun getExpenseHistory(groupId: String): List<Expense> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun sendReminder(userId: String, groupId: String) {
         TODO("Not yet implemented")
     }
 }
