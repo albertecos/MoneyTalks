@@ -37,7 +37,7 @@ class ExpenseSyncWorker(
             amount = amount,
             description = description,
             action = "expense",
-            payers = payers
+            payers = payers.map { it.id }
         )
 
         return try {
