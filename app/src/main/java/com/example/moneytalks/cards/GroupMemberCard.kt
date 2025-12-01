@@ -1,5 +1,6 @@
 package com.example.moneytalks.cards
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +48,7 @@ fun GroupMemberCard(
     balance: Double,
     notificationViewModel: NotificationViewModel = viewModel()
 ) {
+    val context = LocalContext.current
 
     if(member.accepted) {
         ElevatedCard(
@@ -93,6 +96,7 @@ fun GroupMemberCard(
                         color = Color.Gray,
                         fontWeight = FontWeight.SemiBold
                     )
+
                     Spacer(modifier = Modifier.height(7.dp))
                     if(balance >= 0){
                         Text(
@@ -115,7 +119,13 @@ fun GroupMemberCard(
                         .weight(1f),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    IconButton(onClick = {notificationViewModel.sendReminder(member.id, groupId)}) {
+                    IconButton(onClick = {
+                        if(balance >= 0){
+                            Toast.makeText(context, "Cannot notify that user", Toast.LENGTH_LONG).show()
+                        } else {
+                            notificationViewModel.sendReminder(member.id, groupId)
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Outlined.Notifications,
                             contentDescription = "Additional action",
