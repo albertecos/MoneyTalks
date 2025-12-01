@@ -35,6 +35,7 @@ import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.GreyColor
+import com.example.moneytalks.ui.theme.greenCreditor
 import com.example.moneytalks.ui.theme.redInDebt
 import com.example.moneytalks.viewmodel.NotificationViewModel
 
@@ -93,8 +94,15 @@ fun GroupMemberCard(
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.height(7.dp))
+                    if(balance >= 0){
+                        Text(
+                            text = balance.toString(),
+                            fontSize = 18.sp,
+                            color = greenCreditor,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    } else
                     Text(
-                        //TODO()
                         text = balance.toString(),
                         fontSize = 18.sp,
                         color = redInDebt,
