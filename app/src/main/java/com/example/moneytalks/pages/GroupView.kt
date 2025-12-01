@@ -59,6 +59,7 @@ import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 import com.example.moneytalks.viewmodel.BalanceViewModel
 import com.example.moneytalks.viewmodel.ExpenseViewModel
+import com.example.moneytalks.viewmodel.GroupsViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 import kotlin.Unit
 
@@ -129,6 +130,7 @@ fun GroupView(
                 GroupMembersListCard(
                     navController = navController,
                     group = group,
+                    balanceVm,
                     onClose = { showMemberCard = false }
                 )
             }

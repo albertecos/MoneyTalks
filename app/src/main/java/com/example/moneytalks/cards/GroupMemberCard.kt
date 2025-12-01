@@ -42,6 +42,7 @@ import com.example.moneytalks.viewmodel.NotificationViewModel
 fun GroupMemberCard(
     member: GroupMember,
     groupId: String,
+    balance: Double,
     notificationViewModel: NotificationViewModel = viewModel()
 ) {
 
@@ -94,7 +95,7 @@ fun GroupMemberCard(
                     Spacer(modifier = Modifier.height(7.dp))
                     Text(
                         //TODO()
-                        text = "balance",
+                        text = balance.toString(),
                         fontSize = 18.sp,
                         color = redInDebt,
                         fontWeight = FontWeight.SemiBold
