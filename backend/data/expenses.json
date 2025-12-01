@@ -38,24 +38,5 @@
     "amount": 123,
     "description": "testing",
     "action": "expense"
-  },
-  {
-    "id": "e07ac802-f6cb-4b27-b25c-8cf64d73ee57",
-    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
-    "date": "2025-11-29T14:22:57.931Z",
-    "amount": 6,
-    "description": "n",
-    "action": "expense",
-    "payers": [
-      {
-        "accepted": false,
-        "email": "user2@example.com",
-        "full_name": "string",
-        "id": "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",
-        "password": "string",
-        "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg",
-        "username": "user2"
-      }
-    ]
   }
 ]
