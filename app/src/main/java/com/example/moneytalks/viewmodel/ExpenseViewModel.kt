@@ -15,7 +15,7 @@ import com.example.moneytalks.workers.ExpenseSyncWorker
 import com.example.moneytalks.dataclasses.GroupMember
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import okio.IOException
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClient): ViewModel() {
