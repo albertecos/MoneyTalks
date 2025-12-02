@@ -15,36 +15,51 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.cards.BalanceBox
+import com.example.moneytalks.cards.GroupMembersListCard
 import com.example.moneytalks.dataclasses.Group
+import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.PossibleActions.*
 import com.example.moneytalks.popup.PaymentPopup
+import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.ui.theme.DarkGrey
 import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.LilyScriptOne
+import com.example.moneytalks.ui.theme.MoneyTalksTheme
 import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 import com.example.moneytalks.viewmodel.BalanceViewModel
 import com.example.moneytalks.viewmodel.ExpenseViewModel
+import com.example.moneytalks.viewmodel.GroupsViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 import kotlin.Unit
 
@@ -59,6 +74,7 @@ fun GroupView(
 ) {
 
     var showPaymentPopup by remember { mutableStateOf(false) }
+    var showMemberCard by remember { mutableStateOf(false) }
     val currentUser = userVm.currentUser //for own bubble
     val currentUserId = currentUser.value?.id ?: "00cacc5b-55a3-4958-b551-b07668168ca6"
     val expenses = expenseVM.expenseHistory.value
@@ -79,12 +95,47 @@ fun GroupView(
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         GroupBar(group.name)
-        Box(
+        Row (
             modifier = modifier
                 .fillMaxWidth()
-                .padding(4.dp)
-        )
-        BalanceBox(balance)
+                .padding(10.dp)
+                .height(60.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            BalanceBox(balance, modifier = Modifier.weight(1f))
+
+            IconButton(
+                onClick = {
+                    showMemberCard = true
+                },
+                modifier = Modifier.weight(0.2f)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.AccountBox,
+                    contentDescription = "Group Member List",
+                    tint = DarkBlue,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
+
+        if(showMemberCard) {
+            Box(
+                modifier = Modifier
+                    .height(350.dp)
+                    .width(350.dp)
+                    .background(Color.Transparent),
+                contentAlignment = Alignment.Center
+            ){
+                GroupMembersListCard(
+                    navController = navController,
+                    group = group,
+                    balanceVm,
+                    onClose = { showMemberCard = false }
+                )
+            }
+
+        }
 
         // Transactions
         Column(modifier = modifier
@@ -225,8 +276,7 @@ fun TransactionButton(onPayClick:() -> Unit ) {
         colors = ButtonDefaults.buttonColors(GreyColor),
         onClick = { onPayClick() } //TODO
     ) {
-        Image(painter = painterResource(R.drawable.payment),
-            "payment icon")
+        Image(painter = painterResource(R.drawable.payment), "payment icon")
     }
 }
 
@@ -275,5 +325,85 @@ enum class PossibleActions {
     PAID,
     ADD_EXPENSE,
     REMOVE_EXPENSE
+}
+
+@Preview(
+    name = "GroupView preview",
+    showBackground = true,
+    showSystemUi = true
+)
+@Composable
+fun GroupViewPreview() {
+    val navController = rememberNavController()
+
+    val members = listOf(
+        GroupMember(
+            id = "user_1",
+            username = "alice",
+            full_name = "Alice Andersen",
+            email = "alice@example.com",
+            password = "",
+            profile_picture = "",
+            accepted = true
+        ),
+        GroupMember(
+            id = "user_2",
+            username = "bob",
+            full_name = "Bob Hansen",
+            email = "bob@example.com",
+            password = "",
+            profile_picture = "",
+            accepted = true
+        ),
+        GroupMember(
+            id = "user_3",
+            username = "charlie",
+            full_name = "Charlie Jensen",
+            email = "charlie@example.com",
+            password = "",
+            profile_picture = "",
+            accepted = false
+        ),
+        GroupMember(
+            id = "user_2",
+            username = "bob",
+            full_name = "Bob Hansen",
+            email = "bob@example.com",
+            password = "",
+            profile_picture = "",
+            accepted = true
+        ),
+        GroupMember(
+            id = "user_3",
+            username = "charlie",
+            full_name = "Charlie Jensen",
+            email = "charlie@example.com",
+            password = "",
+            profile_picture = "",
+            accepted = false
+        )
+    )
+
+    val previewGroup = Group(
+        id = "group_123",
+        name = "Holiday Trip",
+        members = members
+    )
+
+    // If your VMs have default constructors / Hilt preview support,
+    // this will work. Otherwise replace with your own fake / stub implementations.
+    val userVm: UserViewModel = viewModel()
+    val expenseVm: ExpenseViewModel = viewModel()
+    val balanceVm: BalanceViewModel = viewModel()
+
+    MoneyTalksTheme {
+        GroupView(
+            navController = navController,
+            group = previewGroup,
+            userVm = userVm,
+            expenseVM = expenseVm,
+            balanceVm = balanceVm
+        )
+    }
 }
 

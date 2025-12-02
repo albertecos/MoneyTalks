@@ -40,6 +40,15 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging{
+        resources{
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/LICENSE*"
+        }
+    }
 }
 
 dependencies {
@@ -65,10 +74,30 @@ dependencies {
 
 
     testImplementation(libs.junit)
+    implementation("com.google.accompanist:accompanist-permissions:0.30.1")
+    implementation("androidx.work:work-runtime-ktx:2.11.0")
+    implementation(libs.androidx.media3.common.ktx) //Permission for notifications
+
+    //WorkManager test
+    androidTestImplementation("androidx.work:work-testing:2.11.0")
+
+    //JUnit test
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
+    //Espresso test
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    //Compose test
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    //MockK
+    testImplementation("io.mockk:mockk:1.14.6")
+    androidTestImplementation("io.mockk:mockk-android:1.14.6")
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.junit)
 }

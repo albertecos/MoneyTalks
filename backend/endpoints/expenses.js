@@ -97,27 +97,15 @@ endPoints.push({method: 'GET', path: '/getBalance', oapi: {
         return res.status(400).send({error: 'groupId and userId query parameters are required'});
     }
 
-    const balance = getBalance(groupId, userId);
+    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId, accepted: true})[0];
+    if(!member){
+        return res.status(404).send({error: 'No balance found for this group ID and user ID'});
+    }
+    
+    const balance = member.balance || 0;
 
     res.json({balance});
 }});
-
-function getBalance(groupId, userId) {
-    const members = Database.getInstance('group_members').select({group_id: groupId, accepted: true});
-    const member = members.find(m => m.user_id === userId);
-    if(!member){
-        return 0;
-    }
-
-    const expenses = Database.getInstance('expenses').all().filter(e => members.map(m => m.id).includes(e.member_id));
-
-    let owed = expenses.filter(e => e.action === 'expense').reduce((sum, e) => sum + e.amount, 0) / members.length;
-    let paid = expenses.filter(e => e.action === 'payment' && e.member_id === member.id).reduce((sum, e) => sum + e.amount, 0);
-    paid += expenses.filter(e => e.action === 'expense' && e.member_id === member.id).reduce((sum, e) => sum + e.amount, 0);
-
-    const balance = paid - owed;
-    return balance;
-}
 
 endPoints.push({method: 'POST', path: '/createExpense', oapi: {
     summary: 'Create an expense',
@@ -155,13 +143,31 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         return res.status(400).send({error: 'userId query parameter is required'});
     }
 
-    const { groupId, amount, description } = req.body;
+    const { groupId, amount, description, payers } = req.body;
 
-    if (!groupId || !amount || !description) {
+    if (!groupId || !amount || !description || payers == undefined || payers.length == 0) {
         return res.status(400).send({error: 'Please provide groupId, amount, and description for the expense'});
     }
 
     const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId, accepted: true})[0];
+
+    const payerMembers = Database.getInstance('group_members').select({group_id: groupId, accepted: true}).filter(m => payers.includes(m.user_id));
+
+    if (payerMembers.length === 0) {
+        return res.status(400).send({error: 'At least one valid payer must be specified'});
+    }
+
+    const totalPayers = payerMembers.length;
+    const splitAmount = amount / totalPayers;
+
+    payerMembers.forEach(pm => {
+        pm.balance = (pm.balance || 0) - splitAmount;
+        Database.getInstance('group_members').update(pm.id, {balance: pm.balance});
+    });
+
+    member.balance = (member.balance || 0) + amount;
+    Database.getInstance('group_members').update(member.id, {balance: member.balance});
+    
 
     Database.getInstance('expenses').insert({
         id: uuidv4(),
@@ -169,7 +175,8 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         date: new Date().toISOString(),
         amount: amount,
         description: description,
-        action: 'expense'
+        action: 'expense',
+        payers: payers
     });
 
     const notificationsDb = Database.getInstance('notifications');
@@ -249,13 +256,43 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
         return res.status(400).send({error: 'userId query parameter and groupId in body are required'});
     }
 
-    const balance = getBalance(groupId, userId);
+    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId, accepted: true})[0];
+    if(!member){
+        return res.status(404).send({error: 'No balance found for this group ID and user ID'});
+    }
+    
+    const balance = member.balance || 0;
 
     if (balance >= 0) {
         return res.status(400).send({error: 'No owed expenses to pay'});
     }
 
-    const member = Database.getInstance('group_members').select({group_id: groupId, user_id: userId, accepted: true})[0];
+    const membersToPay = Database.getInstance('group_members').select({group_id: groupId, accepted: true}).filter(m => m.user_id !== userId && (m.balance || 0) > 0);
+
+    let amountToSettle = -balance;
+
+    // Settle balances weighted with other members
+    let totalPositiveBalance = membersToPay.reduce((sum, m) => sum + (m.balance || 0), 0);
+
+    membersToPay.forEach(m => {
+        if (amountToSettle <= 0) return;
+
+        const memberBalance = m.balance || 0;
+        const share = (memberBalance / totalPositiveBalance) * (-balance);
+
+        const payment = Math.min(share, amountToSettle, memberBalance);
+
+        // Update payer's balance
+        m.balance -= payment;
+        Database.getInstance('group_members').update(m.id, {balance: m.balance});
+
+        amountToSettle -= payment;
+        sendReceivementNotifications(groupId, userId, payment, m.user_id);
+    });
+
+    // Update payee's balance
+    member.balance += -balance;
+    Database.getInstance('group_members').update(member.id, {balance: member.balance});
 
     Database.getInstance('expenses').insert({
         id: uuidv4(),
@@ -268,38 +305,50 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
 
     const notificationsDb = Database.getInstance('notifications');
     const groupsDb = Database.getInstance('groups');
-    const usersDb = Database.getInstance('users');
 
     const group = groupsDb.select({ id: groupId })[0];
     const groupName = group ? group.name: 'default group name';
 
-    const payerUser = usersDb.select({ id: userId })[0];
-    const payerName = payerUser ? payerUser.full_name : 'unknow user'
-
-    const members = Database.getInstance('group_members').select({ group_id: groupId, accepted: true });
-
     const totalAmountPaid = -balance;
 
-    members.forEach(m => {
-        const isPayer = m.user_id === userId;
-
-        notificationsDb.insert({
-            id: uuidv4(),
-            action: isPayer ? 'PAYMENT' : 'RECEIVEMENT',
-            groupId,
-            groupName,
-            userId: m.user_id,
-            amount: totalAmountPaid,
-            date: new Date().toISOString(),
-            interacted: false,
-            seen: false,
-            description: isPayer
-                ? `You paid ${totalAmountPaid} to settle your balance in ${groupName}`
-                : `${payerName} paid ${totalAmountPaid} in ${groupName}`
-        });
+    notificationsDb.insert({
+        id: uuidv4(),
+        action: 'PAYMENT',
+        groupId,
+        groupName,
+        userId: userId,
+        amount: totalAmountPaid,
+        date: new Date().toISOString(),
+        interacted: false,
+        seen: false,
+        description: `You paid ${totalAmountPaid} to settle your balance in ${groupName}`
     });
 
     res.status(201).send({message: 'Expense paid successfully'});
 }});
+
+function sendReceivementNotifications(groupId, payerUserId, amountPaid, receiverId) {
+    const notificationsDb = Database.getInstance('notifications');
+    const groupsDb = Database.getInstance('groups');
+    const usersDb = Database.getInstance('users');
+    const group = groupsDb.select({ id: groupId })[0];
+    const groupName = group ? group.name: 'default group name';
+
+    const payerUser = usersDb.select({ id: payerUserId })[0];
+    const payerName = payerUser ? payerUser.full_name : 'unknow user'
+
+    notificationsDb.insert({
+        id: uuidv4(),
+        action: 'RECEIVEMENT',
+        groupId,
+        groupName,
+        userId: receiverId,
+        amount: amountPaid,
+        date: new Date().toISOString(),
+        interacted: false,
+        seen: false,
+        description: `You received a payment of ${amountPaid} from ${payerName} in ${groupName}`
+    });
+}
 
 module.exports = endPoints;

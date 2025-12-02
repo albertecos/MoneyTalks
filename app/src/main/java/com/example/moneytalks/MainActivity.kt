@@ -51,6 +51,7 @@ import com.example.moneytalks.pages.EditGroupPage
 import com.example.moneytalks.pages.CreateGroup
 import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
+import com.example.moneytalks.utilityclasses.NotificationUtil
 import com.example.moneytalks.viewmodel.UserViewModel
 
 import kotlin.jvm.java
@@ -66,14 +67,11 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        createNotificationChannel()
+        NotificationUtil.createNotificationChannel(this)
         requestNotificationPermission()
 
     }
 
-    companion object {
-        private const val CHANNEL_ID = "notification_channel"
-    }
 
 
     private var requestPermissionLauncher: ActivityResultLauncher<String> =
@@ -105,50 +103,6 @@ class MainActivity : ComponentActivity() {
             }
         } else {
             Toast.makeText(this, "No required permission", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Channel"
-            val descriptionText = "The notification channel"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-    }
-
-
-    fun sendNotification(title: String, text: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-        }
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(title)
-            .setContentText(text)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-
-        with(NotificationManagerCompat.from(this)) {
-            notify(1, builder.build())
         }
     }
 
@@ -208,7 +162,7 @@ fun MoneyTalksApp() {
                     ?.get<Group>("group")
 
                 if (group != null) {
-                    EditGroupPage(group, navController)
+                    EditGroupPage(group, navController, userVM)
                 } else {
                     Text("Group not found")
                 }
