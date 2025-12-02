@@ -309,4 +309,45 @@ endPoints.push({method: 'POST', path: '/sendReminder', oapi: {
     res.status(200).send({message: 'Reminder sent successfully'});
 }});
 
+endPoints.push({method: 'POST', path: '/getUnseen', oapi: {
+    summary: 'Get unseen notifications for a user and mark them as seen',
+    parameters: [
+        {
+            name: 'userId',
+            in: 'query',
+            required: true,
+            schema: {
+                type: 'string',
+                format: 'uuid'
+            }
+        }
+    ],
+    responses: {
+        200: {
+            description: 'Unseen notifications retrieved successfully'
+        },
+        404: {
+            description: 'No unseen notifications found for this user ID'
+        }
+    }
+}, handler: (req, res) => {
+    const userId = req.query.userId;
+
+    let notifications = Database.getInstance('notifications').all();
+
+    notifications = notifications.filter(n => n.userId === userId && !n.seen)
+
+    if(notifications.length === 0){
+        return res.status(404).send({error: 'No unseen notifications for this user id'})
+    }
+
+    // Mark notifications as seen
+    const notificationsDb = Database.getInstance('notifications');
+    notifications.forEach(notification => {
+        notificationsDb.update(notification.id, { seen: true });
+    });
+
+    res.json(notifications);
+}});
+
 module.exports = endPoints;
