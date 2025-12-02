@@ -84,8 +84,8 @@ fun GroupView(
         balanceVm.fetchBalance(group.id, currentUserId)
     }
 
-    val balanceNum = balanceVm.balance.value
-    var balance = balanceNum?.balance?.toDouble() ?: 0.0
+    val balanceNum = balanceVm.memberBalances.get(currentUserId)
+    var balance = - (balanceNum ?: 0.0)
 
     Column(
         modifier = modifier
@@ -172,9 +172,10 @@ fun GroupView(
                 value = balance,
                 onDismiss = {showPaymentPopup = false},
                 onConfirm = {
-                    if (balance > 0.0) {
-                        balance = 0.0
-                    }
+                    balanceVm.payOwed(
+                        groupId = group.id,
+                        userId = currentUserId
+                    )
                     showPaymentPopup = false
                 }
             )
