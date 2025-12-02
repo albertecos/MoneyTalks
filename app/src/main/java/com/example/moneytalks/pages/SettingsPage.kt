@@ -1,6 +1,9 @@
 package com.example.moneytalks.pages
 
 import android.net.Uri
+import android.provider.Settings
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -30,9 +33,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.moneytalks.R
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.viewmodel.UserViewModel
-
-// Dummy data class for user information
-data class DummyUserData(val email: String, val password: String)
+import com.example.moneytalks.dataclasses.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +41,7 @@ fun SettingsPage(
     navController: NavController,
     userVM: UserViewModel
 ) {
+    val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     //image launcher
@@ -58,18 +60,17 @@ fun SettingsPage(
         }
     }
 
-    var notificationsEnabled by remember { mutableStateOf(true) }
-    var userData by remember { mutableStateOf(DummyUserData("user@example.com", "password123")) }
     var showChangeEmailDialog by remember { mutableStateOf(false) }
     var showChangePasswordDialog by remember { mutableStateOf(false) }
+    val userData: User? = userVM.currentUser.value;
 
     if (showChangeEmailDialog) {
         ChangeInfoDialog(
             title = "Change Email",
-            currentValue = userData.email,
+            currentValue = userData?.email ?: "",
             onDismiss = { showChangeEmailDialog = false },
             onSave = { newEmail ->
-                userData = userData.copy(email = newEmail)
+                userVM.updateEmail(newEmail)
                 showChangeEmailDialog = false
             }
         )
@@ -81,7 +82,7 @@ fun SettingsPage(
             currentValue = "", // Don't show current password
             onDismiss = { showChangePasswordDialog = false },
             onSave = { newPassword ->
-                userData = userData.copy(password = newPassword)
+                userVM.updatePassword(newPassword)
                 showChangePasswordDialog = false
             }
         )
@@ -167,11 +168,14 @@ fun SettingsPage(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedButtonUI(
-                    text = if (notificationsEnabled) "Turn off notifications" else "Turn on notifications",
-                    onClick = { notificationsEnabled = !notificationsEnabled }
+                    text = "Go to notifications settings",
+                    onClick = {
+                        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)  // Changed
+                        }
+                        context.startActivity(intent)  // Changed
+                    }
                 )
-                OutlinedButtonUI(text = "...")
-                OutlinedButtonUI(text = "...")
             }
 
             Spacer(modifier = Modifier.weight(1f))

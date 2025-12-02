@@ -80,4 +80,30 @@ class UserViewModel(private val retrofitClient: RetrofitClient = RetrofitClient)
     fun logout() {
         currentUser.value = null
     }
+    
+    fun updateEmail(newEmail: String) {
+        viewModelScope.launch {
+            currentUser.value?.let {
+                try {
+                    val updatedUser = it.copy(email = newEmail)
+                    currentUser.value = retrofitClient.api.updateUser(updatedUser)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    fun updatePassword(newPassword: String) {
+        viewModelScope.launch {
+            currentUser.value?.let {
+                try {
+                    val updatedUser = it.copy(password = newPassword)
+                    currentUser.value = retrofitClient.api.updateUser(updatedUser)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
 }
