@@ -46,5 +46,13 @@
     "email": "user4@example.com",
     "password": "string",
     "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+  },
+  {
+    "id": "36a0e280-890c-4016-babd-3afa78fa98c3",
+    "username": "maria",
+    "full_name": "maria",
+    "email": "maria@gmail.com",
+    "password": "maria",
+    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
   }
 ]

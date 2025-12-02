@@ -67,6 +67,13 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0") //For API
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.30.1") //Permission for notifications
+
+    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("io.coil-kt:coil-gif:2.6.0")
+
+
+    testImplementation(libs.junit)
     implementation("com.google.accompanist:accompanist-permissions:0.30.1")
     implementation("androidx.work:work-runtime-ktx:2.11.0")
     implementation(libs.androidx.media3.common.ktx) //Permission for notifications
