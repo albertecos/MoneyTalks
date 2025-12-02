@@ -70,5 +70,17 @@
     "interacted": false,
     "seen": false,
     "description": "string added an expense: testing (123)"
+  },
+  {
+    "id": "8393341e-5865-41e8-ac2d-e3e06bb37c25",
+    "action": "INVITE",
+    "groupId": "09bcb08c-a1ed-4ad8-81a6-134ddeef1cbf",
+    "groupName": "Maria",
+    "userId": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "amount": null,
+    "date": "2025-11-28T12:32:16.399Z",
+    "interacted": false,
+    "seen": false,
+    "description": "maria added an expense: Maria"
   }
 ]

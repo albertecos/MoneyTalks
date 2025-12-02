@@ -34,5 +34,11 @@
     "group_id": "fc22156c-0394-4152-ad9f-e3c12e0be02a",
     "user_id": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
     "accepted": true
+  },
+  {
+    "id": "7af36799-44ef-41ac-bfe6-e820a3364420",
+    "group_id": "09bcb08c-a1ed-4ad8-81a6-134ddeef1cbf",
+    "user_id": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "accepted": false
   }
 ]
