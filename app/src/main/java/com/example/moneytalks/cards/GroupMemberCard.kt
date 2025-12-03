@@ -36,10 +36,12 @@ import coil.compose.AsyncImage
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.ui.theme.DarkBlue
+import com.example.moneytalks.ui.theme.DarkGrey
 import com.example.moneytalks.ui.theme.GreyColor
 import com.example.moneytalks.ui.theme.greenCreditor
 import com.example.moneytalks.ui.theme.redInDebt
 import com.example.moneytalks.viewmodel.NotificationViewModel
+import okhttp3.internal.format
 
 @Composable
 fun GroupMemberCard(
@@ -93,13 +95,13 @@ fun GroupMemberCard(
                     Text(
                         text = member.full_name,
                         fontSize = 18.sp,
-                        color = Color.Gray,
+                        color = DarkGrey,
                         fontWeight = FontWeight.SemiBold
                     )
 
                     Spacer(modifier = Modifier.height(7.dp))
                     Text(
-                        text = balance.toString(),
+                        text = String.format("%.2f", Math.abs(balance)),
                         fontSize = 18.sp,
                         color = if(balance >= 0) greenCreditor else redInDebt,
                         fontWeight = FontWeight.SemiBold
