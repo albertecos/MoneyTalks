@@ -110,5 +110,53 @@
     "amount": 5463,
     "description": "h",
     "action": "expense"
+  },
+  {
+    "id": "68c730f9-2427-40d7-8b9c-7f0a66c7dd0b",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-03T10:35:33.753Z",
+    "amount": 1,
+    "description": "x",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    ]
+  },
+  {
+    "id": "04b177ac-832a-4fe9-afad-a28dc6b568f5",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-03T10:47:47.764Z",
+    "amount": 23,
+    "description": "r",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    ]
+  },
+  {
+    "id": "2e49e0be-8bf1-4280-bf92-7dfaad83413e",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-03T10:47:57.512Z",
+    "amount": 32,
+    "description": "f",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    ]
+  },
+  {
+    "id": "2468d889-f8e5-4eb4-9e26-1530a8b99478",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-03T10:48:58.905Z",
+    "amount": 9999999999999,
+    "description": "testinnnng",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543",
+      "68661b1b-1234-4f3c-ac0b-a02fa35d60f7",
+      "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+      "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",
+      "4fdf2d6a-c65b-47b7-96a0-3d0c748616d9"
+    ]
   }
 ]
