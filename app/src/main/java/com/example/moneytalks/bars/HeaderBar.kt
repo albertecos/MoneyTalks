@@ -32,8 +32,8 @@ fun TopBar(
 
     CenterAlignedTopAppBar(
         modifier = modifier
-            .statusBarsPadding()
             .background(gradient)
+            .statusBarsPadding()
             .zIndex(1f),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
