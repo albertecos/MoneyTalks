@@ -98,18 +98,10 @@ fun GroupMemberCard(
                     )
 
                     Spacer(modifier = Modifier.height(7.dp))
-                    if(balance >= 0){
-                        Text(
-                            text = balance.toString(),
-                            fontSize = 18.sp,
-                            color = greenCreditor,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    } else
                     Text(
                         text = balance.toString(),
                         fontSize = 18.sp,
-                        color = redInDebt,
+                        color = if(balance >= 0) greenCreditor else redInDebt,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
