@@ -30,6 +30,8 @@ import com.example.moneytalks.viewmodel.UserViewModel
 import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.ui.theme.DarkBlue
 import com.example.moneytalks.R
+import com.example.moneytalks.ui.theme.DarkGrey
+import com.example.moneytalks.ui.theme.greenCreditor
 
 
 @Composable
@@ -330,22 +332,12 @@ fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = 
             color = Color.DarkGray,
             modifier = Modifier.padding(start = 8.dp)
         )
-        if(member.accepted){
-            Box(
-                modifier = Modifier
-                    .size(30.dp)
-                    .padding(start = 8.dp)
-            ){
-                Image(painter = painterResource(R.drawable.crown), "crown icon")
-            }
-        }else{
-            Text(
-                text = "Pending",
-                fontSize = 14.sp,
-                color = Color.Gray,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
+        Text(
+            text = if(member.accepted) "Accepted" else "Pending",
+            fontSize = 14.sp,
+            color = if(member.accepted) greenCreditor else DarkGrey,
+            modifier = Modifier.padding(start = 8.dp)
+        )
 
         if (additionalActionIcon == null) {
             return
