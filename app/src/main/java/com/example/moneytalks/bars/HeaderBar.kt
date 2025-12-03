@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.example.moneytalks.ui.theme.LilyScriptOne
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.navigation.NavIcon
@@ -24,13 +25,19 @@ import com.example.moneytalks.ui.theme.gradient
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior) {
+fun TopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier
+    ) {
 
     CenterAlignedTopAppBar(
-        modifier = Modifier.background(gradient).statusBarsPadding(),
+        modifier = modifier
+            .statusBarsPadding()
+            .background(gradient)
+            .zIndex(1f),
         colors = TopAppBarDefaults.topAppBarColors(
-            //containerColor = Color.Red,
             containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent,
             titleContentColor = Black
         ),
         title = {
