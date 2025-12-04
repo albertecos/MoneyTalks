@@ -110,5 +110,38 @@
     "amount": 5463,
     "description": "h",
     "action": "expense"
+  },
+  {
+    "id": "095e20d6-4179-4d72-b8ff-953c3d4d65a8",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-04T07:30:58.254Z",
+    "amount": 4,
+    "description": "g",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    ]
+  },
+  {
+    "id": "782c35e6-d4e3-4fef-80e9-1ce0c5bbef05",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-04T07:35:36.029Z",
+    "amount": 3,
+    "description": "r",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    ]
+  },
+  {
+    "id": "ea1a94fb-0ef1-4607-8619-130e572d8d0e",
+    "member_id": "791c291c-675a-491d-934f-7f655018a66b",
+    "date": "2025-12-04T07:36:29.519Z",
+    "amount": 45434545,
+    "description": "g",
+    "action": "expense",
+    "payers": [
+      "c4d21a74-c59c-4a4b-8dea-9eb519428543"
+    ]
   }
 ]

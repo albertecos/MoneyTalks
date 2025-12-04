@@ -1,11 +1,6 @@
 package com.example.moneytalks
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -28,9 +23,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,7 +33,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moneytalks.bars.NavBar
 import com.example.moneytalks.bars.TopBar
 import com.example.moneytalks.dataclasses.Group
-import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.navigation.Destination
 import com.example.moneytalks.pages.AddExpensePage
 import com.example.moneytalks.pages.CreateAccount
@@ -53,8 +46,6 @@ import com.example.moneytalks.pages.LoginScreen
 import com.example.moneytalks.ui.theme.MoneyTalksTheme
 import com.example.moneytalks.utilityclasses.NotificationUtil
 import com.example.moneytalks.viewmodel.UserViewModel
-
-import kotlin.jvm.java
 
 class MainActivity : ComponentActivity() {
 
@@ -121,7 +112,7 @@ fun MoneyTalksApp() {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopBar(navController, scrollBehavior) },
+        topBar = { TopBar(scrollBehavior) },
         bottomBar = {
             if (currentRoute != Destination.LOGIN.route &&
                 currentRoute != Destination.CREATEACCOUNT.route

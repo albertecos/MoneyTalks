@@ -80,7 +80,10 @@ interface MoneyTalksInterface {
     )
 
     @GET("searchUsers")
-    suspend fun searchUsers(@Query("username") query: String): List<com.example.moneytalks.dataclasses.User>
+    suspend fun searchUsers(@Query("username") query: String): List<User>
+
+    @POST("updateUser")
+    suspend fun updateUser(@Body user: User): User
 
     @GET("expenseHistory")
     suspend fun getExpenseHistory(

@@ -55,7 +55,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
             } catch(e: HttpException){
                 println(e.message)
                 println(e.response()?.errorBody().toString())
-
+                onError("Server error while creating expense")
 
             } catch (e: Exception){
                 e.printStackTrace()
@@ -80,7 +80,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
             "groupId" to groupId,
             "amount" to amount,
             "description" to description,
-            "payers" to payersJson
+            "payersJson" to payersJson
         )
 
         val request = OneTimeWorkRequestBuilder<ExpenseSyncWorker>()
