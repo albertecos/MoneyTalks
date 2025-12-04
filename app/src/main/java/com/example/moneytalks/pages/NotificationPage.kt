@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,13 +44,14 @@ fun NotificationPage(
         modifier = modifier
             .padding(horizontal = 12.dp)
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = "Group Invites",
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        val inviteNotification = notifications.filter { it.action == "INVITE" }
+        val inviteNotification = notifications.filter { it.action == "INVITE" }.sortedByDescending { it.date }
 
         if (inviteNotification.isEmpty()) {
             Text("No invites at the moment...")
@@ -71,7 +75,7 @@ fun NotificationPage(
 
         val expenseNotifications = notifications.filter {
             it.action == "PAYMENT" || it.action == "RECEIVEMENT" || it.action == "EXPENSE" || it.action == "REMINDER"
-        }
+        }.sortedByDescending { it.date }
 
         if(expenseNotifications.isEmpty()){
             Text("No notifications yet...")

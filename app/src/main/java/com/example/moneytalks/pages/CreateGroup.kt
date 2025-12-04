@@ -1,5 +1,6 @@
 package com.example.moneytalks.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,18 +15,23 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.moneytalks.dataclasses.GroupMember
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.viewmodel.UserViewModel
 import com.example.moneytalks.apisetup.RetrofitClient
+import com.example.moneytalks.ui.theme.DarkBlue
+import com.example.moneytalks.R
+import com.example.moneytalks.ui.theme.DarkGrey
+import com.example.moneytalks.ui.theme.greenCreditor
 
 
 @Composable
@@ -194,7 +200,7 @@ fun CreateGroup(navController: NavController, userVM: UserViewModel) {
             } else {
                 MemberListElement(
                     member = groupMember,
-                    additionalActionIcon = Icons.Default.Delete,
+                    additionalActionIcon = Icons.Outlined.Delete,
                     onAdditionalActionClick = {
                         peopleList.removeAll { it.id == groupMember.id }
                     }
@@ -284,9 +290,9 @@ fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
                 elevation = ButtonDefaults.buttonElevation(0.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    imageVector = Icons.Outlined.Add,
                     contentDescription = "Add member",
-                    tint = Color.Blue,
+                    tint = DarkBlue,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -301,6 +307,7 @@ fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = 
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
+
     ) {
         // Profile picture
         AsyncImage(
@@ -325,11 +332,10 @@ fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = 
             color = Color.DarkGray,
             modifier = Modifier.padding(start = 8.dp)
         )
-
         Text(
-            text = if (member.accepted) "Accepted" else "Pending",
+            text = if(member.accepted) "Accepted" else "Pending",
             fontSize = 14.sp,
-            color = if (member.accepted) Color.Green else Color.Gray,
+            color = if(member.accepted) greenCreditor else DarkGrey,
             modifier = Modifier.padding(start = 8.dp)
         )
 
@@ -350,7 +356,7 @@ fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = 
                 Icon(
                     imageVector = additionalActionIcon,
                     contentDescription = "Additional action",
-                    tint = Color.Blue,
+                    tint = DarkBlue,
                     modifier = Modifier.size(24.dp)
                 )
             }

@@ -9,6 +9,7 @@ import com.example.moneytalks.dataclasses.GroupEdit
 import com.example.moneytalks.dataclasses.LoginRequest
 import com.example.moneytalks.dataclasses.Notification
 import com.example.moneytalks.dataclasses.NotificationCreate
+import com.example.moneytalks.dataclasses.PayOwedData
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.dataclasses.UserCreate
 import okhttp3.MediaType.Companion.toMediaType
@@ -90,6 +91,13 @@ class FakeApi() : MoneyTalksInterface {
         groupId: String,
         userId: String
     ): Balance {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun payOwed(
+        userId: String,
+        data: PayOwedData
+    ) {
         TODO("Not yet implemented")
     }
 

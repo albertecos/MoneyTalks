@@ -4,32 +4,35 @@
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
     "accepted": true,
-    "balance": 11.5
+    "balance": 8000000000009.7
   },
   {
     "id": "111c291c-675a-491d-934f-7f655018a66b",
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
     "accepted": true,
-    "balance": -11.5
+    "balance": -2000000000010.3
   },
   {
     "id": "222c291c-675a-491d-934f-7f655018a66b",
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "68661b1b-1234-4f3c-ac0b-a02fa35d60f7",
-    "accepted": true
+    "accepted": true,
+    "balance": -1999999999999.8
   },
   {
     "id": "333c291c-675a-491d-934f-7f655018a66b",
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",
-    "accepted": true
+    "accepted": true,
+    "balance": -1999999999999.8
   },
   {
     "id": "444c291c-675a-491d-934f-7f655018a66b",
     "group_id": "a8602b88-8236-4596-9235-01a6040ab116",
     "user_id": "4fdf2d6a-c65b-47b7-96a0-3d0c748616d9",
-    "accepted": true
+    "accepted": true,
+    "balance": -1999999999999.8
   },
   {
     "id": "3cb2abc9-1dfe-4d33-8b02-0696d5eb3a81",
@@ -42,5 +45,17 @@
     "group_id": "fc22156c-0394-4152-ad9f-e3c12e0be02a",
     "user_id": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
     "accepted": true
+  },
+  {
+    "id": "620cbbc5-68c6-4deb-9a16-9781960d687b",
+    "group_id": "082b7622-8fa0-4955-83ca-98fb15d5db90",
+    "user_id": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
+    "accepted": true
+  },
+  {
+    "id": "ceb5fab0-b3e1-4f2d-8816-f62a0dad5155",
+    "group_id": "082b7622-8fa0-4955-83ca-98fb15d5db90",
+    "user_id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
+    "accepted": false
   }
 ]
