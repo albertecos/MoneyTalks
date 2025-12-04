@@ -105,6 +105,10 @@ class FakeApi() : MoneyTalksInterface {
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateUser(user: User): User {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getExpenseHistory(groupId: String): List<Expense> {
         TODO("Not yet implemented")
     }
