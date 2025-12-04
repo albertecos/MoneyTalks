@@ -1,5 +1,6 @@
 package com.example.moneytalks.pages
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,7 @@ fun LoginScreen(
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     val gradient = Brush.horizontalGradient(
         colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
@@ -144,7 +147,8 @@ fun LoginScreen(
                         onSuccess = {
                             navController.navigate(Destination.HOME.route)},
                         onError = {
-                            println("Error in Login")
+                            Toast.makeText(context, "Email or password are incorrect", Toast.LENGTH_SHORT)
+                                .show()
                         })
 
                 },
