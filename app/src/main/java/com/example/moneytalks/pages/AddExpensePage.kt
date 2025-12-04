@@ -219,9 +219,14 @@ fun AddExpensePage(
                     val groupId = group.id
                     val ctx = context
 
+                    val currentUser = userVm.currentUser.value
+                    val currentMember =  groupMembers.firstOrNull { it.userId == currentUser?.id }
+                    val currentMemberId = currentMember?.id ?: run{"no current member's ID were found"}
+
                     expenseVM.createExpense(
                         context = ctx,
                         userId = userId,
+                        memberId = currentMemberId,
                         groupId = groupId,
                         amount = amount,
                         description = description,
@@ -230,7 +235,6 @@ fun AddExpensePage(
                             Toast.makeText(ctx, "Expense added succesfully", Toast.LENGTH_SHORT)
                                 .show()
 
-                            val currentUser = userVm.currentUser.value
                             if (currentUser != null) {
                                 val expenseTitle = "Expense added to your group!"
                                 val expenseMessage =

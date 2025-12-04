@@ -50,6 +50,7 @@ fun CreateGroup(navController: NavController, userVM: UserViewModel) {
                 add(
                     GroupMember(
                         id = currentUser.id,
+                        userId = currentUser.id, //for now
                         full_name = currentUser.full_name,
                         profile_picture = currentUser.profile_picture,
                         username = currentUser.username,
@@ -166,6 +167,7 @@ fun CreateGroup(navController: NavController, userVM: UserViewModel) {
                 peopleList.add(
                     GroupMember(
                         id = member.id,
+                        userId = member.id,
                         full_name = member.full_name,
                         profile_picture = member.profile_picture,
                         username = member.username,

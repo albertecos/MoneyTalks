@@ -21,6 +21,7 @@ class ExpenseSyncWorker(
     override suspend fun doWork(): Result {
         val userId = inputData.getString("userId") ?: return Result.failure()
         val groupId = inputData.getString("groupId") ?: return Result.failure()
+        val memberId = inputData.getString("memberId") ?: return Result.failure()
         val description = inputData.getString("description") ?: return Result.failure()
         val amount = inputData.getDouble("amount", -1.0)
         val payersJson = inputData.getString("payersJson") ?: return Result.failure()
@@ -33,6 +34,7 @@ class ExpenseSyncWorker(
 
         val expense = Expense(
             userId = userId,
+            memberId = memberId,
             groupId = groupId,
             amount = amount,
             description = description,

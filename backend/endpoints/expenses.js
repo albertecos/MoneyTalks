@@ -172,6 +172,7 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
     Database.getInstance('expenses').insert({
         id: uuidv4(),
         member_id: member.id,
+        user_id: userId,
         date: new Date().toISOString(),
         amount: amount,
         description: description,

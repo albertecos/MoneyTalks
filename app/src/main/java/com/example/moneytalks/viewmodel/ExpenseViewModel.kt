@@ -25,6 +25,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
     fun createExpense(
         context: Context,
         userId: String,
+        memberId: String,
         groupId: String,
         amount: Double,
         description: String,
@@ -39,6 +40,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
                 val expense = Expense(
                     groupId = groupId,
                     userId = userId,
+                    memberId = memberId,
                     amount = amount,
                     description = description,
                     action = action,
@@ -50,7 +52,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
 
             } catch (e: IOException) {
                 e.printStackTrace()
-                scheduleExpenseRetry(context, userId, groupId, amount, description, payers)
+                scheduleExpenseRetry(context, userId, groupId, memberId, amount, description, payers)
                 onNetworkRetryScheduled()
             } catch(e: HttpException){
                 println(e.message)
@@ -67,6 +69,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
     private fun scheduleExpenseRetry(
         context: Context,
         userId: String,
+        memberId: String,
         groupId: String,
         amount: Double,
         description: String,
@@ -77,6 +80,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
 
         val workData = workDataOf(
             "userId" to userId,
+            "memberId" to memberId,
             "groupId" to groupId,
             "amount" to amount,
             "description" to description,

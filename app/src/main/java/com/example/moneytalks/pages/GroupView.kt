@@ -19,14 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import com.example.moneytalks.apisetup.RetrofitClient
 import com.example.moneytalks.cards.BalanceBox
 import com.example.moneytalks.cards.GroupMembersListCard
 import com.example.moneytalks.dataclasses.Group
@@ -59,7 +59,6 @@ import com.example.moneytalks.ui.theme.blueDebtFree
 import com.example.moneytalks.ui.theme.blueDebtFreeV2
 import com.example.moneytalks.viewmodel.BalanceViewModel
 import com.example.moneytalks.viewmodel.ExpenseViewModel
-import com.example.moneytalks.viewmodel.GroupsViewModel
 import com.example.moneytalks.viewmodel.UserViewModel
 import kotlin.Unit
 
@@ -145,6 +144,8 @@ fun GroupView(
         ) {
             expenses.forEach { expense ->
 
+                val membersToFullName = group.members.associate { it.id to it.full_name }
+                val membersToPfp = group.members.associate { it.id to it.profile_picture }
                 val ifMyself = expense.userId == currentUserId
                 val actionEnum = mapActionToEnum(expense.action)
 
@@ -152,9 +153,8 @@ fun GroupView(
                     OwnBubble(actionEnum, expense.amount)
                 } else {
                     FriendsBubble(
-                        //TODO: Display correct userID, is this through.... group members?
-                        "PLAYER",
-                        R.drawable.babygator,
+                        membersToFullName[expense.userId] ?:"Unknown user",
+                        membersToPfp[expense.userId] ?: "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg", //the default img?
                         actionEnum,
                         expense.amount)
                 }
@@ -220,7 +220,7 @@ fun OwnBubble(action: PossibleActions, value: Double) {
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, value: Double) {
+fun FriendsBubble(username: String, pfpString: String, action: PossibleActions, value: Double) {
     val formattedPrice = String.format("%.2f", Math.abs(value))
 
     Row (modifier = Modifier
@@ -229,9 +229,9 @@ fun FriendsBubble(username: String, pfpResID: Int, action: PossibleActions, valu
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(pfpResID),
-            "lulul",
+        AsyncImage(
+            model = "${RetrofitClient.BASE_URL}image?path=${pfpString}",
+            contentDescription = "Profile picture",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp)
@@ -340,6 +340,7 @@ fun GroupViewPreview() {
     val members = listOf(
         GroupMember(
             id = "user_1",
+            userId = "userId_1",
             username = "alice",
             full_name = "Alice Andersen",
             email = "alice@example.com",
@@ -349,6 +350,7 @@ fun GroupViewPreview() {
         ),
         GroupMember(
             id = "user_2",
+            userId = "userId_2",
             username = "bob",
             full_name = "Bob Hansen",
             email = "bob@example.com",
@@ -358,6 +360,7 @@ fun GroupViewPreview() {
         ),
         GroupMember(
             id = "user_3",
+            userId = "userId_3",
             username = "charlie",
             full_name = "Charlie Jensen",
             email = "charlie@example.com",
@@ -366,7 +369,8 @@ fun GroupViewPreview() {
             accepted = false
         ),
         GroupMember(
-            id = "user_2",
+            id = "user_4",
+            userId = "userId_4",
             username = "bob",
             full_name = "Bob Hansen",
             email = "bob@example.com",
@@ -375,7 +379,8 @@ fun GroupViewPreview() {
             accepted = true
         ),
         GroupMember(
-            id = "user_3",
+            id = "user_5",
+            userId = "userId_5",
             username = "charlie",
             full_name = "Charlie Jensen",
             email = "charlie@example.com",
