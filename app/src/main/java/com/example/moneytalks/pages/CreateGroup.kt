@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -20,6 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.moneytalks.dataclasses.GroupMember
@@ -254,9 +257,10 @@ fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
         AsyncImage(
             model = "${RetrofitClient.BASE_URL}image?path=${member.profile_picture}",
             contentDescription = "Profile picture",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+                .clip(CircleShape)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -308,9 +312,10 @@ fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = 
         AsyncImage(
             model = "${RetrofitClient.BASE_URL}image?path=${member.profile_picture}",
             contentDescription = "Profile picture",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+                .clip(CircleShape)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
