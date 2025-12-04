@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -200,19 +201,35 @@ fun SettingsPage(
 
 @Composable
 fun OutlinedButtonUI(text: String, onClick: () -> Unit = {}) {
-    OutlinedButton(
-        onClick = onClick,
+
+    val gradient = Brush.horizontalGradient(
+        colors = listOf(Color(0xFFBADFFF), Color(0xFF3F92DA))
+    )
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(48.dp)
             .padding(vertical = 6.dp)
-            .height(48.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = Color.Black,
-            containerColor = Color(0xFFF8F9FA)
-        ),
-        shape = RoundedCornerShape(12.dp),
+            .border(2.dp, gradient, RoundedCornerShape(20.dp))
+            .background(Color(0xFFF8F9FA), RoundedCornerShape(20.dp))
     ) {
-        Text(text = text, textAlign = TextAlign.Center, fontSize = 16.sp)
+        Button(
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Black
+            ),
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues()
+        ) {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
 
