@@ -10,6 +10,7 @@ import com.example.moneytalks.dataclasses.LoginRequest
 import com.example.moneytalks.dataclasses.NotificationCreate
 import com.example.moneytalks.dataclasses.User
 import com.example.moneytalks.dataclasses.UserCreate
+import com.example.moneytalks.dataclasses.PayOwedData
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -71,6 +72,12 @@ interface MoneyTalksInterface {
         @Query("groupId") groupId: String,
         @Query("userId") userId: String)
     : Balance
+
+    @POST("payOwed")
+    suspend fun payOwed(
+        @Query("userId") userId: String,
+        @Body data: PayOwedData
+    )
 
     @GET("searchUsers")
     suspend fun searchUsers(@Query("username") query: String): List<User>
