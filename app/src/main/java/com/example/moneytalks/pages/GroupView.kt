@@ -193,7 +193,7 @@ fun GroupBar(groupName: String) {
         horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
-        Text(groupName, color = blueDebtFreeV2, fontFamily = LilyScriptOne)
+        Text(groupName, color = blueDebtFreeV2, fontWeight = FontWeight.Bold)
     }
 }
 
