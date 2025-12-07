@@ -24,12 +24,11 @@ import com.example.moneytalks.R
 @Composable
 fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier,
     title: String? = null
 ) {
 
     CenterAlignedTopAppBar(
-        modifier = modifier
+        modifier = Modifier
             .background(gradient)
             .statusBarsPadding()
             .zIndex(1f),
