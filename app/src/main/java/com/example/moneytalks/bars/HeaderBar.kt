@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moneytalks.navigation.Destination
@@ -31,7 +32,10 @@ import com.example.moneytalks.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior) {
+fun TopBar(
+    navController: NavController,
+    scrollBehavior: TopAppBarScrollBehavior,
+    title: String? = null ) {
 
     CenterAlignedTopAppBar(
         modifier = Modifier.background(gradient).statusBarsPadding(),
@@ -41,12 +45,20 @@ fun TopBar(navController: NavController, scrollBehavior: TopAppBarScrollBehavior
             titleContentColor = Black
         ),
         title = {
-            Image(
-                painter = painterResource(R.drawable.mtlogo),
-                "Logo",
-                modifier = Modifier
-                    .size(90.dp)
-            )
+            if (title != null) {
+                Text(
+                    title,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.mtlogo),
+                    "Logo",
+                    modifier = Modifier
+                        .size(90.dp)
+                )
+            }
         },
         scrollBehavior = scrollBehavior,
     )

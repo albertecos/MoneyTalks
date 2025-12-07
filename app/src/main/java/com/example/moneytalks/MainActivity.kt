@@ -121,7 +121,16 @@ fun MoneyTalksApp() {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { TopBar(navController, scrollBehavior) },
+        topBar = {
+            val title = if (currentRoute == Destination.GROUPVIEW.route || currentRoute == Destination.ADDEXPENSE.route) {
+                val group = navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<Group>("group")
+                group?.name
+            } else null
+
+            TopBar(navController, scrollBehavior, title)
+        },
         bottomBar = {
             if (currentRoute != Destination.LOGIN.route &&
                 currentRoute != Destination.CREATEACCOUNT.route
