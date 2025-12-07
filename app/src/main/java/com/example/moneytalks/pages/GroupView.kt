@@ -143,21 +143,21 @@ fun GroupView(
         ) {
             expenses.forEach { expense ->
 
-                val membersToFullName = group.members.associate { it.userId to it.full_name }
-                val membersToPfp = group.members.associate { it.userId to it.profile_picture }
+                fun getMemberByAllIds(id: String): GroupMember? {
+                    return group.members.firstOrNull {it.id == id ||it.userId == id}
+                }
+
                 val ifMyself = expense.userId == currentUserId
                 val actionEnum = mapActionToEnum(expense.action)
-
-                fun getMemberByAllIds(id: String): GroupMember {
-                    return group.members.firstOrNull {|it.userId == id}
-                }
 
                 if (ifMyself) {
                     OwnBubble(actionEnum, expense.amount)
                 } else {
+                    val friend = getMemberByAllIds(expense.userId)
+
                     FriendsBubble(
-                        membersToFullName[expense.userId] ?:"Unknown user",
-                        membersToPfp[expense.userId] ?: "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg", //the default img?
+                        friend?.full_name ?:"Unknown user",
+                        friend?.profile_picture ?: "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg",
                         actionEnum,
                         expense.amount)
                 }
