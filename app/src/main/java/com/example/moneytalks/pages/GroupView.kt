@@ -93,7 +93,6 @@ fun GroupView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        GroupBar(group.name)
         Row (
             modifier = modifier
                 .fillMaxWidth()
@@ -144,10 +143,14 @@ fun GroupView(
         ) {
             expenses.forEach { expense ->
 
-                val membersToFullName = group.members.associate { it.id to it.full_name }
-                val membersToPfp = group.members.associate { it.id to it.profile_picture }
+                val membersToFullName = group.members.associate { it.userId to it.full_name }
+                val membersToPfp = group.members.associate { it.userId to it.profile_picture }
                 val ifMyself = expense.userId == currentUserId
                 val actionEnum = mapActionToEnum(expense.action)
+
+                fun getMemberByAllIds(id: String): GroupMember {
+                    return group.members.firstOrNull {|it.userId == id}
+                }
 
                 if (ifMyself) {
                     OwnBubble(actionEnum, expense.amount)
@@ -180,20 +183,6 @@ fun GroupView(
                 }
             )
         }
-    }
-}
-
-@Composable
-fun GroupBar(groupName: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(blueDebtFree)
-            .padding(2.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-        Text(groupName, color = blueDebtFreeV2, fontWeight = FontWeight.Bold)
     }
 }
 
