@@ -35,6 +35,7 @@ class ExpenseSyncWorkerTest {
     val input = workDataOf(
         "userId" to "u1",
         "groupId" to "g1",
+        "memberId" to "m1",
         "amount" to 10.0,
         "description" to "test expense",
         "payersJson" to "[]"
@@ -57,7 +58,7 @@ class ExpenseSyncWorkerTest {
         unmockkAll()
     }
     @Test
-    fun succes_returnSucces() = runTest {
+    fun success_returnSuccess() = runTest {
         val worker = TestListenableWorkerBuilder<ExpenseSyncWorker>(context)
             .setInputData(input)
             .build()

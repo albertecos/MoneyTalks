@@ -52,7 +52,7 @@ class ExpenseViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
 
             } catch (e: IOException) {
                 e.printStackTrace()
-                scheduleExpenseRetry(context, userId, groupId, memberId, amount, description, payers)
+                scheduleExpenseRetry(context, userId, memberId, groupId, amount, description, payers)
                 onNetworkRetryScheduled()
             } catch(e: HttpException){
                 println(e.message)
