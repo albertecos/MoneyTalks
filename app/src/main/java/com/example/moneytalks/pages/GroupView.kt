@@ -79,10 +79,15 @@ fun GroupView(
     val currentUserId = currentUser.value?.id ?: "00cacc5b-55a3-4958-b551-b07668168ca6"
     val expenses = expenseVM.expenseHistory.value
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(group.id) {
         expenseVM.getExpenseHistoryByGroupId(group.id)
         balanceVm.fetchBalance(group.id, currentUserId)
+    }
+
+    LaunchedEffect(expenses.size) {
+        scrollState.animateScrollTo(scrollState.maxValue)
     }
 
     val balanceNum = balanceVm.memberBalances.get(currentUserId)
@@ -141,7 +146,7 @@ fun GroupView(
         Column(modifier = modifier
             .weight(1f)
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
         ) {
             expenses.forEach { expense ->
 
