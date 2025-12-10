@@ -55,9 +55,9 @@ fun ShowLeavePopup(
             }
         }
 
-        val balanceNum = balanceViewModel.balance.value
+        val balanceNum = balanceViewModel.memberBalances.get(userId);
 
-        val payment = balanceNum?.balance?.roundToInt() ?: 0
+        val payment = balanceNum?.roundToInt() ?: 0
 
         val canLeave = payment >= 0
 
