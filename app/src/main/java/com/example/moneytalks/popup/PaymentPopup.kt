@@ -80,22 +80,33 @@ fun PaymentPopup(
                         .padding(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterHorizontally),
                 )  {
-                    Text(
-                        text = "Cancel",
-                        fontSize = 15.sp,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .clickable{onDismiss() }
-                    )
-
-                    Text(
-                        text = "Confirm",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .clickable{onConfirm() }
-                    )
+                    if (value > 0) {
+                        Text(
+                            text = "Cancel",
+                            fontSize = 15.sp,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .clickable{onDismiss() }
+                        )
+    
+                        Text(
+                            text = "Confirm",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .clickable{onConfirm() }
+                        )
+                    } else {
+                        Text(
+                            text = "Okay",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .clickable{onDismiss() }
+                        )
+                    }
                 }
             }
         }
