@@ -39,8 +39,7 @@ endPoints.push({method: 'GET', path: '/expenseHistory', oapi: {
         return res.status(400).send({error: 'groupId query parameter is required'});
     }
 
-    const memberIds = Database.getInstance('group_members').select({group_id: groupId, accepted: true}).map(m => m.id);
-    const expenses = Database.getInstance('expenses').all().filter(e => memberIds.includes(e.member_id));
+    const expenses = Database.getInstance('expenses').select({group_id: groupId});
     if(expenses.length === 0) {
         return res.status(404).send({error: 'No expense history found for this group ID'});
     }
@@ -173,6 +172,7 @@ endPoints.push({method: 'POST', path: '/createExpense', oapi: {
         id: uuidv4(),
         member_id: member.id,
         user_id: userId,
+        group_id: groupId,
         date: new Date().toISOString(),
         amount: amount,
         description: description,
@@ -298,6 +298,8 @@ endPoints.push({method: 'POST', path: '/payOwed', oapi: {
     Database.getInstance('expenses').insert({
         id: uuidv4(),
         member_id: member.id,
+        user_id: userId,
+        group_id: groupId,
         date: new Date().toISOString(),
         amount: -balance,
         description: 'Payment of owed expenses',
