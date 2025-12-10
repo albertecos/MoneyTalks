@@ -135,7 +135,7 @@ fun LeaveGroupText(payment: Int, groupName: String){
         Text(text = message, color = DarkBlue, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(35.dp))
         Text(
-            text = "${payment} KR",
+            text = "${Math.abs(payment)} KR",
             color = amountColor,
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold
