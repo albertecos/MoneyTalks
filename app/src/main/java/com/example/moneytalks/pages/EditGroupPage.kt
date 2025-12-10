@@ -152,6 +152,7 @@ fun EditGroupPage(group: com.example.moneytalks.dataclasses.Group? = null, navCo
                 peopleList.add(
                     GroupMember(
                         id = member.id,
+                        userId = member.id,
                         full_name = member.full_name,
                         profile_picture = member.profile_picture,
                         username = member.username,

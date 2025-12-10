@@ -1,58 +1,26 @@
 [
   {
     "id": "68661b1b-6586-4f3c-ac0b-a02fa35d60f7",
-    "username": "justavirus",
-    "full_name": "Bob Lars",
-    "email": "boy-big@example.com",
-    "password": "catlover",
-    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+    "username": "Batman",
+    "full_name": "The Dark Knight",
+    "email": "batman@gmail.com",
+    "password": "joker",
+    "profile_picture": "batman.jpeg"
   },
   {
     "id": "68661b1b-1234-4f3c-ac0b-a02fa35d60f7",
-    "username": "crazy frog",
-    "full_name": "Asta Pasta",
-    "email": "anya_banana@gmail.com",
-    "password": "maria_Sangria",
-    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
+    "username": "legofigur",
+    "full_name": "Ole K.",
+    "email": "founder@lego.com",
+    "password": "leggodt",
+    "profile_picture": "legoman.jpg"
   },
   {
-    "id": "c4d21a74-c59c-4a4b-8dea-9eb519428543",
-    "username": "user1",
-    "full_name": "user1",
-    "email": "user1@example.com",
-    "password": "string",
-    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
-  },
-  {
-    "id": "3d26fd4d-9c81-46e2-ac1b-334adc1e6013",
-    "username": "user2",
-    "full_name": "string",
-    "email": "user2@example.com",
-    "password": "string",
-    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
-  },
-  {
-    "id": "7b9b96c2-733c-48bb-9389-4ed6cf1b84ed",
-    "username": "user3",
-    "full_name": "string",
-    "email": "user3@example.com",
-    "password": "string",
-    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
-  },
-  {
-    "id": "4fdf2d6a-c65b-47b7-96a0-3d0c748616d9",
-    "username": "user4",
-    "full_name": "string",
-    "email": "user4@example.com",
-    "password": "string",
-    "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
-  },
-  {
-    "id": "36a0e280-890c-4016-babd-3afa78fa98c3",
-    "username": "maria",
-    "full_name": "maria",
-    "email": "maria@gmail.com",
-    "password": "maria",
+    "id": "7b006fe6-4145-4ad1-a7a4-1bb6b97e19eb",
+    "username": "tester",
+    "full_name": "tester",
+    "email": "tester",
+    "password": "tester",
     "profile_picture": "337d5322-930a-472e-8c0f-ebd04cc9b3ef.jpg"
   },
   {

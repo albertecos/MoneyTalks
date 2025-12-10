@@ -120,6 +120,7 @@ fun GroupMembersListCardPreview() {
     val members = listOf(
         GroupMember(
             id = "user_1",
+            userId = "userId_1",
             username = "alice",
             full_name = "Alice Andersen",
             email = "alice@example.com",
@@ -129,6 +130,7 @@ fun GroupMembersListCardPreview() {
         ),
         GroupMember(
             id = "user_2",
+            userId = "userId_2",
             username = "bob",
             full_name = "Bob Hansen",
             email = "bob@example.com",
@@ -138,6 +140,7 @@ fun GroupMembersListCardPreview() {
         ),
         GroupMember(
             id = "user_3",
+            userId = "userId_3",
             username = "charlie",
             full_name = "Charlie Jensen",
             email = "charlie@example.com",

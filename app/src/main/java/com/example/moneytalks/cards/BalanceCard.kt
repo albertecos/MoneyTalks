@@ -53,14 +53,14 @@ fun BalanceStatusText(value: Double, balanceStatus: BalanceStatus) {
     val formattedPrice = String.format("%.2f", Math.abs(value))
 
     val message = when (balanceStatus) {
-        BalanceStatus.OweMoney -> "You need to pay " + formattedPrice + ".-"
-        BalanceStatus.RecieveMoney -> "Others owe you " + formattedPrice + ".-"
+        BalanceStatus.OweMoney -> "You owe -" + formattedPrice + ".-"
+        BalanceStatus.RecieveMoney -> "You'll recieve " + formattedPrice + ".-"
         BalanceStatus.Clear -> "You are all clear!"
     }
 
     Text(
         message,
-        fontSize = 14.sp,
+        fontSize = 18.sp,
         color = Color.Black,
         fontWeight = FontWeight.Bold
     )

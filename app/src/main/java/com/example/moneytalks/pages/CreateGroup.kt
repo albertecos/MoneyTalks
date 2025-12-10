@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -22,6 +23,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.moneytalks.dataclasses.GroupMember
@@ -56,6 +59,7 @@ fun CreateGroup(navController: NavController, userVM: UserViewModel) {
                 add(
                     GroupMember(
                         id = currentUser.id,
+                        userId = currentUser.id, //for now
                         full_name = currentUser.full_name,
                         profile_picture = currentUser.profile_picture,
                         username = currentUser.username,
@@ -172,6 +176,7 @@ fun CreateGroup(navController: NavController, userVM: UserViewModel) {
                 peopleList.add(
                     GroupMember(
                         id = member.id,
+                        userId = member.id,
                         full_name = member.full_name,
                         profile_picture = member.profile_picture,
                         username = member.username,
@@ -258,9 +263,10 @@ fun SearchedMemberListElement(member: User, onAddClick: () -> Unit) {
         AsyncImage(
             model = "${RetrofitClient.BASE_URL}image?path=${member.profile_picture}",
             contentDescription = "Profile picture",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+                .clip(CircleShape)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -307,15 +313,15 @@ fun MemberListElement(member: GroupMember, additionalActionIcon: ImageVector? = 
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
-
     ) {
         // Profile picture
         AsyncImage(
             model = "${RetrofitClient.BASE_URL}image?path=${member.profile_picture}",
             contentDescription = "Profile picture",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(20.dp))
+                .clip(CircleShape)
         )
 
         Spacer(modifier = Modifier.width(16.dp))
