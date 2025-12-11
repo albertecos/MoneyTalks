@@ -268,7 +268,13 @@ endPoints.push({path: '/leaveGroup', method: 'POST', oapi: {
     if(groupMembers.length === 0) {
         return res.status(404).send({error: 'Group not found or user not in group'});
     }
-    // TODO: check if expenses are settled before leaving
+    
+    let balance = groupMembers[0].balance || 0;
+    if (balance < 0) {
+        return res.status(400).send({error: 'Cannot leave group while you owe money. Please settle your debts before leaving.'});
+    } else if (balance > 0) {
+        // TODO: give up balance claiming then leaving
+    }
 
     Database.getInstance('group_members').delete(groupMembers[0].id);
 
