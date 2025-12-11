@@ -36,23 +36,21 @@ class BalanceViewModel(private val retrofitClient: RetrofitClient = RetrofitClie
 
     private fun _isCurrentUser(userId: String): Boolean = false
 
-    fun payOwed(
+    suspend fun payOwed(
         groupId: String,
         userId: String,
     ) {
-        viewModelScope.launch {
-            try {
-                retrofitClient.api.payOwed(
-                    userId,
-                    com.example.moneytalks.dataclasses.PayOwedData(
-                        groupId = groupId
-                    )
+        try {
+            retrofitClient.api.payOwed(
+                userId,
+                com.example.moneytalks.dataclasses.PayOwedData(
+                    groupId = groupId
                 )
-                // After payment, refresh balance
-                fetchBalance(groupId, userId)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
+            // After payment, refresh balance
+            fetchBalance(groupId, userId)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

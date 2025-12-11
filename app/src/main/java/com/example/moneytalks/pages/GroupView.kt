@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
+import kotlinx.coroutines.launch
 import com.example.moneytalks.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,10 +78,16 @@ fun GroupView(
     val currentUser = userVm.currentUser //for own bubble
     val currentUserId = currentUser.value?.id ?: "00cacc5b-55a3-4958-b551-b07668168ca6"
     val expenses = expenseVM.expenseHistory.value
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(group.id) {
         expenseVM.getExpenseHistoryByGroupId(group.id)
         balanceVm.fetchBalance(group.id, currentUserId)
+    }
+
+    LaunchedEffect(expenses.size) {
+        scrollState.animateScrollTo(scrollState.maxValue)
     }
 
     val balanceNum = balanceVm.memberBalances.get(currentUserId)
@@ -139,7 +146,7 @@ fun GroupView(
         Column(modifier = modifier
             .weight(1f)
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
         ) {
             expenses.forEach { expense ->
 
@@ -175,10 +182,13 @@ fun GroupView(
                 value = balance,
                 onDismiss = {showPaymentPopup = false},
                 onConfirm = {
-                    balanceVm.payOwed(
-                        groupId = group.id,
-                        userId = currentUserId
-                    )
+                    coroutineScope.launch {
+                        balanceVm.payOwed(
+                            groupId = group.id,
+                            userId = currentUserId
+                        )
+                        expenseVM.getExpenseHistoryByGroupId(group.id)
+                    }
                     showPaymentPopup = false
                 }
             )
