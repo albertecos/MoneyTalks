@@ -23,6 +23,9 @@ import com.example.moneytalks.notifications.PaymentNotify
 import com.example.moneytalks.notifications.ReceivementNotify
 import com.example.moneytalks.notifications.ReminderNotify
 import com.example.moneytalks.viewmodel.NotificationViewModel
+import com.example.moneytalks.viewmodel.GroupsViewModel
+import com.example.moneytalks.dataclasses.Group
+import com.example.moneytalks.navigation.Destination
 import kotlinx.coroutines.delay
 
 
@@ -33,9 +36,11 @@ fun NotificationPage(
     modifier: Modifier = Modifier
 ) {
     val vm: NotificationViewModel = viewModel()
+    val groupVM: GroupsViewModel = viewModel()
 
     LaunchedEffect(userId) {
         vm.fetchNotifications(userId)
+        groupVM.fetchGroups(userId)
     }
 
     val notifications = vm.notifications
@@ -81,11 +86,19 @@ fun NotificationPage(
             Text("No notifications yet...")
         } else {
             expenseNotifications.forEach { notification ->
+                var group: Group? = groupVM.groups.firstOrNull();
+                val navigateToGroup: () -> Unit = {  ->
+                    if (group != null) {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("group", group)
+                        navController.navigate(Destination.GROUPVIEW.route)
+                    }
+                }
                 when (notification.action){
                     "PAYMENT" -> PaymentNotify(
                         payment = notification.amount?.toString() ?: "0",
                         groupName = notification.groupName,
                         date = notification.date.take(10),
+                        onClick = navigateToGroup,
                         navController = navController
                     )
 
@@ -93,6 +106,7 @@ fun NotificationPage(
                         payment = notification.amount?.toString() ?: "0",
                         groupName = notification.groupName,
                         date = notification.date.take(10),
+                        onClick = navigateToGroup,
                         navController = navController
                     )
 
@@ -100,12 +114,14 @@ fun NotificationPage(
                         payment = notification.amount?.toString() ?: "0",
                         groupName = notification.groupName,
                         date = notification.date.take(10),
+                        onClick = navigateToGroup,
                         navController = navController
                     )
                     "REMINDER" -> ReminderNotify(
                         payment = notification.amount?.toString() ?: "0",
                         groupName = notification.groupName,
                         date = notification.date.take(10),
+                        onClick = navigateToGroup,
                         navController = navController
                     )
                 }
